@@ -10,7 +10,7 @@ const app = express();
 const corsOptions = {
     origin: [
         'http://localhost:3000',
-        'https://your-netlify-app.netlify.app', // Replace with your actual Netlify URL
+        'https://animated-pavlova-03cd88.netlify.app', // Your actual Netlify URL
         'https://*.netlify.app'
     ],
     credentials: true,
