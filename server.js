@@ -6,8 +6,19 @@ require('dotenv').config();
 
 const app = express();
 
+// CORS configuration for Netlify frontend
+const corsOptions = {
+    origin: [
+        'http://localhost:3000',
+        'https://your-netlify-app.netlify.app', // Replace with your actual Netlify URL
+        'https://*.netlify.app'
+    ],
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Add logging middleware
@@ -16,26 +27,44 @@ app.use((req, res, next) => {
     next();
 });
 
-// Serve static files from root directory
-app.use(express.static(path.join(__dirname), {
-    dotfiles: 'ignore',
-    etag: false,
-    extensions: ['htm', 'html'],
-    index: false,
-    maxAge: '1d',
-    redirect: false
-}));
-
 // Health check endpoint
 app.get('/health', (req, res) => {
     res.json({ 
         status: 'ok', 
         timestamp: new Date().toISOString(),
-        environment: process.env.NODE_ENV || 'development'
+        environment: process.env.NODE_ENV || 'development',
+        service: 'Fitzone Backend API'
     });
 });
 
-// Create checkout session
+// Create payment intent endpoint (for Payment Elements)
+app.post('/create-payment-intent', async (req, res) => {
+    try {
+        const { amount, currency = 'eur', customerEmail } = req.body;
+        
+        console.log('Creating payment intent for amount:', amount, currency);
+        
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: Math.round(amount * 100), // Convert to cents
+            currency: currency,
+            automatic_payment_methods: {
+                enabled: true,
+            },
+            receipt_email: customerEmail,
+        });
+
+        console.log('Payment intent created:', paymentIntent.id);
+        res.status(200).json({ 
+            clientSecret: paymentIntent.client_secret,
+            paymentIntentId: paymentIntent.id 
+        });
+    } catch (err) {
+        console.error('Stripe payment intent error:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Create checkout session endpoint (for Stripe Checkout)
 app.post('/create-checkout-session', async (req, res) => {
     try {
         const { amount, currency = 'eur', customerEmail, successUrl, cancelUrl } = req.body;
@@ -62,46 +91,22 @@ app.post('/create-checkout-session', async (req, res) => {
         console.log('Checkout session created:', session.id);
         res.status(200).json({ url: session.url, sessionId: session.id });
     } catch (err) {
-        console.error('Stripe error:', err);
+        console.error('Stripe checkout error:', err);
         res.status(500).json({ error: err.message });
     }
 });
 
-// Root route - serve index.html
-app.get('/', (req, res) => {
-    const indexPath = path.join(__dirname, 'index.html');
-    console.log('Serving index.html from:', indexPath);
-    res.sendFile(indexPath, (err) => {
-        if (err) {
-            console.error('Error serving index.html:', err);
-            res.status(500).send('Error loading homepage');
-        }
-    });
-});
-
-// Catch-all route for HTML files
-app.get('/*.html', (req, res) => {
-    const fileName = req.params[0] + '.html';
-    const filePath = path.join(__dirname, fileName);
-    console.log('Serving HTML file:', filePath);
-    res.sendFile(filePath, (err) => {
-        if (err) {
-            console.error('Error serving file:', filePath, err);
-            res.status(404).send('File not found');
-        }
-    });
-});
-
-// 404 handler
+// 404 handler for API routes
 app.use((req, res) => {
-    console.log('404 - File not found:', req.url);
-    res.status(404).send('File not found');
+    console.log('404 - API endpoint not found:', req.url);
+    res.status(404).json({ error: 'API endpoint not found' });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Fitzone server running on port ${PORT}`);
+    console.log(`🚀 Fitzone Backend API running on port ${PORT}`);
     console.log(`🔗 Health check: http://localhost:${PORT}/health`);
-    console.log(`📁 Serving static files from: ${__dirname}`);
-    console.log(`🏠 Homepage: http://localhost:${PORT}/`);
+    console.log(`💳 Payment Intent endpoint: http://localhost:${PORT}/create-payment-intent`);
+    console.log(`💰 Checkout Session endpoint: http://localhost:${PORT}/create-checkout-session`);
+    console.log(`🌍 CORS enabled for Netlify frontend`);
 }); 
