@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitzone Database Setup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .setup-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .description {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .setup-btn {
+            background: #007bff;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        
+        .setup-btn:hover {
+            background: #0056b3;
+        }
+        
+        .setup-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f1b2b8;
+        }
+        
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #b8daff;
+        }
+        
+        .navigation {
+            margin-top: 30px;
+        }
+        
+        .nav-btn {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 5px;
+            display: inline-block;
+        }
+        
+        .nav-btn:hover {
+            background: #1e7e34;
+        }
+        
+        .features-list {
+            text-align: left;
+            margin: 20px 0;
+        }
+        
+        .features-list h3 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        
+        .features-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .features-list li {
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .features-list li:before {
+            content: "✅ ";
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="setup-container">
+        <h1>🎉 Fitzone Booking System Setup</h1>
+        
+        <div class="description">
+            Welcome to the Fitzone Booking System! This setup page will initialize your database with sample data 
+            so you can immediately start testing all the features.
+        </div>
+        
+        <div class="features-list">
+            <h3>What will be created:</h3>
+            <ul>
+                <li>3 Fitzone locations with different capacities</li>
+                <li>5 party packages with realistic pricing</li>
+                <li>Complete database structure for bookings</li>
+                <li>Admin dashboard with real-time data</li>
+                <li>Availability management system</li>
+                <li>Email confirmation system</li>
+            </ul>
+        </div>
+        
+        <button id="setupBtn" class="setup-btn" onclick="initializeDatabase()">
+            🚀 Initialize Database with Sample Data
+        </button>
+        
+        <button id="testConnectionBtn" class="setup-btn" onclick="testDatabaseConnection()">
+            🔍 Test Database Connection Only
+        </button>
+        
+        <div id="status"></div>
+        
+        <div class="navigation" id="navigation" style="display: none;">
+            <h3>Ready to go! 🎯</h3>
+            <a href="index.html" class="nav-btn">🏠 Home Page</a>
+            <a href="booking.html" class="nav-btn">📅 Make a Booking</a>
+            <a href="admin.html" class="nav-btn">⚙️ Admin Dashboard</a>
+            <a href="packages.html" class="nav-btn">📦 View Packages</a>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { 
+            createLocation,
+            createPackage,
+            testConnection
+        } from './supabase.js';
+        
+        const statusDiv = document.getElementById('status');
+        const setupBtn = document.getElementById('setupBtn');
+        const testConnectionBtn = document.getElementById('testConnectionBtn');
+        const navigation = document.getElementById('navigation');
+        
+        function showStatus(message, type) {
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+        
+        window.testDatabaseConnection = async function() {
+            testConnectionBtn.disabled = true;
+            testConnectionBtn.textContent = 'Testing...';
+            showStatus('Testing database connection...', 'info');
+            
+            try {
+                const result = await testConnection();
+                if (result.success) {
+                    showStatus('✅ Database connection successful! You can proceed with initialization.', 'success');
+                } else {
+                    showStatus('❌ Database connection failed: ' + result.error, 'error');
+                }
+            } catch (error) {
+                showStatus('❌ Connection test error: ' + error.message, 'error');
+            } finally {
+                testConnectionBtn.disabled = false;
+                testConnectionBtn.textContent = '🔍 Test Database Connection Only';
+            }
+        }
+        
+        window.initializeDatabase = async function() {
+            setupBtn.disabled = true;
+            setupBtn.textContent = 'Initializing...';
+            showStatus('Initializing database with sample data...', 'info');
+            
+            try {
+                // Test connection first
+                const connectionTest = await testConnection();
+                if (!connectionTest.success) {
+                    throw new Error('Database connection failed: ' + connectionTest.error);
+                }
+                
+                showStatus('✅ Connection successful. Creating sample data...', 'info');
+                
+                // Create sample locations
+                const locations = [
+                    {
+                        name: 'Fitzone Leopardstown',
+                        address: 'Leopardstown Business Park, Dublin 18, Ireland',
+                        phone: '+353 1 123 4567',
+                        email: 'leopardstown@fitzone.ie',
+                        daily_capacity: 8,
+                        active: true
+                    },
+                    {
+                        name: 'Fitzone Clontarf',
+                        address: 'Clontarf Retail Park, Dublin 3, Ireland',
+                        phone: '+353 1 234 5678',
+                        email: 'clontarf@fitzone.ie',
+                        daily_capacity: 6,
+                        active: true
+                    },
+                    {
+                        name: 'Fitzone Westmanstown',
+                        address: 'Westmanstown Sports Centre, Dublin 15, Ireland',
+                        phone: '+353 1 345 6789',
+                        email: 'westmanstown@fitzone.ie',
+                        daily_capacity: 10,
+                        active: true
+                    }
+                ];
+                
+                let successCount = 0;
+                for (const location of locations) {
+                    const result = await createLocation(location);
+                    if (result.success) {
+                        successCount++;
+                        console.log(`✅ Created location: ${location.name}`);
+                    } else {
+                        console.error(`❌ Failed to create location ${location.name}:`, result.error);
+                    }
+                }
+                
+                // Create sample packages
+                const packages = [
+                    {
+                        name: 'Adventure Zone',
+                        description: 'Our most popular package featuring obstacle courses, climbing walls, and team challenges perfect for kids aged 6-14.',
+                        price: 199.99,
+                        duration: 2,
+                        features: [
+                            'Obstacle courses and climbing walls',
+                            'Team building activities',
+                            'Professional party host',
+                            'Party room for cake and food',
+                            'Birthday child gets a special gift',
+                            'Setup and cleanup included'
+                        ],
+                        active: true
+                    },
+                    {
+                        name: 'Go-Kart Racing',
+                        description: 'High-speed electric go-kart racing experience for adrenaline-seeking birthday parties.',
+                        price: 249.99,
+                        duration: 2.5,
+                        features: [
+                            'Electric go-kart racing sessions',
+                            'Safety briefing and equipment',
+                            'Racing trophies for winners',
+                            'Party room access',
+                            'Professional supervision',
+                            'Photo session with winner podium'
+                        ],
+                        active: true
+                    },
+                    {
+                        name: 'Play & Dance',
+                        description: 'Perfect for younger children with soft play areas, music, and dance activities.',
+                        price: 149.99,
+                        duration: 1.5,
+                        features: [
+                            'Soft play area access',
+                            'Music and dance activities',
+                            'Arts and crafts corner',
+                            'Dedicated party host',
+                            'Party room for refreshments',
+                            'Age-appropriate games and activities'
+                        ],
+                        active: true
+                    },
+                    {
+                        name: 'VIP Ultimate Experience',
+                        description: 'Our premium package combining multiple activities with exclusive VIP treatment.',
+                        price: 399.99,
+                        duration: 3,
+                        features: [
+                            'Access to all activity zones',
+                            'Go-kart racing session',
+                            'Climbing wall challenge',
+                            'Private VIP party room',
+                            'Dedicated party coordinator',
+                            'Professional photography',
+                            'Personalized decorations',
+                            'Premium party favors',
+                            'Extended celebration time'
+                        ],
+                        active: true
+                    },
+                    {
+                        name: 'Climbing Wall Challenge',
+                        description: 'Specialized climbing and rope course adventure for outdoor enthusiasts.',
+                        price: 179.99,
+                        duration: 2,
+                        features: [
+                            'Indoor climbing wall access',
+                            'Rope course challenges',
+                            'Safety equipment provided',
+                            'Certified climbing instructors',
+                            'Achievement certificates',
+                            'Group photo session'
+                        ],
+                        active: true
+                    }
+                ];
+                
+                let packageSuccessCount = 0;
+                for (const pkg of packages) {
+                    const result = await createPackage(pkg);
+                    if (result.success) {
+                        packageSuccessCount++;
+                        console.log(`✅ Created package: ${pkg.name} - $${pkg.price}`);
+                    } else {
+                        console.error(`❌ Failed to create package ${pkg.name}:`, result.error);
+                    }
+                }
+                
+                showStatus(`🎉 Database initialized successfully!
+                
+✅ ${successCount}/${locations.length} locations created
+✅ ${packageSuccessCount}/${packages.length} packages created
+
+Your Fitzone booking system is now ready for use!`, 'success');
+                
+                navigation.style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error initializing database:', error);
+                showStatus('❌ Initialization failed: ' + error.message, 'error');
+            } finally {
+                setupBtn.disabled = false;
+                setupBtn.textContent = '🚀 Initialize Database with Sample Data';
+            }
+        }
+        
+        // Test connection on page load
+        window.addEventListener('load', () => {
+            showStatus('Ready to initialize your Fitzone booking system!', 'info');
+        });
+    </script>
+</body>
+</html> 

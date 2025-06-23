@@ -1,0 +1,1482 @@
+// --- Mobile Menu --- //
+const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
+const navUl = document.querySelector("nav ul");
+
+if (mobileMenuBtn && navUl) {
+    mobileMenuBtn.addEventListener("click", (e) => {
+        e.stopPropagation(); // Prevent click from immediately closing menu
+        navUl.classList.toggle("active");
+        mobileMenuBtn.classList.toggle("active");
+    });
+
+    // Close menu when a link is clicked
+    navUl.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", () => {
+            if (navUl.classList.contains("active")) {
+                navUl.classList.remove("active");
+                mobileMenuBtn.classList.remove("active");
+            }
+        });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener("click", (e) => {
+        if (navUl.classList.contains("active") && !navUl.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+            navUl.classList.remove("active");
+            mobileMenuBtn.classList.remove("active");
+        }
+    });
+}
+
+// --- Smooth Scrolling (for anchor links if any) --- //
+document.querySelectorAll("a[href^=\"#\"]").forEach(anchor => {
+    anchor.addEventListener("click", function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute("href");
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+            targetElement.scrollIntoView({ behavior: "smooth" });
+        }
+    });
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    // --- FAQ Accordion --- //
+    const faqItems = document.querySelectorAll(".faq-item");
+    faqItems.forEach(item => {
+        const header = item.querySelector("h3");
+        if (header) {
+            header.addEventListener("click", () => {
+                item.classList.toggle("active");
+            });
+        }
+    });
+
+    // --- Gallery Lightbox --- //
+    const galleryItems = document.querySelectorAll(".gallery-item");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    const lightboxCaption = document.getElementById("lightbox-caption");
+    const closeLightbox = document.getElementById("close-lightbox");
+    const prevBtn = document.getElementById("prev-lightbox");
+    const nextBtn = document.getElementById("next-lightbox");
+    let currentIndex = 0;
+    const images = [];
+
+    galleryItems.forEach((item, index) => {
+        const img = item.querySelector("img");
+        const caption = item.querySelector(".overlay h3")?.textContent || img?.alt || "Fitzone Fun"; // Use alt text as fallback caption
+        if (img) {
+            images.push({ src: img.src, caption: caption });
+            item.addEventListener("click", () => {
+                currentIndex = index;
+                updateLightbox();
+                if (lightbox) lightbox.classList.add("active");
+            });
+        }
+    });
+
+    function updateLightbox() {
+        if (images.length > 0 && lightboxImg && lightboxCaption) {
+            lightboxImg.src = images[currentIndex].src;
+            lightboxCaption.textContent = images[currentIndex].caption;
+        }
+    }
+
+    if (closeLightbox) {
+        closeLightbox.addEventListener("click", () => {
+            if (lightbox) lightbox.classList.remove("active");
+        });
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener("click", () => {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateLightbox();
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener("click", () => {
+            currentIndex = (currentIndex + 1) % images.length;
+            updateLightbox();
+        });
+    }
+
+    // Close lightbox on background click
+    if (lightbox) {
+        lightbox.addEventListener("click", (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove("active");
+            }
+        });
+    }
+
+    // Keyboard navigation for lightbox
+    document.addEventListener("keydown", (e) => {
+        if (lightbox && lightbox.classList.contains("active")) {
+            if (e.key === "ArrowLeft") {
+                prevBtn.click();
+            } else if (e.key === "ArrowRight") {
+                nextBtn.click();
+            } else if (e.key === "Escape") {
+                closeLightbox.click();
+            }
+        }
+    });
+
+    // --- Chat Assistant (Demo Logic) --- //
+    const chatIcon = document.getElementById("chat-icon");
+    const chatPopup = document.getElementById("chat-popup");
+    const closeChatBtn = document.getElementById("close-chat");
+    const chatMessages = document.getElementById("chat-messages");
+    const chatInputForm = document.getElementById("chat-input-form");
+    const chatInputField = document.getElementById("chat-input-field");
+    const quickRepliesContainer = document.getElementById("quick-replies");
+
+    if (chatIcon) { // Only run chat logic if elements exist
+        const initialMessages = [
+            { type: "bot", text: "Hi there! 👋 I am the Fitzone demo assistant. How can I help you explore today?" },
+        ];
+
+        const initialQuickReplies = [
+            "Party Packages",
+            "Booking Demo",
+            "Locations",
+            "Contact Demo"
+        ];
+
+        function addMessage(type, text) {
+            if (!chatMessages) return;
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("message", type);
+            const sanitizedText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            messageDiv.innerHTML = sanitizedText;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addQuickReplies(replies) {
+            if (!quickRepliesContainer) return;
+            quickRepliesContainer.innerHTML = "";
+            replies.forEach(replyText => {
+                const button = document.createElement("button");
+                button.classList.add("quick-reply");
+                button.textContent = replyText;
+                button.addEventListener("click", () => handleQuickReply(replyText));
+                quickRepliesContainer.appendChild(button);
+            });
+        }
+
+        function handleQuickReply(text) {
+            addMessage("user", text);
+            getBotResponse(text);
+            if (quickRepliesContainer) quickRepliesContainer.innerHTML = "";
+        }
+
+        function getBotResponse(userInput) {
+            let response = "Thanks for the message! In a real system, I would process this. Since this is a demo, feel free to explore other options.";
+            const lowerInput = userInput.toLowerCase();
+            let nextQuickReplies = ["Party Packages", "Booking Demo", "Locations", "Contact Demo"];
+
+            if (lowerInput.includes("package") || lowerInput.includes("party types")) {
+                response = "We have several exciting party packages! You can find details on our Packages page. Would you like me to take you there?";
+                nextQuickReplies = ["Yes, show Packages", "Booking Demo", "Other Question"];
+            } else if (lowerInput.includes("book") || lowerInput.includes("availability") || lowerInput.includes("booking demo")) {
+                response = "Great! You can see the booking form structure online. Remember, submission is disabled in this demo. Go to the booking form?";
+                nextQuickReplies = ["Yes, go to Booking Demo", "Check Locations First", "Ask about Packages"];
+            } else if (lowerInput.includes("location")) {
+                response = "We have multiple Fitzone locations! Check out our Locations page for addresses and details.";
+                nextQuickReplies = ["Show Locations Page", "Party Packages", "Contact Demo"];
+            } else if (lowerInput.includes("contact") || lowerInput.includes("phone") || lowerInput.includes("email") || lowerInput.includes("contact demo")) {
+                response = "You can find our contact details on the Contact Us page. The form submission is disabled in this demo. Go there?";
+                nextQuickReplies = ["Go to Contact Demo Page", "Booking Demo", "Opening Hours"];
+            } else if (lowerInput.includes("yes, show packages")) {
+                const packagesLink = document.querySelector("a[href*=\"packages\"]");
+                if (packagesLink) window.location.href = packagesLink.href;
+                response = "Taking you to the Packages page...";
+                nextQuickReplies = [];
+            } else if (lowerInput.includes("yes, go to booking demo")) {
+                const bookingLink = document.querySelector("a[href*=\"booking\"]");
+                if (bookingLink) window.location.href = bookingLink.href;
+                response = "Let\"s check out the booking form! Remember, it won\"t submit data in this demo.";
+                nextQuickReplies = [];
+            } else if (lowerInput.includes("show locations page")) {
+                const locationsLink = document.querySelector("a[href*=\"locations\"]");
+                if (locationsLink) window.location.href = locationsLink.href;
+                response = "Here are our locations...";
+                nextQuickReplies = [];
+            } else if (lowerInput.includes("go to contact demo page")) {
+                const contactLink = document.querySelector("a[href*=\"contact\"]");
+                if (contactLink) window.location.href = contactLink.href;
+                response = "Heading to the Contact Us page. The form is for visual demo only.";
+                nextQuickReplies = [];
+            } else if (lowerInput.includes("hello") || lowerInput.includes("hi")) {
+                response = "Hello! How can I assist you with exploring the Fitzone demo site today?";
+                nextQuickReplies = initialQuickReplies;
+            } else if (lowerInput.includes("other question") || lowerInput.includes("opening hours")) {
+                response = "For specific questions like opening hours, please check the relevant location details or the Contact page (form submission is disabled).";
+                nextQuickReplies = initialQuickReplies;
+            }
+
+            setTimeout(() => {
+                addMessage("bot", response);
+                if (nextQuickReplies.length > 0) {
+                    addQuickReplies(nextQuickReplies);
+                }
+            }, 600);
+        }
+
+        if (chatMessages) {
+            initialMessages.forEach(msg => addMessage(msg.type, msg.text));
+        }
+        if (quickRepliesContainer) {
+            addQuickReplies(initialQuickReplies);
+        }
+
+        if (chatIcon && chatPopup) {
+            chatIcon.addEventListener("click", () => {
+                chatPopup.classList.toggle("active");
+                if (chatPopup.classList.contains("active") && chatInputField) {
+                    chatInputField.focus();
+                }
+            });
+        }
+        if (closeChatBtn && chatPopup) {
+            closeChatBtn.addEventListener("click", () => {
+                chatPopup.classList.remove("active");
+            });
+        }
+
+        if (chatInputForm && chatInputField) {
+            chatInputForm.addEventListener("submit", (e) => {
+                e.preventDefault();
+                const userInput = chatInputField.value.trim();
+                if (userInput) {
+                    addMessage("user", userInput);
+                    chatInputField.value = "";
+                    if (quickRepliesContainer) quickRepliesContainer.innerHTML = "";
+                    getBotResponse(userInput);
+                }
+            });
+        }
+    } // End chat logic check
+
+    // --- Flash Message Auto-hide --- //
+    const flashMessages = document.querySelectorAll(".flash-message");
+    flashMessages.forEach(flash => {
+        setTimeout(() => {
+            flash.style.transition = "opacity 0.5s ease";
+            flash.style.opacity = "0";
+            setTimeout(() => flash.remove(), 500);
+        }, 5000);
+    });
+
+    // --- Homepage Swiper --- //
+    if (typeof Swiper !== "undefined" && document.querySelector(".homepage-swiper")) {
+        const swiper = new Swiper(".homepage-swiper", {
+            loop: true,
+            slidesPerView: 1,
+            spaceBetween: 20,
+            autoplay: {
+                delay: 4000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            breakpoints: {
+                640: { slidesPerView: 2, spaceBetween: 30 },
+                992: { slidesPerView: 3, spaceBetween: 40 }
+            }
+        });
+    }
+
+    // --- Contact Form Demo Submission --- //
+    const contactForm = document.getElementById("contactForm");
+    const flashMessagesContainerContact = document.getElementById("flash-messages");
+
+    if (contactForm && flashMessagesContainerContact) {
+        contactForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+            let isValid = true;
+            const requiredFields = contactForm.querySelectorAll("[required]");
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.style.borderColor = "red";
+                } else {
+                    field.style.borderColor = "";
+                }
+            });
+
+            flashMessagesContainerContact.innerHTML = "";
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("flash-message");
+
+            if (isValid) {
+                messageDiv.classList.add("success");
+                messageDiv.textContent = "Message sent successfully! (Demo)";
+                contactForm.reset();
+            } else {
+                messageDiv.classList.add("error");
+                messageDiv.textContent = "Please fill out all required fields. (Demo)";
+            }
+            flashMessagesContainerContact.appendChild(messageDiv);
+
+            setTimeout(() => {
+                messageDiv.style.transition = "opacity 0.5s ease";
+                messageDiv.style.opacity = "0";
+                setTimeout(() => messageDiv.remove(), 500);
+            }, 5000);
+        });
+    }
+
+    // --- Login Form Demo Submission --- //
+    const loginForm = document.getElementById("loginForm");
+    const flashMessagesContainerLogin = document.getElementById("flash-messages");
+
+    if (loginForm && flashMessagesContainerLogin) {
+        loginForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+            const email = loginForm.querySelector("#email");
+            const password = loginForm.querySelector("#password");
+            let isValid = (email && email.value.trim() && password && password.value.trim());
+
+            flashMessagesContainerLogin.innerHTML = "";
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("flash-message");
+
+            if (isValid) {
+                messageDiv.classList.add("success");
+                messageDiv.textContent = "Logged in successfully! (Demo)";
+            } else {
+                messageDiv.classList.add("error");
+                messageDiv.textContent = "Please enter email and password. (Demo)";
+            }
+            flashMessagesContainerLogin.appendChild(messageDiv);
+
+            setTimeout(() => {
+                messageDiv.style.transition = "opacity 0.5s ease";
+                messageDiv.style.opacity = "0";
+                setTimeout(() => messageDiv.remove(), 500);
+            }, 5000);
+        });
+    }
+
+    // --- Register Form Demo Submission --- //
+    const registerForm = document.getElementById("registerForm");
+    const flashMessagesContainerRegister = document.getElementById("flash-messages");
+
+    if (registerForm && flashMessagesContainerRegister) {
+        registerForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+            const name = registerForm.querySelector("#name");
+            const email = registerForm.querySelector("#email");
+            const password = registerForm.querySelector("#password");
+            const confirmPassword = registerForm.querySelector("#confirm_password");
+            let isValid = true;
+            let message = "";
+
+            if (!name || !name.value.trim() || !email || !email.value.trim() || !password || !password.value.trim() || !confirmPassword || !confirmPassword.value.trim()) {
+                isValid = false;
+                message = "Please fill out all required fields. (Demo)";
+            } else if (password.value !== confirmPassword.value) {
+                isValid = false;
+                message = "Passwords do not match. (Demo)";
+            }
+
+            flashMessagesContainerRegister.innerHTML = "";
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("flash-message");
+
+            if (isValid) {
+                messageDiv.classList.add("success");
+                messageDiv.textContent = "Registration successful! (Demo)";
+                registerForm.reset();
+            } else {
+                messageDiv.classList.add("error");
+                messageDiv.textContent = message;
+            }
+            flashMessagesContainerRegister.appendChild(messageDiv);
+
+            setTimeout(() => {
+                messageDiv.style.transition = "opacity 0.5s ease";
+                messageDiv.style.opacity = "0";
+                setTimeout(() => messageDiv.remove(), 500);
+            }, 5000);
+        });
+    }
+
+    // --- Confirmation Page Logic --- //
+    if (document.body.getAttribute("data-page") === "confirmation") {
+        displayConfirmationDetails();
+    }
+
+}); // End DOMContentLoade// == Old Rebuilt Booking Logic Removed ==
+
+// =====================================tep)
+        const numGuestsInput = document.getElementById("num_guests");
+        if (numGuestsInput) {
+             numGuestsInput.addEventListener("change", () => {
+                 validateSingleFieldRebuilt(numGuestsInput); // Validate on change
+                 if(currentStepRebuilt === totalStepsRebuilt) {
+                     updateSummaryRebuilt();
+                 }
+             });
+        }
+
+        // Form submission handler (Demo)
+        bookingFormRebuilt.addEventListener("submit", function(e) {
+            e.preventDefault();
+            // Final validation check including terms
+            const termsCheckbox = document.getElementById("terms");
+            let termsValid = validateSingleFieldRebuilt(termsCheckbox);
+
+            if (validateStepRebuilt(currentStepRebuilt) && termsValid) {
+                console.log("Rebuilt Form Submitted (Demo)");
+                const formData = new FormData(bookingFormRebuilt);
+                const data = Object.fromEntries(formData.entries());
+                data.packageName = packagesRebuilt[data.package]?.name || data.package;
+                data.price = calculatePriceRebuilt(data.package, data.num_guests);
+                sessionStorage.setItem("bookingConfirmationData", JSON.stringify(data));
+                window.location.href = "confirmation.html";
+            } else {
+                 console.log("Validation failed on submit");
+                 // Ensure errors are visible
+                 if (!termsValid) {
+                     const termsError = document.getElementById("terms-error");
+                     if(termsError) {
+                         termsError.textContent = "You must agree to the terms.";
+                         termsError.style.display = "block";
+                     }
+                 }
+            }
+        });
+
+        // Initial setup
+        updatePackageRadioOptionsRebuilt(); // Initial call to set state based on default location (none)
+        showStepRebuilt(currentStepRebuilt); // Show the first step initially
+    }
+});
+
+// Function to display confirmation details (Rebuilt)
+function displayConfirmationDetails() {
+    const dataString = sessionStorage.getItem("bookingConfirmationData");
+    const detailsContainer = document.getElementById("confirmation-details");
+
+    if (dataString && detailsContainer) {
+        try {
+            const data = JSON.parse(dataString);
+            detailsContainer.innerHTML = 
+                "<p><strong>Location:</strong> " + (data.location ? document.querySelector("#location option[value='" + data.location + "']").textContent : "N/A") + "</p>" +
+                "<p><strong>Package:</strong> " + (data.packageName || "N/A") + "</p>" +
+                "<p><strong>Date & Time:</strong> " + (data.party_date || "N/A") + " at " + (data.party_time || "N/A") + "</p>" +
+                "<p><strong>Child's Name:</strong> " + (data.child_name || "N/A") + "</p>" +
+                "<p><strong>Child's Age:</strong> " + (data.child_age || "N/A") + "</p>" +
+                "<p><strong>Number of Guests:</strong> " + (data.num_guests || "N/A") + "</p>" +
+                "<p><strong>Parent Name:</strong> " + (data.parent_name || "N/A") + "</p>" +
+                "<p><strong>Email:</strong> " + (data.email || "N/A") + "</p>" +
+                "<p><strong>Phone:</strong> " + (data.phone || "N/A") + "</p>" +
+                "<p><strong>Special Requests:</strong> " + (data.special_requests || "None") + "</p>" +
+                "<p><strong>Estimated Price:</strong> " + (data.price ? "€" + data.price.toFixed(2) : "N/A") + "</p>" +
+                "<hr>" +
+                "<p><em>Thank you for your booking request! A member of our team will be in touch shortly to confirm availability and details. (This is a demo confirmation).</em></p>";
+        } catch (error) {
+            console.error("Error parsing confirmation data:", error);
+            detailsContainer.innerHTML = "<p>There was an error retrieving your booking details. Please contact us directly.</p>";
+        }
+    } else if (detailsContainer) {
+        detailsContainer.innerHTML = "<p>No booking details found. Please complete the booking form first.</p>";
+    }
+}
+ils");
+        if (detailsContainer) {
+            detailsContainer.innerHTML = "<p>Booking details not found. Please start the booking process again.</p>";
+        }
+    }
+}
+
+// --- Set current year in footer --- //
+const currentYearSpan = document.getElementById("current-year");
+if (currentYearSpan) {
+    currentYearSpan.textContent = new Date().getFullYear();
+}
+
+// --- Set active navigation link based on body data attribute --- //
+const currentPage = document.body.getAttribute("data-page");
+if (currentPage) {
+    const activeLink = document.querySelector(`.nav-link[data-page="${currentPage}"]`);
+    if (activeLink) {
+        document.querySelectorAll(".nav-link").forEach(link => link.classList.remove("active"));
+        activeLink.classList.add("active");
+        if (currentPage === "booking") {
+             const bookNowBtn = document.querySelector(".nav-book-btn");
+             if (bookNowBtn) bookNowBtn.classList.add("active");
+        }
+    }
+}
+
+
+
+
+// ======================================================
+// == NEW BOOKING FORM (V3.2 - Package First) LOGIC ==
+// ======================================================
+// This section handles the multi-step booking form introduced in v3,
+// specifically updated in v3.2 to allow package selection before location.
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Only run this logic on the new booking page (v3)
+    // Check for a specific data attribute on the body tag
+    if (document.body.dataset.page !== "booking-v3") {
+        return;
+    }
+
+    console.log("Initializing Booking Form V3.2 Logic...");
+
+    // --- DOM Element References ---
+    const form = document.getElementById("bookingFormV3");
+    const steps = Array.from(form.querySelectorAll(".form-step-v3"));
+    const nextBtn = form.querySelector(".next-btn-v3");
+    const prevBtn = form.querySelector(".prev-btn-v3");
+    const submitBtn = form.querySelector(".submit-btn-v3");
+    const stepDots = Array.from(document.querySelectorAll(".step-dot"));
+    const progressLine = document.getElementById("progress-line-v3");
+
+    // Form Elements (using v3 IDs for uniqueness)
+    const locationSelect = document.getElementById("location-v3");
+    const packageContainer = document.getElementById("package-card-container-v3");
+    const dateInput = document.getElementById("party_date-v3");
+    const timeInput = document.getElementById("party_time-v3");
+    const childNameInput = document.getElementById("child_name-v3");
+    const childAgeInput = document.getElementById("child_age-v3");
+    const numGuestsInput = document.getElementById("num_guests-v3");
+    const parentNameInput = document.getElementById("parent_name-v3");
+    const emailInput = document.getElementById("email-v3");
+    const phoneInput = document.getElementById("phone-v3");
+    const requestsInput = document.getElementById("special_requests-v3");
+    const termsCheckbox = document.getElementById("terms-v3");
+
+    // Summary Elements (for the final review step)
+    const summaryLocation = document.getElementById("summary-location-v3");
+    const summaryPackage = document.getElementById("summary-package-v3");
+    const summaryDate = document.getElementById("summary-date-v3");
+    const summaryTime = document.getElementById("summary-time-v3");
+    const summaryChildName = document.getElementById("summary-child_name-v3");
+    const summaryChildAge = document.getElementById("summary-child_age-v3");
+    const summaryNumGuests = document.getElementById("summary-num_guests-v3");
+    const summaryParentName = document.getElementById("summary-parent_name-v3");
+    const summaryEmail = document.getElementById("summary-email-v3");
+    const summaryPhone = document.getElementById("summary-phone-v3");
+    const summaryRequests = document.getElementById("summary-special_requests-v3");
+    const summaryPrice = document.getElementById("summary-price-v3");
+
+    // --- State Variable ---
+    let currentStep = 0; // Index of the currently active step (0-based)
+
+    // --- Package Data (Combined & Location Specific) ---
+    const allPackages = {
+        adventure_leo: { 
+            id: "adventure_leo", 
+            name: "Adventure Zone Party", 
+            details: "Ages 4-12 | Min 15 guests", 
+            price: 29.99, 
+            minGuests: 15, 
+            maxGuests: 50,
+            description: "Let them climb, crawl, race, and slide their way through Dublin's ultimate Adventure Zone!",
+            features: [
+                "2 hours of non-stop fun across obstacle courses, slides, and climbing walls",
+                "Hot food (pizza, nuggets, vegetarian options)",
+                "Goody bags for every child",
+                "Full supervision from start to finish"
+            ]
+        },
+        gokart_leo: { 
+            id: "gokart_leo", 
+            name: "Go-Kart Party", 
+            details: "Ages 6-12 | Min 12 guests", 
+            price: 39.99, 
+            minGuests: 12, 
+            maxGuests: 24,
+            description: "Ready, set, race! Our thrilling Go-Kart Birthday Parties are perfect for kids who love speed and adventure.",
+            features: [
+                "Indoor electric go-kart racing",
+                "Adventure Zone playtime included",
+                "Hot food, party games, and prizes",
+                "Fully supervised by expert party hosts"
+            ]
+        },
+        play_dance_leo: { 
+            id: "play_dance_leo", 
+            name: "Play & Dance Party", 
+            details: "Ages 5-12 | Min 15 guests", 
+            price: 34.99, 
+            minGuests: 15, 
+            maxGuests: 30,
+            description: "Turn up the music — it's time to dance!",
+            features: [
+                "Adventure play followed by a private disco dance party",
+                "Party games, dancing competitions, and prizes",
+                "Hot food and goody bags for every child",
+                "Full supervision throughout"
+            ]
+        },
+        vip_leo: { 
+            id: "vip_leo", 
+            name: "VIP Ultimate Party", 
+            details: "Ages 7-12 | Min 10 guests", 
+            price: 59.99, 
+            minGuests: 10, 
+            maxGuests: 20,
+            description: "Go big with the ultimate birthday party experience!",
+            features: [
+                "Use of the play zone, go-kart track, and disco room",
+                "Go-kart racing and dance competitions",
+                "Hot food, drinks, and premium goody bags",
+                "2.5 to 3 hours of non-stop fun",
+                "Dedicated party host managing everything"
+            ]
+        },
+        adventure_clon: { 
+            id: "adventure_clon", 
+            name: "Adventure Zone Party", 
+            details: "Ages 4-12 | Min 15 guests", 
+            price: 29.99, 
+            minGuests: 15, 
+            maxGuests: 50,
+            description: "Let them climb, crawl, race, and slide their way through Dublin's ultimate Adventure Zone!",
+            features: [
+                "2 hours of non-stop fun across obstacle courses, slides, and climbing walls",
+                "Hot food (pizza, nuggets, vegetarian options)",
+                "Goody bags for every child",
+                "Full supervision from start to finish"
+            ]
+        },
+        climbing_clon: { 
+            id: "climbing_clon", 
+            name: "Adventure Zone & Climbing Wall Party", 
+            details: "Ages 5-12 | Min 10 guests", 
+            price: 34.99, 
+            minGuests: 10, 
+            maxGuests: 20,
+            description: "For kids who love climbing, adventure, and action!",
+            features: [
+                "2 hours of exciting play and climbing fun",
+                "Hot food options (pizza or party box with chips, chicken nuggets, sausages, vegetarian options)",
+                "Full supervision to ensure safety and smiles"
+            ]
+        },
+        adventure_west: { 
+            id: "adventure_west", 
+            name: "Adventure Zone Party", 
+            details: "Ages 4-12 | Min 15 guests", 
+            price: 29.99, 
+            minGuests: 15, 
+            maxGuests: 50,
+            description: "Let them climb, crawl, race, and slide their way through Dublin's ultimate Adventure Zone!",
+            features: [
+                "2 hours of non-stop fun across obstacle courses, slides, and climbing walls",
+                "Hot food (pizza, nuggets, vegetarian options)",
+                "Goody bags for every child",
+                "Full supervision from start to finish"
+            ]
+        }
+    };
+
+    // Maps location values to arrays of available package IDs
+    const locationPackageMap = {
+        leopardstown: ["adventure_leo", "gokart_leo", "play_dance_leo", "vip_leo"],
+        clontarf: ["adventure_clon", "climbing_clon"],
+        westmanstown: ["adventure_west"]
+    };
+
+    // Location details with contact information
+    const locationDetails = {
+        leopardstown: {
+            name: "Fitzone Leopardstown",
+            phone: "01 9609328",
+            email: "leopardstown.fitzone@westwood.ie",
+            address: "Leopardstown, Dublin 18"
+        },
+        clontarf: {
+            name: "Fitzone Clontarf",
+            phone: "01 8530353",
+            email: "clontarf.fitzone@westwood.ie",
+            address: "Clontarf Road, Dublin 3"
+        },
+        westmanstown: {
+            name: "Fitzone Westmanstown",
+            phone: "01 8025906",
+            email: "jennifer.whelan@westwood.ie",
+            address: "Westmanstown, Dublin 15"
+        }
+    };
+
+    // --- Initialization ---
+    // Initialize Flatpickr date and time pickers if the elements exist.
+    if (dateInput) {
+        flatpickr(dateInput, {
+            altInput: true,
+            altFormat: "F j, Y",
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            disable: [
+                function(date) {
+                    // Disable weekends
+                    return (date.getDay() === 0 || date.getDay() === 6);
+                }
+            ],
+            onChange: function(selectedDates, dateStr) {
+                // Clear any existing error
+                const errorElement = document.getElementById("party_date-v3-error");
+                if (errorElement) errorElement.textContent = "";
+                
+                // Update time picker min/max times based on selected date
+                if (timeInput._flatpickr) {
+                    const isWeekend = selectedDates[0].getDay() === 0 || selectedDates[0].getDay() === 6;
+                    timeInput._flatpickr.set("minTime", isWeekend ? "10:00" : "09:00");
+                    timeInput._flatpickr.set("maxTime", isWeekend ? "18:00" : "20:00");
+                }
+            }
+        });
+    }
+    if (timeInput) {
+        flatpickr(timeInput, {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",
+            time_24hr: true,
+            minuteIncrement: 30,
+            minTime: "09:00",
+            maxTime: "20:00",
+            onChange: function(selectedDates, dateStr) {
+                // Clear any existing error
+                const errorElement = document.getElementById("party_time-v3-error");
+                if (errorElement) errorElement.textContent = "";
+            }
+        });
+    }
+
+    // --- Event Listeners ---
+    // Handle clicks on the "Next" button.
+    if (nextBtn) {
+        nextBtn.addEventListener("click", () => {
+            // Validate the current step before proceeding.
+            if (validateStep(currentStep)) {
+                goToStep(currentStep + 1);
+            }
+        });
+    }
+
+    // Handle clicks on the "Previous" button.
+    if (prevBtn) {
+        prevBtn.addEventListener("click", () => {
+            goToStep(currentStep - 1);
+        });
+    }
+
+    // Handle form submission (on the last step).
+    if (form) {
+        form.addEventListener("submit", (e) => {
+            e.preventDefault(); // Prevent default browser submission
+            // Validate the final step before simulating submission.
+            if (validateStep(currentStep)) {
+                // In a real scenario, you would send `getFormData()` to a server here.
+                console.log("Form Submitted (Demo)", getFormData());
+                // Show a success message or redirect to a confirmation page.
+                alert("Booking Submitted Successfully! (Demo)");
+                // Optionally reset the form after submission:
+                // goToStep(0); form.reset(); populateAllPackageCards(); updatePackageAvailability(locationSelect.value);
+            }
+        });
+    }
+
+    // Handle changes to the location dropdown.
+    if (locationSelect) {
+        locationSelect.addEventListener("change", () => {
+            // Update which packages are marked as available/unavailable.
+            updatePackageAvailability(locationSelect.value);
+            // Re-validate Step 1 immediately to check for conflicts.
+            validateStep(0);
+        });
+    }
+
+    // --- Core Functions ---
+
+    /**
+     * Navigates the form to the specified step index.
+     * @param {number} stepIndex - The 0-based index of the step to display.
+     */
+    function goToStep(stepIndex) {
+        if (stepIndex < 0 || stepIndex >= steps.length) return; // Boundary check
+
+        // Hide the currently active step.
+        steps[currentStep].classList.remove("active");
+
+        // Show the target step.
+        currentStep = stepIndex;
+        steps[currentStep].classList.add("active");
+
+        // Update visual indicators (dots, progress line, buttons).
+        updateStepIndicator();
+        updateNavigationButtons();
+
+        // If navigating to the final (review) step, populate the summary.
+        if (currentStep === steps.length - 1) {
+            updateSummary();
+        }
+    }
+
+    /**
+     * Updates the visual step indicator (dots and progress line).
+     */
+    function updateStepIndicator() {
+        stepDots.forEach((dot, index) => {
+            dot.classList.remove("active", "completed");
+            if (index < currentStep) {
+                dot.classList.add("completed"); // Mark previous steps as completed
+            } else if (index === currentStep) {
+                dot.classList.add("active"); // Mark current step as active
+            }
+        });
+
+        // Update the width of the progress line connecting the dots.
+        const progressPercentage = (currentStep / (steps.length - 1)) * 100;
+        if (progressLine) {
+            progressLine.style.width = `${progressPercentage}%`;
+        }
+    }
+
+    /**
+     * Shows/hides the Previous, Next, and Submit buttons based on the current step.
+     */
+    function updateNavigationButtons() {
+        if (!prevBtn || !nextBtn || !submitBtn) return;
+
+        prevBtn.style.display = currentStep > 0 ? "inline-flex" : "none"; // Show Prev btn except on step 0
+        nextBtn.style.display = currentStep < steps.length - 1 ? "inline-flex" : "none"; // Show Next btn except on last step
+        submitBtn.style.display = currentStep === steps.length - 1 ? "inline-flex" : "none"; // Show Submit btn only on last step
+    }
+
+    /**
+     * Populates the package container with cards for ALL available packages.
+     * This is called once on initial page load.
+     */
+    function populateAllPackageCards() {
+        if (!packageContainer) return;
+
+        packageContainer.innerHTML = ""; // Clear any existing cards
+        clearError(packageContainer.parentNode); // Clear potential validation error on the group
+
+        const packageKeys = Object.keys(allPackages);
+
+        if (packageKeys.length === 0) {
+            packageContainer.innerHTML = `<p class="package-placeholder">No packages defined.</p>`;
+            updateGuestNumberLimits(null); // Reset guest limits if no packages
+            return;
+        }
+
+        // Create a card for each package defined in `allPackages`.
+        packageKeys.forEach(pkgId => {
+            const pkg = allPackages[pkgId];
+            const cardLabel = document.createElement("label");
+            cardLabel.classList.add("package-card");
+            cardLabel.htmlFor = `package-${pkg.id}`; // Link label to radio input
+            cardLabel.dataset.packageId = pkg.id; // Store package ID for availability checks
+
+            const radioInput = document.createElement("input");
+            radioInput.type = "radio";
+            radioInput.name = "package"; // Group radios together
+            radioInput.id = `package-${pkg.id}`;
+            radioInput.value = pkg.id;
+            radioInput.required = true; // Make package selection mandatory
+            // Store package details on the input for easy access later
+            radioInput.dataset.packageName = pkg.name;
+            radioInput.dataset.price = pkg.price;
+            radioInput.dataset.minGuests = pkg.minGuests;
+            radioInput.dataset.maxGuests = pkg.maxGuests;
+
+            // Build the visual content of the card
+            const cardContent = document.createElement("div");
+            cardContent.classList.add("card-content");
+
+            // Package Name
+            const nameSpan = document.createElement("h3");
+            nameSpan.classList.add("name");
+            nameSpan.textContent = pkg.name;
+
+            // Package Description
+            const descriptionSpan = document.createElement("p");
+            descriptionSpan.classList.add("description");
+            descriptionSpan.textContent = pkg.description;
+
+            // Package Details (Age Range & Min Guests)
+            const detailsSpan = document.createElement("span");
+            detailsSpan.classList.add("details");
+            detailsSpan.textContent = pkg.details;
+
+            // Price
+            const priceSpan = document.createElement("span");
+            priceSpan.classList.add("price");
+            priceSpan.textContent = `€${pkg.price.toFixed(2)} / guest`;
+
+            // Features List
+            const featuresList = document.createElement("ul");
+            featuresList.classList.add("features");
+            pkg.features.forEach(feature => {
+                const li = document.createElement("li");
+                li.textContent = feature;
+                featuresList.appendChild(li);
+            });
+
+            // Age Range Badge
+            const ageRange = document.createElement("span");
+            ageRange.classList.add("age-range");
+            ageRange.textContent = pkg.details.split(" | ")[0]; // Extract age range from details
+
+            // Assemble the card content
+            cardContent.appendChild(nameSpan);
+            cardContent.appendChild(descriptionSpan);
+            cardContent.appendChild(detailsSpan);
+            cardContent.appendChild(priceSpan);
+            cardContent.appendChild(featuresList);
+            cardContent.appendChild(ageRange);
+
+            // Assemble the card: label contains radio (hidden) and visual content
+            cardLabel.appendChild(radioInput);
+            cardLabel.appendChild(cardContent);
+
+            packageContainer.appendChild(cardLabel);
+
+            // Add event listener to handle selection styling and updates
+            radioInput.addEventListener("change", handlePackageSelection);
+        });
+
+        // Check if a package was pre-selected (e.g., form restoration) and apply styles
+        handlePackageSelection();
+    }
+
+    /**
+     * Updates the visual availability of package cards based on the selected location.
+     * Adds/removes the ".unavailable" class and enables/disables the radio input.
+     * @param {string} selectedLocation - The value of the selected location dropdown option.
+     */
+    function updatePackageAvailability(selectedLocation) {
+        // Get the list of package IDs available for the location, or all IDs if no location selected.
+        const availablePackageIds = selectedLocation ? locationPackageMap[selectedLocation] || [] : Object.keys(allPackages);
+        const allCardLabels = packageContainer.querySelectorAll(".package-card");
+
+        allCardLabels.forEach(label => {
+            const packageId = label.dataset.packageId;
+            const radioInput = label.querySelector("input[type=\"radio\"]");
+            const isAvailable = availablePackageIds.includes(packageId);
+
+            if (isAvailable) {
+                // Package is available: remove unavailable style, enable input.
+                label.classList.remove("unavailable");
+                if (radioInput) radioInput.disabled = false;
+            } else {
+                // Package is unavailable: add unavailable style, disable input.
+                label.classList.add("unavailable");
+                if (radioInput) radioInput.disabled = true;
+                // If this unavailable package was previously selected, remove the visual selection style
+                // but keep the radio checked internally to allow conflict detection.
+                if (radioInput && radioInput.checked) {
+                    label.classList.remove("selected");
+                }
+            }
+        });
+    }
+
+    /**
+     * Handles the change event when a package radio button is selected.
+     * Updates the visual selection style, guest limits, and triggers validation.
+     */
+    function handlePackageSelection() {
+        const selectedRadio = packageContainer.querySelector("input[name=\'package\']:checked");
+        const allLabels = packageContainer.querySelectorAll(".package-card");
+
+        // Remove selection style from all cards first.
+        allLabels.forEach(label => label.classList.remove("selected"));
+
+        if (selectedRadio) {
+            const parentLabel = selectedRadio.closest(".package-card");
+            // Apply selection style only if the selected package is not marked as unavailable.
+            if (parentLabel && !parentLabel.classList.contains("unavailable")) {
+                 parentLabel.classList.add("selected");
+            }
+            // Update the min/max limits on the guest number input based on the package.
+            updateGuestNumberLimits(selectedRadio);
+            // Clear any previous general error message shown for the package selection group.
+            clearError(packageContainer.parentNode);
+            // Re-validate Step 1 immediately to check for potential location/package conflicts.
+            validateStep(0);
+        } else {
+            // If no package is selected, reset guest limits.
+            updateGuestNumberLimits(null);
+        }
+    }
+
+    /**
+     * Updates the min/max attributes and informational text for the number of guests input.
+     * @param {HTMLInputElement|null} selectedRadio - The currently selected package radio button, or null.
+     */
+    function updateGuestNumberLimits(selectedRadio) {
+        if (!numGuestsInput) return;
+        const infoText = document.getElementById("num_guests-v3-info"); // Assumes an element exists to show info
+
+        if (selectedRadio) {
+            // Get min/max from the selected radio's dataset, providing defaults.
+            const min = selectedRadio.dataset.minGuests || 5;
+            const max = selectedRadio.dataset.maxGuests || 50;
+            numGuestsInput.min = min;
+            numGuestsInput.max = max;
+            if (infoText) infoText.textContent = `Min ${min}, Max ${max} guests.`;
+        } else {
+            // Reset to generic defaults if no package is selected.
+            numGuestsInput.min = 5;
+            numGuestsInput.max = 50;
+            if (infoText) infoText.textContent = "Min/Max guests vary by package.";
+        }
+        // If the guest number input already has a value, re-validate it against the new limits.
+        if (numGuestsInput.value) {
+             validateInput(numGuestsInput);
+        }
+    }
+
+    /**
+     * Validates all required fields within the specified step.
+     * Also performs special checks for package selection and location/package conflicts in Step 1,
+     * and the terms checkbox in Step 3.
+     * @param {number} stepIndex - The 0-based index of the step to validate.
+     * @returns {boolean} - True if the step is valid, false otherwise.
+     */
+    function validateStep(stepIndex) {
+        let isValid = true;
+        const currentStepElement = steps[stepIndex];
+        if (!currentStepElement) return false;
+        const inputs = currentStepElement.querySelectorAll("input[required], select[required], textarea[required]");
+
+        // Clear previous conflict-specific error messages before re-validating.
+        clearError(locationSelect?.closest(".form-group-v3"));
+        clearError(packageContainer?.parentNode);
+
+        // Validate each required input in the step.
+        inputs.forEach(input => {
+            if (!validateInput(input)) {
+                isValid = false;
+            }
+        });
+
+        // --- Step-Specific Validations ---
+
+        // Step 1: Package Selection & Conflict Check
+        if (stepIndex === 0) {
+            const packageRadios = packageContainer.querySelectorAll("input[name=\'package\']");
+            const selectedPackageRadio = packageContainer.querySelector("input[name=\'package\']:checked");
+
+            // Check if a package is required and if one is selected.
+            if (packageRadios.length > 0 && !selectedPackageRadio) {
+                isValid = false;
+                showError(packageContainer.parentNode, "Please select a package.");
+            } else {
+                // If selected, clear the general package error (conflict error might still be shown below).
+                clearError(packageContainer.parentNode);
+            }
+
+            // Check for conflict: Is a location selected AND is the selected package unavailable at that location?
+            const selectedLocationValue = locationSelect ? locationSelect.value : null;
+            if (selectedLocationValue && selectedPackageRadio) {
+                const selectedPackageCard = selectedPackageRadio.closest(".package-card");
+                // Check if the selected package's card has the 'unavailable' class.
+                if (selectedPackageCard && selectedPackageCard.classList.contains("unavailable")) {
+                    isValid = false;
+                    const errorMsg = "This package is not available at the selected location.";
+                    // Show error message near both the location dropdown and the package selection.
+                    showError(locationSelect.closest(".form-group-v3"), errorMsg);
+                    showError(packageContainer.parentNode, errorMsg);
+                    // Add a specific 'conflict' class for potential extra styling.
+                    selectedPackageCard.classList.add("conflict");
+                } else if (selectedPackageCard) {
+                    // If valid, ensure any previous conflict styling is removed.
+                    selectedPackageCard.classList.remove("conflict");
+                }
+            }
+        }
+
+        // Step 3: Terms & Conditions Checkbox
+        if (stepIndex === 2) { // Assuming Step 3 is index 2
+             if (termsCheckbox && !termsCheckbox.checked) {
+                 isValid = false;
+                 showError(termsCheckbox.closest(".form-group-v3"), "You must agree to the terms.");
+             } else if (termsCheckbox) {
+                 // If checked, clear any previous error for the terms checkbox.
+                 clearError(termsCheckbox.closest(".form-group-v3"));
+             }
+        }
+
+        return isValid;
+    }
+
+    /**
+     * Validates a single input field based on its type and attributes (required, min, max, pattern, etc.).
+     * @param {HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement} input - The input element to validate.
+     * @returns {boolean} - True if the input is valid, false otherwise.
+     */
+    function validateInput(input) {
+        let valid = true;
+        const value = input.value.trim();
+        const formGroup = input.closest(".form-group-v3"); // Find the parent container for error messages
+
+        // Clear previous error message for this specific field,
+        // unless it's a conflict error message (handled in validateStep).
+        if (formGroup && !formGroup.querySelector(".error-message")?.textContent.includes("not available")) {
+            clearError(formGroup);
+        }
+        input.classList.remove("invalid"); // Remove visual invalid state
+
+        // --- Validation Rules ---
+        // Check if required and empty
+        if (input.required && !value && input.type !== 'checkbox') { // Checkbox handled in validateStep
+            valid = false;
+            showError(formGroup, "This field is required.");
+        }
+        // Check email format
+        else if (input.type === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+            valid = false;
+            showError(formGroup, "Please enter a valid email address.");
+        }
+        // Check basic phone format (allows digits, spaces, -, +, (, ))
+        else if (input.type === "tel" && value && !/^[\d\s\-\+\(\)]{7,}$/.test(value)) {
+            valid = false;
+            showError(formGroup, "Please enter a valid phone number.");
+        }
+        // Check number range (min/max)
+        else if (input.type === "number") {
+            const numValue = parseFloat(value);
+            const min = parseFloat(input.min);
+            const max = parseFloat(input.max);
+            if (value && isNaN(numValue)) {
+                valid = false;
+                showError(formGroup, "Please enter a valid number.");
+            } else if (!isNaN(min) && numValue < min) {
+                valid = false;
+                showError(formGroup, `Minimum value is ${min}.`);
+            } else if (!isNaN(max) && numValue > max) {
+                valid = false;
+                showError(formGroup, `Maximum value is ${max}.`);
+            }
+        }
+        // Add other specific validations here if needed (e.g., date format, time range)
+
+        // Apply visual invalid state if validation failed.
+        if (!valid) {
+            input.classList.add("invalid");
+        }
+
+        return valid;
+    }
+
+    /**
+     * Displays an error message within the specified form group.
+     * @param {HTMLElement|null} formGroup - The container element for the input and error message.
+     * @param {string} message - The error message text to display.
+     */
+    function showError(formGroup, message) {
+        if (!formGroup) return;
+        const errorElement = formGroup.querySelector(".error-message");
+        if (errorElement) {
+            errorElement.textContent = message;
+            errorElement.style.display = "block";
+        }
+        // Special handling for package group container styling
+        if (formGroup.classList.contains("package-group")) {
+            packageContainer.classList.add("invalid");
+        }
+        // Ensure the input itself also gets the invalid class if not already applied
+        const inputElement = formGroup.querySelector("input, select, textarea");
+        if (inputElement && !inputElement.classList.contains("invalid")) {
+            inputElement.classList.add("invalid");
+        }
+    }
+
+    /**
+     * Clears the error message and invalid styling from a form group.
+     * @param {HTMLElement|null} formGroup - The container element to clear errors from.
+     */
+    function clearError(formGroup) {
+        if (!formGroup) return;
+        const errorElement = formGroup.querySelector(".error-message");
+        if (errorElement) {
+            errorElement.textContent = "";
+            errorElement.style.display = "none";
+        }
+        // Special handling for package group container styling
+        if (formGroup.classList.contains("package-group")) {
+            packageContainer.classList.remove("invalid");
+        }
+        // Remove invalid class from all relevant elements within the group
+        formGroup.querySelectorAll(".invalid").forEach(el => el.classList.remove("invalid"));
+        // Also remove conflict class from package cards if clearing package group error
+        packageContainer?.querySelectorAll(".conflict").forEach(el => el.classList.remove("conflict"));
+    }
+
+    /**
+     * Populates the summary section (Step 4) with the data entered in previous steps.
+     */
+    function updateSummary() {
+        const formData = getFormData(); // Get all current form data
+        const selectedPackageRadio = packageContainer.querySelector(`input[value="${formData.package}"]`);
+
+        // Extract details for display
+        const packageName = selectedPackageRadio ? selectedPackageRadio.dataset.packageName : "N/A";
+        const packagePricePerGuest = selectedPackageRadio ? parseFloat(selectedPackageRadio.dataset.price) : 0;
+        const numGuests = parseInt(formData.num_guests) || 0;
+        const totalPrice = (packagePricePerGuest * numGuests).toFixed(2);
+
+        // Format the date nicely for display using Flatpickr's utility
+        let formattedDate = "N/A";
+        if (formData.party_date) {
+            try {
+                // Flatpickr stores date as YYYY-MM-DD. Need to handle potential timezone issues if converting directly.
+                // Replacing space with T helps ISO 8601 parsing if altInput somehow introduces spaces.
+                formattedDate = flatpickr.formatDate(new Date(formData.party_date.replace(/ /g,"T")), "F j, Y");
+            } catch (e) {
+                console.error("Error formatting date:", e);
+                formattedDate = formData.party_date; // Fallback to raw value
+            }
+        }
+
+        // Update the text content of summary elements.
+        if (summaryLocation) summaryLocation.textContent = formData.location_text || "N/A";
+        if (summaryPackage) summaryPackage.textContent = packageName;
+        if (summaryDate) summaryDate.textContent = formattedDate;
+        if (summaryTime) summaryTime.textContent = formData.party_time || "N/A";
+        if (summaryChildName) summaryChildName.textContent = formData.child_name || "N/A";
+        if (summaryChildAge) summaryChildAge.textContent = formData.child_age || "N/A";
+        if (summaryNumGuests) summaryNumGuests.textContent = formData.num_guests || "N/A";
+        if (summaryParentName) summaryParentName.textContent = formData.parent_name || "N/A";
+        if (summaryEmail) summaryEmail.textContent = formData.email || "N/A";
+        if (summaryPhone) summaryPhone.textContent = formData.phone || "N/A";
+        if (summaryRequests) summaryRequests.textContent = formData.special_requests || "None";
+        if (summaryPrice) summaryPrice.textContent = numGuests > 0 && packagePricePerGuest > 0 ? `€${totalPrice}` : "Calculating...";
+    }
+
+    /**
+     * Collects all data from the form inputs.
+     * @returns {object} - An object containing form data key-value pairs.
+     */
+    function getFormData() {
+        const formData = new FormData(form);
+        const data = {};
+        for (let [key, value] of formData.entries()) {
+            // Use the input's id (without '-v3') as the key for consistency, falling back to name.
+            const inputElement = form.querySelector(`[name="${key}"]`);
+            const dataKey = inputElement?.id.replace("-v3", "") || key;
+            data[dataKey] = value;
+        }
+        // Add the display text of the selected location.
+        if (locationSelect && locationSelect.selectedIndex >= 0) {
+             data.location_text = locationSelect.options[locationSelect.selectedIndex].text;
+        }
+        // Attempt to get the user-friendly formatted date from Flatpickr's altInput if available.
+        const altDateInput = dateInput?.nextSibling; // Flatpickr often adds altInput as the next sibling.
+        if (altDateInput && altDateInput.tagName === 'INPUT' && altDateInput.classList.contains('flatpickr-input')) {
+            data.party_date_formatted = altDateInput.value;
+        }
+
+        return data;
+    }
+
+    // --- Initial Setup on Page Load ---
+    updateStepIndicator(); // Set initial state of dots/line
+    updateNavigationButtons(); // Set initial button visibility
+    populateAllPackageCards(); // Create all package cards
+    updatePackageAvailability(locationSelect ? locationSelect.value : null); // Apply initial availability based on default/selected location
+
+}); // End DOMContentLoaded
+
+// Form validation functions
+function validateStep(step) {
+    let isValid = true;
+    const currentStepElement = document.querySelector(`#form-step-${step}`);
+    
+    // Get all required inputs in the current step
+    const requiredInputs = currentStepElement.querySelectorAll('[required]');
+    
+    requiredInputs.forEach(input => {
+        const errorElement = document.getElementById(`${input.id}-error`);
+        const formGroup = input.closest('.form-group');
+        
+        // Clear previous error state
+        if (formGroup) formGroup.classList.remove('has-error');
+        if (errorElement) errorElement.textContent = '';
+        
+        // Validate based on input type
+        if (!input.value.trim()) {
+            isValid = false;
+            showError(input, 'This field is required');
+        } else if (input.type === 'email' && !isValidEmail(input.value)) {
+            isValid = false;
+            showError(input, 'Please enter a valid email address');
+        } else if (input.type === 'tel' && !isValidPhone(input.value)) {
+            isValid = false;
+            showError(input, 'Please enter a valid phone number');
+        } else if (input.type === 'number') {
+            const min = parseInt(input.getAttribute('min'));
+            const max = parseInt(input.getAttribute('max'));
+            const value = parseInt(input.value);
+            
+            if (min && value < min) {
+                isValid = false;
+                showError(input, `Minimum value is ${min}`);
+            } else if (max && value > max) {
+                isValid = false;
+                showError(input, `Maximum value is ${max}`);
+            }
+        }
+    });
+    
+    // Special validation for package selection
+    if (step === 1) {
+        const selectedPackage = document.querySelector('.package-card.selected');
+        if (!selectedPackage) {
+            isValid = false;
+            const errorElement = document.getElementById('package-v3-error');
+            if (errorElement) {
+                errorElement.textContent = 'Please select a package';
+                errorElement.style.display = 'block';
+            }
+        }
+    }
+    
+    return isValid;
+}
+
+function showError(input, message) {
+    const formGroup = input.closest('.form-group');
+    const errorElement = document.getElementById(`${input.id}-error`);
+    
+    if (formGroup) formGroup.classList.add('has-error');
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+    }
+}
+
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+function isValidPhone(phone) {
+    // Allow various phone formats
+    const phoneRegex = /^[\d\s+()-]{8,15}$/;
+    return phoneRegex.test(phone);
+}
+
+// Update summary section
+function updateSummary() {
+    const summaryElements = {
+        location: document.getElementById('summary-location-v3'),
+        package: document.getElementById('summary-package-v3'),
+        date: document.getElementById('summary-date-v3'),
+        time: document.getElementById('summary-time-v3'),
+        child_name: document.getElementById('summary-child_name-v3'),
+        child_age: document.getElementById('summary-child_age-v3'),
+        num_guests: document.getElementById('summary-num_guests-v3'),
+        parent_name: document.getElementById('summary-parent_name-v3'),
+        email: document.getElementById('summary-email-v3'),
+        phone: document.getElementById('summary-phone-v3'),
+        special_requests: document.getElementById('summary-special_requests-v3'),
+        price: document.getElementById('summary-price-v3')
+    };
+    
+    // Update each summary field
+    Object.keys(summaryElements).forEach(key => {
+        const element = summaryElements[key];
+        if (!element) return;
+        
+        const input = document.getElementById(`${key}-v3`);
+        if (input) {
+            if (key === 'location') {
+                const select = document.getElementById('location-v3');
+                element.textContent = select.options[select.selectedIndex].text;
+            } else if (key === 'package') {
+                const selectedPackage = document.querySelector('.package-card.selected');
+                element.textContent = selectedPackage ? selectedPackage.querySelector('h3').textContent : 'Not selected';
+            } else if (key === 'date' || key === 'time') {
+                element.textContent = input._flatpickr ? input._flatpickr.selectedDates[0].toLocaleString() : input.value;
+            } else {
+                element.textContent = input.value || 'Not provided';
+            }
+        }
+    });
+    
+    // Calculate and update price
+    const selectedPackage = document.querySelector('.package-card.selected');
+    const numGuests = document.getElementById('num_guests-v3').value;
+    if (selectedPackage && numGuests) {
+        const basePrice = parseFloat(selectedPackage.dataset.price);
+        const totalPrice = basePrice * parseInt(numGuests);
+        summaryElements.price.textContent = `€${totalPrice.toFixed(2)}`;
+    }
+}
+
+// --- Booking Page Package Selection Debug --- //
+function populatePackages() {
+    const packageGrid = document.getElementById("package-grid");
+    const locationSelect = document.getElementById("location");
+    if (!packageGrid) {
+        console.error("packageGrid element not found!");
+        return;
+    }
+    if (typeof packages === "undefined" || typeof locationPackages === "undefined") {
+        console.error("packages or locationPackages not defined!");
+        return;
+    }
+    const selectedLocation = locationSelect ? locationSelect.value : null;
+    const availablePackages = selectedLocation ? locationPackages[selectedLocation] : Object.keys(packages);
+    console.log("Selected Location:", selectedLocation);
+    console.log("Available Packages:", availablePackages);
+
+    if (!Array.isArray(availablePackages) || availablePackages.length === 0) {
+        packageGrid.innerHTML = "<p>No packages available for this location.</p>";
+        return;
+    }
+
+    packageGrid.innerHTML = "";
+    availablePackages.forEach(pkgId => {
+        const pkg = packages[pkgId];
+        if (!pkg) return;
+        const card = document.createElement("div");
+        card.className = "package-card";
+        card.innerHTML = `
+            <input type="radio" name="package" id="package-${pkg.id}" value="${pkg.id}" required>
+            <label for="package-${pkg.id}">
+                <h3>${pkg.name}</h3>
+                <p class="description">${pkg.description}</p>
+                <p class="details">${pkg.details}</p>
+                <p class="price">€${pkg.price.toFixed(2)} per guest</p>
+                <ul class="features">
+                    ${pkg.features.map(feature => `<li>${feature}</li>`).join("")}
+                </ul>
+            </label>
+        `;
+        packageGrid.appendChild(card);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Only run if booking form exists
+    if (document.getElementById("booking-form")) {
+        populatePackages();
+    }
+});

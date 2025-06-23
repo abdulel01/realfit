@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup RLS Policies - Fitzone</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        
+        .btn:hover {
+            background: #0056b3;
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f1b2b8;
+        }
+        
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #b8daff;
+        }
+        
+        .sql-block {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: monospace;
+            white-space: pre-line;
+            border: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Setup RLS Policies</h1>
+        
+        <p>This page will create the necessary Row Level Security (RLS) policies to allow public booking creation and proper admin access.</p>
+        
+        <div class="sql-block" id="sqlBlock">
+-- Setup Row Level Security Policies for Fitzone Booking System
+
+-- Enable RLS on all tables (if not already enabled)
+ALTER TABLE bookings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE locations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE packages ENABLE ROW LEVEL SECURITY;
+
+-- BOOKINGS TABLE POLICIES
+-- Allow anyone to insert bookings (for public booking form)
+CREATE POLICY "Allow public booking creation" 
+ON bookings FOR INSERT 
+TO anon, authenticated
+WITH CHECK (true);
+
+-- Allow reading bookings
+CREATE POLICY "Allow reading bookings" 
+ON bookings FOR SELECT 
+TO anon, authenticated
+USING (true);
+
+-- Allow authenticated users to update bookings (for admin)
+CREATE POLICY "Allow authenticated updates" 
+ON bookings FOR UPDATE 
+TO authenticated
+USING (true);
+
+-- Allow authenticated users to delete bookings (for admin)
+CREATE POLICY "Allow authenticated deletes" 
+ON bookings FOR DELETE 
+TO authenticated
+USING (true);
+
+-- LOCATIONS TABLE POLICIES
+-- Allow public read access to active locations
+CREATE POLICY "Allow public location access" 
+ON locations FOR SELECT 
+TO anon, authenticated
+USING (active = true);
+
+-- Allow authenticated users full access (for admin)
+CREATE POLICY "Allow authenticated location management" 
+ON locations FOR ALL 
+TO authenticated
+USING (true);
+
+-- PACKAGES TABLE POLICIES  
+-- Allow public read access to active packages
+CREATE POLICY "Allow public package access" 
+ON packages FOR SELECT 
+TO anon, authenticated
+USING (active = true);
+
+-- Allow authenticated users full access (for admin)
+CREATE POLICY "Allow authenticated package management" 
+ON packages FOR ALL 
+TO authenticated
+USING (true);
+        </div>
+        
+        <button id="setupBtn" class="btn" onclick="setupPolicies()">
+            🚀 Create RLS Policies
+        </button>
+        
+        <button id="testBtn" class="btn" onclick="testBookingCreation()">
+            🧪 Test Booking Creation
+        </button>
+        
+        <div id="status"></div>
+        
+        <div style="margin-top: 30px;">
+            <h3>What this does:</h3>
+            <ul>
+                <li>✅ Allows public users to create bookings</li>
+                <li>✅ Allows public access to view locations and packages</li>
+                <li>✅ Allows authenticated users (admin) full CRUD access</li>
+                <li>✅ Secures data while enabling functionality</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+        
+        const supabaseUrl = 'https://annyssisoigjibiocyzu.supabase.co'
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubnlzc2lzb2lnamliaW9jeXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDczMzIxMDYsImV4cCI6MjA2MjkwODEwNn0.99ilyM9a9NVSNZZ4uiAcv92Nwr3wn6tcd2UhPwgiwg8'
+        
+        const supabase = createClient(supabaseUrl, supabaseKey)
+        
+        const statusDiv = document.getElementById('status');
+        const setupBtn = document.getElementById('setupBtn');
+        const testBtn = document.getElementById('testBtn');
+        
+        function showStatus(message, type) {
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+        
+        window.setupPolicies = async function() {
+            setupBtn.disabled = true;
+            setupBtn.textContent = 'Creating Policies...';
+            showStatus('Setting up RLS policies...', 'info');
+            
+            try {
+                // Note: These SQL commands need to be run in Supabase SQL Editor
+                // as they require admin privileges
+                showStatus(`⚠️ These policies need to be created manually in Supabase:
+
+1. Go to your Supabase dashboard
+2. Navigate to SQL Editor
+3. Copy and paste the SQL above
+4. Click "Run" to execute
+
+Alternatively, you can disable RLS temporarily for testing:
+- Go to Database > Tables
+- For each table (bookings, locations, packages), click "..." 
+- Select "Edit" and uncheck "Enable Row Level Security"
+
+This will allow all operations to work without policies.`, 'info');
+                
+            } catch (error) {
+                showStatus('Error: ' + error.message, 'error');
+            } finally {
+                setupBtn.disabled = false;
+                setupBtn.textContent = '🚀 Create RLS Policies';
+            }
+        }
+        
+        window.testBookingCreation = async function() {
+            testBtn.disabled = true;
+            testBtn.textContent = 'Testing...';
+            showStatus('Testing booking creation...', 'info');
+            
+            try {
+                const testBooking = {
+                    customer_name: 'Test Customer',
+                    customer_email: 'test@example.com',
+                    customer_phone: '01-234-5678',
+                    event_date: '2025-06-01',
+                    event_time: 'afternoon',
+                    location_id: 1,
+                    package_id: 1,
+                    guest_count: 10,
+                    special_requests: 'Test booking from setup',
+                    status: 'pending',
+                    total_amount: 199.99,
+                    created_at: new Date().toISOString()
+                };
+                
+                const { data, error } = await supabase
+                    .from('bookings')
+                    .insert([testBooking])
+                    .select();
+                
+                if (error) {
+                    if (error.code === '42501') {
+                        showStatus(`❌ RLS Policy violation detected. Please:
+
+1. Run the SQL policies in Supabase SQL Editor, OR
+2. Temporarily disable RLS on tables for testing
+
+Error: ${error.message}`, 'error');
+                    } else {
+                        throw error;
+                    }
+                } else {
+                    showStatus(`✅ Booking created successfully! 
+
+Booking ID: ${data[0].id}
+Customer: ${data[0].customer_name}
+Date: ${data[0].event_date}
+
+The RLS policies are working correctly!`, 'success');
+                }
+                
+            } catch (error) {
+                showStatus('Test failed: ' + error.message, 'error');
+            } finally {
+                testBtn.disabled = false;
+                testBtn.textContent = '🧪 Test Booking Creation';
+            }
+        }
+        
+        // Show initial status
+        showStatus('Ready to set up RLS policies. Choose an option above.', 'info');
+    </script>
+</body>
+</html> 

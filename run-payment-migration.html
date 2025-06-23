@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Migration Tool - Fitzone Admin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .title {
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .migration-status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        .btn:hover { background: #0056b3; }
+        .btn:disabled { background: #6c757d; cursor: not-allowed; }
+        .sql-code {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            border: 1px solid #e9ecef;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        .step {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+        .step-number {
+            background: #007bff;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🛠️ Payment Migration Tool</h1>
+        
+        <div class="info migration-status">
+            <strong>⚠️ Database Migration Required</strong><br>
+            Your bookings table needs to be updated to support the new Stripe payment integration.
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">1</span>Check Current Schema</h3>
+            <p>First, let's check if the payment columns already exist in your database:</p>
+            <button class="btn" onclick="checkSchema()">Check Schema</button>
+            <div id="schema-result"></div>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">2</span>Add Payment Columns</h3>
+            <p>This will add the missing columns to your bookings table:</p>
+            <div class="sql-code">ALTER TABLE public.bookings 
+ADD COLUMN IF NOT EXISTS amount_paid DECIMAL(10, 2),
+ADD COLUMN IF NOT EXISTS payment_intent_id TEXT,
+ADD COLUMN IF NOT EXISTS payment_method TEXT,
+ADD COLUMN IF NOT EXISTS payment_date TIMESTAMP WITH TIME ZONE;</div>
+            <button class="btn" onclick="addPaymentColumns()" id="migrate-btn">Add Payment Columns</button>
+            <div id="migration-result"></div>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">3</span>Verify Migration</h3>
+            <p>Check that the migration was successful:</p>
+            <button class="btn" onclick="verifyMigration()">Verify Migration</button>
+            <div id="verify-result"></div>
+        </div>
+
+        <div class="step">
+            <h3><span class="step-number">4</span>Test Booking Creation</h3>
+            <p>Test creating a booking with the new payment fields:</p>
+            <button class="btn" onclick="testBookingCreation()">Test Booking</button>
+            <div id="test-result"></div>
+        </div>
+    </div>
+
+    <!-- Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script>
+        const { createClient } = supabase;
+        
+        // Use the same config as your main app
+        const SUPABASE_URL = window.supabaseConfig?.url || 'https://wzgktafadffdqstfivjr.supabase.co';
+        const SUPABASE_ANON_KEY = window.supabaseConfig?.anonKey || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6Z2t0YWZhZGZmZHFzdGZpdmpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ3NzM4NjgsImV4cCI6MjA1MDM0OTg2OH0.GK-FKOo3VdgqTnDcuwIR2qdLvd8Ow6pWAm5T_iwg8';
+        
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        async function checkSchema() {
+            const resultDiv = document.getElementById('schema-result');
+            resultDiv.innerHTML = '<div class="info migration-status">Checking schema...</div>';
+            
+            try {
+                // Try to query with the new columns to see if they exist
+                const { data, error } = await supabaseClient
+                    .from('bookings')
+                    .select('id, amount_paid, payment_intent_id, payment_method, payment_date')
+                    .limit(1);
+                
+                if (error && error.message.includes('does not exist')) {
+                    resultDiv.innerHTML = '<div class="warning migration-status">❌ Payment columns are missing. Migration needed.</div>';
+                } else if (error) {
+                    resultDiv.innerHTML = `<div class="error migration-status">Error checking schema: ${error.message}</div>`;
+                } else {
+                    resultDiv.innerHTML = '<div class="success migration-status">✅ Payment columns already exist!</div>';
+                }
+            } catch (err) {
+                resultDiv.innerHTML = `<div class="error migration-status">Error: ${err.message}</div>`;
+            }
+        }
+        
+        async function addPaymentColumns() {
+            const resultDiv = document.getElementById('migration-result');
+            const btn = document.getElementById('migrate-btn');
+            
+            btn.disabled = true;
+            btn.textContent = 'Adding Columns...';
+            resultDiv.innerHTML = '<div class="info migration-status">Adding payment columns...</div>';
+            
+            try {
+                // Use Supabase RPC to execute the SQL
+                const { data, error } = await supabaseClient.rpc('exec_sql', {
+                    sql: `
+                        ALTER TABLE public.bookings 
+                        ADD COLUMN IF NOT EXISTS amount_paid DECIMAL(10, 2),
+                        ADD COLUMN IF NOT EXISTS payment_intent_id TEXT,
+                        ADD COLUMN IF NOT EXISTS payment_method TEXT,
+                        ADD COLUMN IF NOT EXISTS payment_date TIMESTAMP WITH TIME ZONE;
+                        
+                        UPDATE public.bookings 
+                        SET amount_paid = total_price 
+                        WHERE payment_status = 'paid' AND amount_paid IS NULL;
+                    `
+                });
+                
+                if (error) {
+                    throw error;
+                }
+                
+                resultDiv.innerHTML = '<div class="success migration-status">✅ Payment columns added successfully!</div>';
+                
+            } catch (err) {
+                if (err.message.includes('already exists')) {
+                    resultDiv.innerHTML = '<div class="warning migration-status">⚠️ Columns already exist - no changes needed.</div>';
+                } else {
+                    resultDiv.innerHTML = `<div class="error migration-status">❌ Migration failed: ${err.message}<br><br><strong>Manual Steps:</strong><br>1. Open your Supabase dashboard<br>2. Go to SQL Editor<br>3. Copy and paste the SQL from Step 2 above<br>4. Run the query</div>';
+                }
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Add Payment Columns';
+            }
+        }
+        
+        async function verifyMigration() {
+            const resultDiv = document.getElementById('verify-result');
+            resultDiv.innerHTML = '<div class="info migration-status">Verifying migration...</div>';
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('bookings')
+                    .select('id, total_price, amount_paid, payment_intent_id, payment_method, payment_date, payment_status')
+                    .limit(5);
+                
+                if (error) {
+                    throw error;
+                }
+                
+                let html = '<div class="success migration-status">✅ Migration verified! Payment columns are working.</div>';
+                html += '<h4>Sample Data:</h4>';
+                html += '<div class="sql-code">';
+                html += JSON.stringify(data, null, 2);
+                html += '</div>';
+                
+                resultDiv.innerHTML = html;
+                
+            } catch (err) {
+                resultDiv.innerHTML = `<div class="error migration-status">❌ Verification failed: ${err.message}</div>`;
+            }
+        }
+        
+        async function testBookingCreation() {
+            const resultDiv = document.getElementById('test-result');
+            resultDiv.innerHTML = '<div class="info migration-status">Testing booking creation...</div>';
+            
+            try {
+                const testBooking = {
+                    parent_name: 'Test Parent',
+                    email: 'test@example.com',
+                    phone: '1234567890',
+                    booking_date: '2025-06-25',
+                    booking_time: '14:00:00',
+                    location_id: 1,
+                    package_id: 1,
+                    num_children: 8,
+                    num_adults: 2,
+                    child_name: 'Test Child',
+                    child_age: 8,
+                    total_price: 199.99,
+                    amount_paid: 199.99,
+                    payment_status: 'paid',
+                    payment_intent_id: 'pi_test_123456',
+                    payment_method: 'card',
+                    payment_date: new Date().toISOString(),
+                    status: 'confirmed'
+                };
+                
+                const { data, error } = await supabaseClient
+                    .from('bookings')
+                    .insert([testBooking])
+                    .select();
+                
+                if (error) {
+                    throw error;
+                }
+                
+                resultDiv.innerHTML = `<div class="success migration-status">✅ Test booking created successfully! ID: ${data[0].id}</div>`;
+                
+                // Clean up - delete the test booking
+                await supabaseClient
+                    .from('bookings')
+                    .delete()
+                    .eq('id', data[0].id);
+                
+            } catch (err) {
+                resultDiv.innerHTML = `<div class="error migration-status">❌ Test failed: ${err.message}</div>`;
+            }
+        }
+        
+        // Auto-check schema on load
+        window.addEventListener('load', checkSchema);
+    </script>
+</body>
+</html> 

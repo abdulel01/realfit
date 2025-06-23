@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Fitzone Parties - Kids Party Fun!</title>
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon"> <!-- Placeholder: Add favicon.ico to images -->
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Page-specific head elements -->
+    <style>
+        /* Specific styles for index.html if needed, otherwise keep in style.css */
+        /* Homepage Gallery Slider Styles */
+        .homepage-gallery {
+            padding: 60px 5%;
+            background-color: var(--background-white);
+        }
+        .homepage-gallery h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary-color);
+        }
+        .swiper-container {
+            width: 100%;
+            max-width: 1200px; /* Limit max width */
+            margin: 0 auto;
+            padding: 10px 0 40px; /* Padding for navigation/pagination */
+            overflow: hidden; /* Ensure content doesn't spill */
+        }
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+            /* Center slide content vertically */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: var(--border-radius-main);
+            overflow: hidden;
+            box-shadow: var(--box-shadow-light);
+        }
+        .swiper-slide img {
+            display: block;
+            width: 100%;
+            height: 350px; /* Fixed height for consistency */
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .swiper-slide:hover img {
+            transform: scale(1.05);
+        }
+        .swiper-pagination-bullet-active {
+            background: var(--primary-color);
+        }
+        .swiper-button-next, .swiper-button-prev {
+            color: var(--primary-color);
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            transition: background-color 0.3s ease;
+        }
+        .swiper-button-next:hover, .swiper-button-prev:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        .swiper-button-next::after, .swiper-button-prev::after {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .price .min-children {
+            display: block;
+            font-size: 0.8em;
+            font-weight: normal;
+            color: var(--text-lighter);
+            margin-top: 5px;
+        }
+        .availability {
+            font-size: 0.9em;
+            color: var(--text-lighter);
+            margin-top: 10px;
+            font-style: italic;
+        }
+        .availability strong {
+            color: var(--text-light);
+        }
+    </style>
+</head>
+<body data-page="index">
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <span>Fitzone Parties</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <ul>
+                <li><a href="index.html" class="nav-link active" data-page="index">Home</a></li> <!-- Set active -->
+                <li><a href="packages.html" class="nav-link" data-page="packages">Party Packages</a></li>
+                <li><a href="locations.html" class="nav-link" data-page="locations">Locations</a></li>
+                <li><a href="gallery.html" class="nav-link" data-page="gallery">Gallery</a></li>
+                <li><a href="summer-camp.html" class="nav-link" data-page="summer-camp">Summer Camp</a></li>
+                <li><a href="contact.html" class="nav-link" data-page="contact">Contact</a></li>
+                <li><a href="booking.html" class="nav-link primary-btn nav-book-btn" data-page="booking">Book Now</a></li>
+                <li class="auth-buttons">
+                    <a href="login.html" class="login-btn">Login</a>
+                    <a href="register.html" class="register-btn">Register</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Flash Messages Placeholder -->
+    <div class="flash-messages-container" id="flash-messages"></div>
+
+    <!-- Main Content Area -->
+    <main>
+        <!-- Hero Section with Split Layout -->
+        <section class="hero-split">
+            <div class="hero-content">
+                <h1>Your Child's Dream Party Starts Here!</h1>
+                <p>Planning your child’s next birthday party in Dublin? At Fitzone at West Wood Club, we make kids’ birthdays bigger, better, and easier. Fun for them — stress-free for you!</p>
+                <div class="hero-buttons">
+                    <a href="booking.html" class="button hero-btn hero-btn-primary">
+                        <i class="fas fa-calendar-check"></i> Book Your Party
+                    </a>
+                    <a href="packages.html" class="button hero-btn hero-btn-secondary">
+                        <i class="fas fa-gift"></i> View Packages
+                    </a>
+                    <a href="locations.html" class="button hero-btn hero-btn-accent">
+                        <i class="fas fa-map-marker-alt"></i> Our Locations
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image-container">
+                <img src="images/img-049.jpg" alt="Kids having fun at Fitzone" class="hero-image">
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-star"></i>
+                    <h3>Epic Parties</h3>
+                    <p>Fun-packed birthday parties for children aged 4–12.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Fully Supervised</h3>
+                    <p>Professional party hosts ensure safety and maximum fun.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-utensils"></i>
+                    <h3>All Inclusive</h3>
+                    <p>Hot food, goody bags, and party games included in packages.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-parking"></i>
+                    <h3>Easy Parking</h3>
+                    <p>Free parking available at all our Dublin Fitzone locations.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Homepage Gallery Slider Section -->
+        <section class="homepage-gallery">
+            <h2>Peek Inside the Fun!</h2>
+            <!-- Swiper -->
+            <div class="swiper-container homepage-swiper">
+                <div class="swiper-wrapper">
+                    <!-- Add slides with static image paths -->
+                    <div class="swiper-slide"><img src="images/img-000.jpg" alt="Gallery Image 1"></div>
+                    <div class="swiper-slide"><img src="images/img-007.jpg" alt="Gallery Image 2"></div>
+                    <div class="swiper-slide"><img src="images/img-014.jpg" alt="Gallery Image 3"></div>
+                    <div class="swiper-slide"><img src="images/img-021.jpg" alt="Gallery Image 4"></div>
+                    <div class="swiper-slide"><img src="images/img-028.jpg" alt="Gallery Image 5"></div>
+                    <div class="swiper-slide"><img src="images/img-035.jpg" alt="Gallery Image 6"></div>
+                    <div class="swiper-slide"><img src="images/img-042.jpg" alt="Gallery Image 7"></div>
+                    <div class="swiper-slide"><img src="images/img-056.jpg" alt="Gallery Image 8"></div>
+                    <div class="swiper-slide"><img src="images/img-063.jpg" alt="Gallery Image 9"></div>
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+                <!-- Add Navigation -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </section>
+
+        <!-- Fun Fitness Section (Updated based on reference) -->
+        <section class="fun-fitness">
+            <h2>Where Awesome Parties Happen!</h2>
+            <p>Adventure, racing, dancing, and climbing all under one roof!</p>
+            <div class="content-wrapper">
+                <div class="text-content">
+                    <h3>Dublin’s Ultimate Party Zone!</h3>
+                    <p>At Fitzone, we’ve created five incredible party experiences to suit every type of birthday star. Whether your child loves adventure, racing, climbing, dancing — or all of the above — you’ll find the perfect party package.</p>
+                    <ul class="fun-features">
+                        <li><i class="fas fa-check-circle"></i> Thrilling Adventure Zones</li>
+                        <li><i class="fas fa-check-circle"></i> Exciting Go-Kart Racing (Leopardstown)</li>
+                        <li><i class="fas fa-check-circle"></i> Fun Play & Dance Parties (Leopardstown)</li>
+                        <li><i class="fas fa-check-circle"></i> Challenging Climbing Walls (Clontarf)</li>
+                        <li><i class="fas fa-check-circle"></i> Exclusive VIP Ultimate Parties (Leopardstown)</li>
+                    </ul>
+                    <a href="packages.html" class="button">Explore Party Packages</a>
+                </div>
+                <div class="image-content">
+                    <img src="images/img-000.jpg" alt="Kids playing in Fitzone">
+                </div>
+            </div>
+        </section>
+
+        <!-- Party Packages Preview Section (Updated based on reference) -->
+        <section class="party-packages">
+            <h2>Choose Your Perfect Party Package!</h2>
+            <p>Five incredible party experiences for every birthday star (Ages 4-12)!</p>
+            <div class="package-cards">
+                <!-- Package 1: Adventure Zone -->
+                <div class="card popular">
+                    <img src="images/img-014.jpg" alt="Adventure Zone Party">
+                    <span class="badge">Popular Pick!</span>
+                    <h3>Adventure Zone Party (4-12)</h3>
+                    <p>Climb, crawl, race & slide through Dublin’s ultimate Adventure Zone!</p>
+                    <p class="price">€29.99 <span class="per-child">per child</span><span class="min-children">(Min 15 children)</span></p>
+                    <p class="availability"><strong>Available at:</strong> Leopardstown, Clontarf, Westmanstown</p>
+                    <a href="booking.html?package=adventure" class="button">BOOK ADVENTURE!</a>
+                </div>
+                <!-- Package 2: Go-Kart -->
+                <div class="card best-value">
+                    <img src="images/img-021.jpg" alt="Go-Kart Party">
+                    <span class="badge">Exclusive!</span>
+                    <h3>Go-Kart Party (6-12)</h3>
+                    <p>Thrilling indoor electric go-kart racing plus Adventure Zone playtime.</p>
+                    <p class="price">€39.99 <span class="per-child">per child</span><span class="min-children">(Min 12 children)</span></p>
+                    <p class="availability"><strong>Available exclusively at:</strong> Leopardstown</p>
+                    <a href="booking.html?package=gokart&location=leopardstown" class="button">BOOK GO-KART FUN!</a>
+                </div>
+                <!-- Package 3: Play & Dance -->
+                <div class="card">
+                     <img src="images/img-063.jpg" alt="Play & Dance Party">
+                     <span class="badge" style="background-color: var(--accent-color-3); color: #fff;">Music & Fun!</span>
+                     <h3>Play & Dance Party (5-12)</h3>
+                     <p>Adventure play followed by a private disco dance party with games.</p>
+                     <p class="price">€34.99 <span class="per-child">per child</span><span class="min-children">(Min 15 children)</span></p>
+                     <p class="availability"><strong>Available only at:</strong> Leopardstown</p>
+                     <a href="booking.html?package=play_dance&location=leopardstown" class="button">BOOK PLAY & DANCE!</a>
+                 </div>
+            </div>
+            <a href="packages.html" class="button secondary-btn">SEE ALL 5 PACKAGES</a>
+        </section>
+
+        <!-- Locations Preview Section (Updated based on reference) -->
+        <section class="locations-preview">
+            <h2>Explore Our Party Zones!</h2>
+            <p>Find the perfect Fitzone location for your epic celebration!</p>
+            <div class="location-cards">
+                <div class="card">
+                    <img src="images/img-035.jpg" alt="Fitzone Leopardstown">
+                    <h3>Fitzone Leopardstown</h3>
+                    <p>Includes: Adventure Zone, Go-Karts, Play & Dance, VIP Parties.</p>
+                    <p><i class="fa-solid fa-phone icon"></i> 01 9609328 / 01 2893208</p>
+                    <p><i class="fa-solid fa-envelope icon"></i> leopardstown.fitzone@westwood.ie</p>
+                    <a href="locations.html#leopardstown" class="button">LEOPARDSTOWN DETAILS</a>
+                </div>
+                <div class="card">
+                    <img src="images/img-042.jpg" alt="Fitzone Clontarf">
+                    <h3>Fitzone Clontarf</h3>
+                    <p>Includes: Adventure Zone, Climbing Wall Parties.</p>
+                    <p><i class="fa-solid fa-phone icon"></i> 01 8530353</p>
+                    <p><i class="fa-solid fa-envelope icon"></i> clontarf.fitzone@westwood.ie</p>
+                    <a href="locations.html#clontarf" class="button">CLONTARF DETAILS</a>
+                </div>
+                <div class="card">
+                    <img src="images/img-049.jpg" alt="Fitzone Westmanstown">
+                    <h3>Fitzone Westmanstown</h3>
+                    <p>Includes: Adventure Zone Parties.</p>
+                    <p><i class="fa-solid fa-phone icon"></i> 01 8025906</p>
+                    <p><i class="fa-solid fa-envelope icon"></i> westmanstown.fitzone@westwood.ie</p>
+                    <a href="locations.html#westmanstown" class="button">WESTMANSTOWN DETAILS</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section (Updated with reference quote) -->
+        <section class="testimonials">
+            <h2>Hear From Happy Parents!</h2>
+            <p>See why families love celebrating with Fitzone!</p>
+            <div class="testimonial-slider">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-item">
+                    <img src="images/img-056.jpg" alt="Happy Parent" class="testimonial-avatar">
+                    <blockquote>
+                        “Best party ever! Fitzone made the day amazing for our son — and so easy for us.”
+                    </blockquote>
+                    <cite>Lisa O Donovan, Rathmines, Dublin 6</cite>
+                </div>
+                <!-- Add more testimonials if available -->
+                 <div class="testimonial-item">
+                    <img src="images/img-057.jpg" alt="Happy Parent" class="testimonial-avatar">
+                    <blockquote>
+                        "The kids had an absolute blast! The staff were fantastic and handled everything perfectly. Highly recommend!"
+                    </blockquote>
+                    <cite>Sarah K., Dublin</cite>
+                </div>
+                 <div class="testimonial-item">
+                    <img src="images/img-058.jpg" alt="Happy Parent" class="testimonial-avatar">
+                    <blockquote>
+                        "So much fun and zero stress for the parents. The Go-Kart party was a huge hit! We'll definitely be back."
+                    </blockquote>
+                    <cite>Mark D., Dublin</cite>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section class="cta">
+            <h2>Ready to Give Them Their Best Birthday Ever?</h2>
+            <p>Choose the party they'll be talking about for months. Don’t miss out — our most popular party slots fill up fast!</p>
+            <a href="booking.html" class="button cta-button">Book Your Party Today!</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <!-- Footer content remains the same, check contact details -->
+         <div class="footer-content">
+            <div class="footer-about">
+                <h3>Fitzone Parties</h3>
+                <p>Creating unforgettable, action-packed party experiences for kids across Dublin. Part of the West Wood Club family.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="packages.html">Party Packages</a></li>
+                    <li><a href="locations.html">Locations</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="summer-camp.html">Summer Camp</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="booking.html">Book Now</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt icon"></i> Multiple Locations (See Locations page)</p>
+                <!-- Updated Phone Numbers -->
+                <p><i class="fas fa-phone icon"></i> <a href="tel:019609328">Leopardstown: 01 9609328</a> / <a href="tel:012893208">01 2893208</a></p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:018530353">Clontarf: 01 8530353</a></p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:018025906">Westmanstown: 01 8025906</a></p>
+                <!-- Updated Emails -->
+                <p><i class="fas fa-envelope icon"></i> <a href="mailto:leopardstown.fitzone@westwood.ie">Leopardstown Email</a></p>
+                <p><i class="fas fa-envelope icon"></i> <a href="mailto:clontarf.fitzone@westwood.ie">Clontarf Email</a></p>
+                <p><i class="fas fa-envelope icon"></i> <a href="mailto:westmanstown.fitzone@westwood.ie">Westmanstown Email</a></p>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; <span id="current-year"></span> Fitzone Parties | Powered by West Wood Club. All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- Chat Assistant -->
+    <!-- Chat Assistant HTML remains the same -->
+     <div class="chat-assistant">
+        <div class="chat-icon" id="chat-icon" aria-label="Open Chat">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div class="chat-popup" id="chat-popup">
+            <div class="chat-header">
+                <h4>Fitzone Helper</h4>
+                <button class="close-chat" id="close-chat" aria-label="Close Chat">&times;</button>
+            </div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="quick-replies" id="quick-replies"></div>
+            <div class="chat-input">
+                <form id="chat-input-form">
+                    <input type="text" id="chat-input-field" placeholder="Type your message...">
+                    <button type="submit" aria-label="Send Message"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Main JavaScript -->
+    <script src="script.js"></script>
+
+    <!-- Page-specific scripts -->
+    <script>
+        // Initialize Swiper for homepage gallery
+        var swiper = new Swiper(".homepage-swiper", {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            loop: true,
+            autoplay: {
+                delay: 3500,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            breakpoints: {
+                // when window width is >= 640px
+                640: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                },
+                // when window width is >= 992px
+                992: {
+                    slidesPerView: 3,
+                    spaceBetween: 30,
+                },
+            },
+        });
+
+        // Set current year in footer
+        document.getElementById("current-year").textContent = new Date().getFullYear();
+
+        // Set active navigation link based on body data attribute
+        const currentPage = document.body.getAttribute("data-page");
+        if (currentPage) {
+            const activeLink = document.querySelector(`.nav-link[data-page="${currentPage}"]`);
+            if (activeLink) {
+                activeLink.classList.add("active");
+            }
+        }
+    </script>
+</body>
+</html>
+

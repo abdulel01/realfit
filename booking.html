@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Party - Fitzone</title>
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Page-specific head elements -->
+    <style>
+        /* Placeholder for new booking page styles (to be added in Step 6) */
+        /* .booking-section-v3 { ... } */
+        
+        /* Payment Step Styling */
+        .payment-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .payment-summary {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+            height: fit-content;
+        }
+        
+        .payment-summary h3 {
+            margin: 0 0 20px 0;
+            color: #333;
+            font-size: 1.3em;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        
+        .price-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 0.95em;
+        }
+        
+        .price-item:last-child {
+            border-bottom: none;
+        }
+        
+        .price-item.total {
+            border-top: 2px solid #28a745;
+            margin-top: 10px;
+            padding-top: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #28a745;
+        }
+        
+        .price-label {
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .total-amount {
+            font-size: 1.3em;
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .payment-form {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .payment-form h3 {
+            margin: 0 0 20px 0;
+            color: #333;
+            font-size: 1.3em;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+        
+        #payment-element {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            background: #fafafa;
+            min-height: 200px;
+        }
+        
+        .payment-options {
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .secure-payment-notice {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            background: #e8f5e8;
+            border: 1px solid #28a745;
+            border-radius: 6px;
+            color: #155724;
+            font-size: 0.9em;
+        }
+        
+        .secure-payment-notice i {
+            color: #28a745;
+        }
+        
+        .accepted-cards {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        
+        .accepted-cards i {
+            font-size: 1.5em;
+            color: #007bff;
+        }
+        
+        /* Mobile responsiveness for payment */
+        @media (max-width: 768px) {
+            .payment-section {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .payment-summary,
+            .payment-form {
+                padding: 20px;
+            }
+            
+            .accepted-cards {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body data-page="booking-v3" class="booking-page">
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <span>Fitzone Parties</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <ul>
+                <li><a href="index.html" class="nav-link" data-page="index">Home</a></li>
+                <li><a href="packages.html" class="nav-link" data-page="packages">Party Packages</a></li>
+                <li><a href="locations.html" class="nav-link" data-page="locations">Locations</a></li>
+                <li><a href="gallery.html" class="nav-link" data-page="gallery">Gallery</a></li>
+                <li><a href="summer-camp.html" class="nav-link" data-page="summer-camp">Summer Camp</a></li>
+                <li><a href="contact.html" class="nav-link" data-page="contact">Contact</a></li>
+                <li><a href="booking.html" class="nav-link active" data-page="booking">Book Now</a></li>
+                <li class="auth-buttons">
+                    <a href="login.html" class="login-btn">Login</a>
+                    <a href="register.html" class="register-btn">Register</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Flash Messages -->
+    <div class="flash-messages-container" id="flash-messages"></div>
+
+    <!-- Main Content Area -->
+    <main>
+        <section class="booking-section redesigned">
+            <div class="booking-container redesigned">
+                <!-- Progress Bar -->
+                <div class="step-indicator">
+                    <div class="step active" data-step="1">
+                        <span class="step-number">1</span>
+                        <span class="step-title">Event Details</span>
+                    </div>
+                    <div class="step" data-step="2">
+                        <span class="step-number">2</span>
+                        <span class="step-title">Guest Details</span>
+                    </div>
+                    <div class="step" data-step="3">
+                        <span class="step-number">3</span>
+                        <span class="step-title">Contact Info</span>
+                    </div>
+                    <div class="step" data-step="4">
+                        <span class="step-number">4</span>
+                        <span class="step-title">Payment</span>
+                    </div>
+                    <div class="step" data-step="5">
+                        <span class="step-number">5</span>
+                        <span class="step-title">Review</span>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="progress-container">
+                    <div id="progress-bar"></div>
+                </div>
+
+                <!-- Booking Form -->
+                <form id="booking-form" class="booking-form">
+                    <!-- Step 1: Event Details -->
+                    <div class="form-step active" id="step-1">
+                        <h2><i class="fas fa-calendar-alt"></i> Event Details</h2>
+                        
+                        <!-- Location Selection -->
+                        <div class="form-group">
+                            <label for="location">Select Location <span class="required">*</span></label>
+                            <select id="location" name="location" required>
+                                <option value="">Choose a location...</option>
+                                <option value="leopardstown">Fitzone Leopardstown</option>
+                                <option value="clontarf">Fitzone Clontarf</option>
+                                <option value="westmanstown">Fitzone Westmanstown</option>
+                            </select>
+                            <div class="error-message" id="location-error"></div>
+                        </div>
+
+                        <!-- Package Selection -->
+                        <div class="form-group">
+                            <label>Select Package <span class="required">*</span></label>
+                            <div class="package-grid" id="package-grid">
+                                <!-- Packages will be dynamically loaded here -->
+                            </div>
+                            <div class="error-message" id="package-error"></div>
+                        </div>
+
+                        <!-- Date and Time Selection -->
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="party-date">Party Date <span class="required">*</span></label>
+                                <div class="input-with-icon">
+                                    <input type="text" id="party-date" name="party_date" required placeholder="Select date">
+                                </div>
+                                <div class="error-message" id="party-date-error"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="party-time">Party Time <span class="required">*</span></label>
+                                <div class="input-with-icon">
+                                    <input type="text" id="party-time" name="party_time" required placeholder="Select time">
+                                </div>
+                                <div class="error-message" id="party-time-error"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Guest Details -->
+                    <div class="form-step" id="step-2">
+                        <h2><i class="fas fa-users"></i> Guest Details</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="child-name">Child's Name <span class="required">*</span></label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-child"></i>
+                                    <input type="text" id="child-name" name="child_name" required>
+                                </div>
+                                <div class="error-message" id="child-name-error"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="child-age">Child's Age <span class="required">*</span></label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-birthday-cake"></i>
+                                    <input type="number" id="child-age" name="child_age" required min="1" max="16">
+                                </div>
+                                <div class="error-message" id="child-age-error"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="num-guests">Number of Guests <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-user-friends"></i>
+                                <input type="number" id="num-guests" name="num_guests" required min="5" max="50">
+                            </div>
+                            <div class="info-text" id="num-guests-info">Minimum and maximum guests vary by package</div>
+                            <div class="error-message" id="num-guests-error"></div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Contact Information -->
+                    <div class="form-step" id="step-3">
+                        <h2><i class="fas fa-address-card"></i> Contact Information</h2>
+                        <div class="form-group">
+                            <label for="parent-name">Parent/Guardian Name <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="parent-name" name="parent_name" required>
+                            </div>
+                            <div class="error-message" id="parent-name-error"></div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="email">Email Address <span class="required">*</span></label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-envelope"></i>
+                                    <input type="email" id="email" name="email" required>
+                                </div>
+                                <div class="error-message" id="email-error"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number <span class="required">*</span></label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-phone"></i>
+                                    <input type="tel" id="phone" name="phone" required>
+                                </div>
+                                <div class="error-message" id="phone-error"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="special-requests">Special Requests</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-comment-alt"></i>
+                                <textarea id="special-requests" name="special_requests" placeholder="Any allergies, dietary requirements, or other requests?"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group terms-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="terms" name="terms" required>
+                                I agree to the <a href="#" target="_blank">Terms & Conditions</a> <span class="required">*</span>
+                            </label>
+                            <div class="error-message" id="terms-error"></div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Payment -->
+                    <div class="form-step" id="step-4">
+                        <h2><i class="fas fa-credit-card"></i> Payment</h2>
+                        <div class="payment-section">
+                            <div class="payment-summary">
+                                <h3>Payment Summary</h3>
+                                <div class="price-breakdown">
+                                    <div class="price-item">
+                                        <span class="price-label">Package:</span>
+                                        <span id="payment-package-name"></span>
+                                    </div>
+                                    <div class="price-item">
+                                        <span class="price-label">Number of guests:</span>
+                                        <span id="payment-num-guests"></span>
+                                    </div>
+                                    <div class="price-item">
+                                        <span class="price-label">Price per person:</span>
+                                        <span id="payment-price-per-person"></span>
+                                    </div>
+                                    <div class="price-item total">
+                                        <span class="price-label">Total Amount:</span>
+                                        <span id="payment-total" class="total-amount"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-form">
+                                <h3>Payment Details</h3>
+                                <div id="payment-element">
+                                    <!-- Stripe Elements will be mounted here -->
+                                </div>
+                                <div id="payment-errors" class="error-message"></div>
+                                
+                                <div class="payment-options">
+                                    <div class="secure-payment-notice">
+                                        <i class="fas fa-lock"></i>
+                                        <span>Your payment is secured by SSL encryption</span>
+                                    </div>
+                                    <div class="accepted-cards">
+                                        <span>We accept:</span>
+                                        <i class="fab fa-cc-visa"></i>
+                                        <i class="fab fa-cc-mastercard"></i>
+                                        <i class="fab fa-cc-amex"></i>
+                                        <i class="fab fa-cc-apple-pay"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Review -->
+                    <div class="form-step" id="step-5">
+                        <h2><i class="fas fa-clipboard-check"></i> Review Your Booking</h2>
+                        <div class="summary-section">
+                            <h3>Event Details</h3>
+                            <div class="summary-item">
+                                <strong class="label">Location:</strong>
+                                <span id="summary-location"></span>
+                            </div>
+                            <div class="summary-item">
+                                <strong class="label">Package:</strong>
+                                <span id="summary-package"></span>
+                            </div>
+                            <div class="summary-item">
+                                <strong class="label">Date & Time:</strong>
+                                <span id="summary-datetime"></span>
+                            </div>
+                            <div class="summary-item">
+                                <strong class="label">Number of Guests:</strong>
+                                <span id="summary-guests"></span>
+                            </div>
+                            <div class="summary-total">
+                                <strong class="label">Total Price:</strong>
+                                <span id="summary-price"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Navigation -->
+                    <div class="form-navigation">
+                        <button type="button" class="prev-btn" style="display: none;">Previous</button>
+                        <button type="button" class="next-btn">Next</button>
+                        <button type="submit" class="submit-btn" style="display: none;">Confirm Booking</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-about">
+                <h3>Fitzone Parties</h3>
+                <p>Creating unforgettable birthday experiences for children across Ireland.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="packages.html">Party Packages</a></li>
+                    <li><a href="locations.html">Our Locations</a></li>
+                    <li><a href="gallery.html">Photo Gallery</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-phone"></i> 01-234-5678</p>
+                <p><i class="fas fa-envelope"></i> info@fitzoneparties.ie</p>
+                <p><i class="fas fa-map-marker-alt"></i> Dublin, Ireland</p>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="current-year"></span> Fitzone Parties. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script type="module" src="supabase.js"></script>
+    <script type="module" src="emailjs-integration.js"></script>
+    <script type="module" src="stripe-payment.js"></script>
+    <script type="module" src="script.js"></script>
+    <!-- Add new JS logic for booking_v3 later -->
+
+</body>
+</html>
+

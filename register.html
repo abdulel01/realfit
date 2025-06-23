@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Fitzone Parties</title>
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Page-specific head elements -->
+    <style>
+        /* Styles for Login/Register Pages are in style.css or were inline */
+        /* Using styles defined in login.html (shared) */
+        .auth-section {
+            padding: 80px 1rem 4rem 1rem;
+            background: linear-gradient(135deg, #fdeeee 0%, #fff5f5 100%);
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-form-container {
+            max-width: 480px; /* Slightly wider for register */
+            width: 100%;
+            margin: 2rem auto;
+            padding: 3rem;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eee;
+            text-align: center;
+        }
+
+        .auth-form-container h2 {
+            margin-bottom: 2.5rem;
+            color: #ff5a5f;
+            font-size: 2.2em;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .auth-form-container .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .auth-form-container label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: #555;
+            font-size: 1em;
+        }
+
+        .auth-form-container label .fa-solid {
+            color: #ff7e5f;
+            font-size: 1.1em;
+        }
+
+        .auth-form-container input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            font-family: 'Nunito', sans-serif;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .auth-form-container input:focus {
+            border-color: #ff5a5f;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 90, 95, 0.15);
+        }
+
+        .auth-form-container button[type="submit"] {
+            display: inline-block;
+            width: 100%;
+            margin-top: 1rem;
+            background: linear-gradient(135deg, #ff5a5f, #ff9a8b);
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 90, 95, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .auth-form-container button[type="submit"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 90, 95, 0.4);
+            background: linear-gradient(135deg, #ff4d52, #ff8a7b);
+        }
+
+        .auth-switch-link {
+            margin-top: 2rem;
+            font-size: 0.95em;
+            color: #666;
+        }
+
+        .auth-switch-link a {
+            color: #ff5a5f;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .auth-switch-link a:hover {
+            color: #ff7e5f;
+            text-decoration: underline;
+        }
+
+        /* Flash messages styling */
+        .flash-messages-container {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .flash-message {
+            margin-bottom: 10px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 500px;
+            pointer-events: auto;
+            animation: slideIn 0.3s ease-out forwards;
+        }
+
+        .flash-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .flash-close {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 0 0 0 15px;
+            opacity: 0.7;
+        }
+
+        .flash-close:hover {
+            opacity: 1;
+        }
+
+        .flash-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .flash-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        .flash-message.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .flash-message.warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border-left: 4px solid #ffc107;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .auth-form-container {
+                padding: 2rem;
+            }
+            .auth-form-container h2 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body data-page="register"> <!-- Set data-page for active nav link -->
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <span>Fitzone Parties</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <ul>
+                <li><a href="index.html" class="nav-link" data-page="index">Home</a></li>
+                <li><a href="packages.html" class="nav-link" data-page="packages">Party Packages</a></li>
+                <li><a href="locations.html" class="nav-link" data-page="locations">Locations</a></li>
+                <li><a href="gallery.html" class="nav-link" data-page="gallery">Gallery</a></li>
+                <li><a href="summer-camp.html" class="nav-link" data-page="summer-camp">Summer Camp</a></li>
+                <li><a href="contact.html" class="nav-link" data-page="contact">Contact</a></li>
+                <li><a href="booking.html" class="nav-link primary-btn nav-book-btn" data-page="booking">Book Now</a></li>
+                <li class="auth-buttons">
+                    <a href="login.html" class="login-btn">Login</a>
+                    <a href="register.html" class="register-btn">Register</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Flash Messages Placeholder -->
+    <div class="flash-messages-container" id="flash-messages"></div>
+
+    <!-- Main Content Area -->
+    <main>
+        <section class="auth-section">
+            <div class="auth-form-container">
+                <h2><i class="fa-solid fa-user-plus"></i> Create Your Account</h2>
+                <!-- Form for demo purposes, action removed, added id -->
+                <form id="registerForm" method="POST">
+                    <div class="form-group">
+                        <label for="name"><i class="fa-solid fa-user"></i>Full Name:</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email"><i class="fa-solid fa-envelope"></i>Email Address:</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password"><i class="fa-solid fa-lock"></i>Password:</label>
+                        <input type="password" id="password" name="password" placeholder="Create a password (min 6 chars)" required minlength="6">
+                    </div>
+                     <div class="form-group">
+                        <label for="confirm_password"><i class="fa-solid fa-check-double"></i>Confirm Password:</label>
+                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required minlength="6">
+                    </div>
+                    <button type="submit">Register</button>
+                </form>
+                <p class="auth-switch-link">
+                    Already have an account? <a href="login.html">Login here</a>
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-about">
+                <h3>Fitzone Parties</h3>
+                <p>Creating unforgettable, action-packed party experiences for kids across Dublin. Part of the West Wood Club family.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="packages.html">Party Packages</a></li>
+                    <li><a href="locations.html">Locations</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="summer-camp.html">Summer Camp</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="booking.html">Book Now</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt icon"></i> Multiple Locations (See Locations page)</p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:012191827">Leopardstown: 01 2191827</a></p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:018530353">Clontarf: 01 8530353</a></p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:018025906">Westmanstown: 01 8025906</a></p>
+                <p><i class="fas fa-envelope icon"></i> <a href="mailto:info@fitzoneparties.ie">info@fitzoneparties.ie</a></p>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; <span id="current-year"></span> Fitzone Parties | Powered by West Wood Club. All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- Chat Assistant -->
+    <div class="chat-assistant">
+        <div class="chat-icon" id="chat-icon" aria-label="Open Chat">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div class="chat-popup" id="chat-popup">
+            <div class="chat-header">
+                <h4>Fitzone Helper</h4>
+                <button class="close-chat" id="close-chat" aria-label="Close Chat">&times;</button>
+            </div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="quick-replies" id="quick-replies"></div>
+            <div class="chat-input">
+                <form id="chat-input-form">
+                    <input type="text" id="chat-input-field" placeholder="Type your message...">
+                    <button type="submit" aria-label="Send Message"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Supabase JS -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm"></script>
+    
+    <!-- Main JavaScript -->
+    <script type="module" src="script.js"></script>
+    
+    <!-- Registration JavaScript -->
+    <script type="module" src="register.js"></script>
+
+    <script>
+        // Set current year in footer
+        document.getElementById("current-year").textContent = new Date().getFullYear();
+
+        // Set active navigation link based on body data attribute
+        const currentPage = document.body.getAttribute("data-page");
+        if (currentPage) {
+            const activeLink = document.querySelector(`.nav-link[data-page="${currentPage}"]`);
+            if (activeLink) {
+                activeLink.classList.add("active");
+            }
+        }
+    </script>
+</body>
+</html>

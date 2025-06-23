@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Party Packages - Fitzone Parties - Kids Party Fun!</title>
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon"> <!-- Placeholder: Add favicon.ico to images -->
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Page-specific head elements placeholder -->
+    <style>
+        .availability {
+            font-size: 0.9em;
+            color: var(--text-lighter);
+            margin-top: 10px;
+            font-style: italic;
+        }
+        .availability strong {
+            color: var(--text-light);
+        }
+        .price .min-children {
+            display: block;
+            font-size: 0.8em;
+            font-weight: normal;
+            color: var(--text-lighter);
+            margin-top: 5px;
+        }
+    </style>
+
+</head>
+<body data-page="packages">
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <!-- <img src="images/logo.png" alt="Fitzone Logo"> Placeholder: Add logo.png -->
+                <span>Fitzone Parties</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <ul>
+                <li><a href="index.html" class="nav-link" data-page="index">Home</a></li>
+                <li><a href="packages.html" class="nav-link active" data-page="packages">Party Packages</a></li> <!-- Set active -->
+                <li><a href="locations.html" class="nav-link" data-page="locations">Locations</a></li>
+                <li><a href="gallery.html" class="nav-link" data-page="gallery">Gallery</a></li>
+                <li><a href="summer-camp.html" class="nav-link" data-page="summer-camp">Summer Camp</a></li>
+                <li><a href="contact.html" class="nav-link" data-page="contact">Contact</a></li>
+                <li><a href="booking.html" class="nav-link primary-btn nav-book-btn" data-page="booking">Book Now</a></li>
+                <li class="auth-buttons">
+                    <a href="login.html" class="login-btn">Login</a>
+                    <a href="register.html" class="register-btn">Register</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Flash Messages Placeholder -->
+    <div class="flash-messages-container" id="flash-messages"></div>
+
+    <!-- Main Content Area -->
+    <main>
+        <section class="party-packages" style="padding-top: 120px;"> <!-- Increased padding-top -->
+            <h2>Choose Your Perfect Party Package!</h2>
+            <p>Five incredible party experiences for every birthday star (Ages 4-12)!</p>
+             <div class="package-cards">
+
+                <!-- Package 1: Adventure Zone Party -->
+                <div class="card popular">
+                    <img src="images/img-014.jpg" alt="Adventure Zone Party">
+                    <span class="badge">Popular Pick!</span>
+                    <h3>Adventure Zone Party (Ages 4-12)</h3>
+                    <p>Let them climb, crawl, race, and slide through Dublin's ultimate Adventure Zone!</p>
+                    <ul>
+                        <li><i class="fa-solid fa-check"></i> 2 Hours of Non-Stop Fun</li>
+                        <li><i class="fa-solid fa-check"></i> Obstacle Courses, Slides & Climbing</li>
+                        <li><i class="fa-solid fa-check"></i> Delicious Hot Food (Pizza, Nuggets, Veg options)</li>
+                        <li><i class="fa-solid fa-check"></i> Awesome Goody Bags</li>
+                        <li><i class="fa-solid fa-check"></i> Full Supervision by Party Host</li>
+                    </ul>
+                    <p class="price">€29.99 <span class="per-child">per child</span><span class="min-children">(Minimum 15 children)</span></p>
+                    <p class="availability"><strong>Available at:</strong> Leopardstown, Clontarf, Westmanstown</p>
+                    <a href="booking.html?package=adventure" class="button">BOOK ADVENTURE!</a>
+                </div>
+
+                <!-- Package 2: Go-Kart Party -->
+                <div class="card best-value">
+                    <img src="images/img-021.jpg" alt="Go-Kart Party">
+                    <span class="badge">Exclusive!</span>
+                    <h3>Go-Kart Party (Ages 6-12)</h3>
+                    <p>Ready, set, race! Thrilling indoor electric go-karting plus Adventure Zone playtime.</p>
+                    <ul>
+                        <li><i class="fa-solid fa-check"></i> Indoor Electric Go-Kart Racing</li>
+                        <li><i class="fa-solid fa-check"></i> Adventure Zone Playtime</li>
+                        <li><i class="fa-solid fa-check"></i> Hot Food, Party Games & Prizes</li>
+                        <li><i class="fa-solid fa-check"></i> Fully Supervised by Expert Hosts</li>
+                    </ul>
+                    <p class="price">€39.99 <span class="per-child">per child</span><span class="min-children">(Minimum 12 children)</span></p>
+                    <p class="availability"><strong>Available exclusively at:</strong> Fitzone Leopardstown</p>
+                    <a href="booking.html?package=gokart&location=leopardstown" class="button">BOOK GO-KART FUN!</a>
+                </div>
+
+                 <!-- Package 3: Play & Dance Party -->
+                <div class="card">
+                     <img src="images/img-063.jpg" alt="Play & Dance Party">
+                     <span class="badge" style="background-color: var(--accent-color-3); color: #fff;">Music & Fun!</span>
+                     <h3>Play & Dance Party (Ages 5-12)</h3>
+                     <p>Turn up the music! Adventure play followed by a private disco dance party.</p>
+                     <ul>
+                         <li><i class="fa-solid fa-check"></i> Adventure Play & Private Disco</li>
+                         <li><i class="fa-solid fa-check"></i> Party Games & Dancing Competitions</li>
+                         <li><i class="fa-solid fa-check"></i> Prizes, Hot Food & Goody Bags</li>
+                         <li><i class="fa-solid fa-check"></i> Full Supervision Throughout</li>
+                     </ul>
+                     <p class="price">€34.99 <span class="per-child">per child</span><span class="min-children">(Minimum 15 children)</span></p>
+                     <p class="availability"><strong>Available only at:</strong> Fitzone Leopardstown</p>
+                     <a href="booking.html?package=play_dance&location=leopardstown" class="button">BOOK PLAY & DANCE!</a>
+                 </div>
+
+                <!-- Package 4: Adventure Zone & Climbing Wall Party -->
+                <div class="card">
+                    <img src="images/img-049.jpg" alt="Climbing Wall Party"> <!-- Use a relevant image -->
+                    <span class="badge" style="background-color: var(--accent-color-2); color: #fff;">Climb High!</span>
+                    <h3>Adventure Zone & Climbing Wall Party (Ages 5-12)</h3>
+                    <p>For kids who love climbing, adventure, and action!</p>
+                    <ul>
+                        <li><i class="fa-solid fa-check"></i> 2 Hours of Exciting Play & Climbing</li>
+                        <li><i class="fa-solid fa-check"></i> Hot Food Options (Pizza or Party Box)</li>
+                        <li><i class="fa-solid fa-check"></i> Full Supervision for Safety & Smiles</li>
+                    </ul>
+                    <p class="price">€34.99 <span class="per-child">per child</span><span class="min-children">(Minimum 10 children)</span></p>
+                    <p class="availability"><strong>Available only at:</strong> Fitzone Clontarf</p>
+                    <a href="booking.html?package=climbing&location=clontarf" class="button">BOOK CLIMBING FUN!</a>
+                </div>
+
+                <!-- Package 5: VIP Ultimate Party -->
+                <div class="card premium">
+                    <img src="images/img-028.jpg" alt="VIP Ultimate Party">
+                    <span class="badge">VIP Treat!</span>
+                    <h3>VIP Ultimate Kids Party (Ages 6-12)</h3> <!-- Assumed age -->
+                    <p>Go big! Private use of play zone, go-kart track & disco room.</p>
+                    <ul>
+                        <li><i class="fa-solid fa-check"></i> 2.5 to 3 Hours of Exclusive Fun</li>
+                        <li><i class="fa-solid fa-check"></i> Go-Kart Racing & Dance Competitions</li>
+                        <li><i class="fa-solid fa-check"></i> Hot Food, Drinks & Premium Goody Bags</li>
+                        <li><i class="fa-solid fa-check"></i> Dedicated VIP Party Host</li>
+                    </ul>
+                    <p class="price">€59.99 <span class="per-child">per child</span><span class="min-children">(Minimum 10 children)</span></p>
+                    <p class="availability"><strong>Available exclusively at:</strong> Fitzone Leopardstown</p>
+                    <a href="booking.html?package=vip&location=leopardstown" class="button">BOOK THE VIP PARTY!</a>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <!-- Footer content remains the same -->
+         <div class="footer-content">
+            <div class="footer-about">
+                <h3>Fitzone Parties</h3>
+                <p>Creating unforgettable, action-packed party experiences for kids across Dublin. Part of the West Wood Club family.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="packages.html">Party Packages</a></li>
+                    <li><a href="locations.html">Locations</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="summer-camp.html">Summer Camp</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="booking.html">Book Now</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt icon"></i> Multiple Locations (See Locations page)</p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:012191827">Leopardstown: 01 2191827</a></p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:018530353">Clontarf: 01 8530353</a></p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:018025906">Westmanstown: 01 8025906</a></p>
+                <p><i class="fas fa-envelope icon"></i> <a href="mailto:info@fitzoneparties.ie">info@fitzoneparties.ie</a></p>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; <span id="current-year"></span> Fitzone Parties | Powered by West Wood Club. All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- Chat Assistant -->
+    <!-- Chat Assistant HTML remains the same -->
+     <div class="chat-assistant">
+        <div class="chat-icon" id="chat-icon" aria-label="Open Chat">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div class="chat-popup" id="chat-popup">
+            <div class="chat-header">
+                <h4>Fitzone Helper</h4>
+                <button class="close-chat" id="close-chat" aria-label="Close Chat">&times;</button>
+            </div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="quick-replies" id="quick-replies"></div>
+            <div class="chat-input">
+                <form id="chat-input-form">
+                    <input type="text" id="chat-input-field" placeholder="Type your message...">
+                    <button type="submit" aria-label="Send Message"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Main JavaScript -->
+    <script src="script.js"></script>
+
+    <!-- Dynamic Package Loading -->
+    <script type="module">
+        import { getPackages } from './supabase.js';
+
+        // Load packages dynamically from Supabase
+        async function loadPackages() {
+            try {
+                const result = await getPackages();
+                if (result.success && result.data.length > 0) {
+                    renderPackages(result.data);
+                } else {
+                    console.warn('No packages loaded from Supabase, keeping static content');
+                }
+            } catch (error) {
+                console.error('Error loading packages:', error);
+                console.warn('Keeping static content due to error');
+            }
+        }
+
+        function renderPackages(packages) {
+            const packageContainer = document.querySelector('.package-cards');
+            if (!packageContainer) return;
+
+            // Only replace content if we have packages from database
+            if (packages.length === 0) return;
+
+            packageContainer.innerHTML = packages.map(pkg => {
+                const features = Array.isArray(pkg.features) ? pkg.features : [];
+                const badgeColor = pkg.is_popular ? 'Popular Pick!' : 
+                                 pkg.is_exclusive ? 'Exclusive!' : 
+                                 'Great Choice!';
+                const cardClass = pkg.is_popular ? 'popular' : 
+                                pkg.is_exclusive ? 'best-value' : '';
+                
+                return `
+                    <div class="card ${cardClass}">
+                        <img src="${pkg.image_url || 'images/img-014.jpg'}" alt="${pkg.name}">
+                        <span class="badge">${badgeColor}</span>
+                        <h3>${pkg.name} ${pkg.min_age && pkg.max_age ? `(Ages ${pkg.min_age}-${pkg.max_age})` : ''}</h3>
+                        <p>${pkg.description || 'Amazing party experience for your child!'}</p>
+                        <ul>
+                            ${features.map(feature => `<li><i class="fa-solid fa-check"></i> ${feature}</li>`).join('')}
+                        </ul>
+                        <p class="price">€${pkg.price} <span class="per-child">per child</span>
+                        ${pkg.min_children ? `<span class="min-children">(Minimum ${pkg.min_children} children)</span>` : ''}</p>
+                        <p class="availability"><strong>Available at all locations</strong></p>
+                        <a href="booking.html?package=${encodeURIComponent(pkg.name.toLowerCase().replace(/\s+/g, '_'))}" class="button">BOOK NOW!</a>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Load packages when page loads
+        document.addEventListener('DOMContentLoaded', loadPackages);
+    </script>
+
+    <!-- Page-specific scripts placeholder -->
+
+    <script>
+        // Set current year in footer
+        document.getElementById("current-year").textContent = new Date().getFullYear();
+
+        // Set active navigation link based on body data attribute
+        const currentPage = document.body.getAttribute("data-page");
+        if (currentPage) {
+            const activeLink = document.querySelector(`.nav-link[data-page="${currentPage}"]`);
+            if (activeLink) {
+                activeLink.classList.add("active");
+            }
+        }
+    </script>
+</body>
+</html>
+

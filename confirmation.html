@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Confirmation - Fitzone Parties</title>
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon"> <!-- Placeholder: Add favicon.ico to images -->
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Page-specific styles -->
+    <style>
+        .confirmation-section {
+            padding: 100px 5% 60px;
+            background-color: #fffafc;
+            text-align: center;
+        }
+        .confirmation-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eee;
+        }
+        .confirmation-icon {
+            font-size: 4em;
+            color: #4CAF50; /* Green checkmark */
+            margin-bottom: 20px;
+        }
+        .confirmation-container h2 {
+            color: #ff5a5f;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        .confirmation-container p {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        .confirmation-details {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            margin-top: 30px;
+            text-align: left;
+        }
+        .confirmation-details h3 {
+            color: #ff7e5f;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .confirmation-details p {
+            margin-bottom: 10px;
+            color: #555;
+            font-size: 1em;
+        }
+        .confirmation-details strong {
+            color: #333;
+            min-width: 150px; /* Align keys */
+            display: inline-block;
+        }
+        .confirmation-actions {
+            margin-top: 30px;
+        }
+        .confirmation-actions .primary-btn {
+             background: linear-gradient(135deg, #ff5a5f, #ff9a8b);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 700;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(255, 90, 95, 0.2);
+            display: inline-block;
+        }
+        .confirmation-actions .primary-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 90, 95, 0.3);
+        }
+    </style>
+</head>
+<body data-page="confirmation"> <!-- Unique data-page if needed -->
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <!-- <img src="images/logo.png" alt="Fitzone Logo"> Placeholder: Add logo.png -->
+                <span>Fitzone Parties</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <ul>
+                <li><a href="index.html" class="nav-link" data-page="index">Home</a></li>
+                <li><a href="packages.html" class="nav-link" data-page="packages">Party Packages</a></li>
+                <li><a href="locations.html" class="nav-link" data-page="locations">Locations</a></li>
+                <li><a href="gallery.html" class="nav-link" data-page="gallery">Gallery</a></li>
+                <li><a href="summer-camp.html" class="nav-link" data-page="summer-camp">Summer Camp</a></li>
+                <li><a href="contact.html" class="nav-link" data-page="contact">Contact</a></li>
+                <li><a href="booking.html" class="nav-link primary-btn nav-book-btn" data-page="booking">Book Now</a></li>
+                <li class="auth-buttons">
+                    <a href="login.html" class="login-btn">Login</a>
+                    <a href="register.html" class="register-btn">Register</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+        <section class="confirmation-section">
+            <div class="confirmation-container">
+                <div class="confirmation-header">
+                    <i class="fas fa-check-circle"></i>
+                    <h1>Booking Request Received!</h1>
+                    <p>Thank you for choosing Fitzone Parties. We'll review your booking request and get back to you shortly.</p>
+                </div>
+                
+                <div class="confirmation-details">
+                    <div class="confirmation-section">
+                        <h2>Event Details</h2>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div>
+                                    <h3>Location</h3>
+                                    <p id="confirm_location">Loading...</p>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-gift"></i>
+                                <div>
+                                    <h3>Package</h3>
+                                    <p id="confirm_package">Loading...</p>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-calendar-alt"></i>
+                                <div>
+                                    <h3>Date & Time</h3>
+                                    <p id="confirm_datetime">Loading...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="confirmation-section">
+                        <h2>Party Details</h2>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <i class="fas fa-child"></i>
+                                <div>
+                                    <h3>Child's Name</h3>
+                                    <p id="confirm_child_name">Loading...</p>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-birthday-cake"></i>
+                                <div>
+                                    <h3>Child's Age</h3>
+                                    <p id="confirm_child_age">Loading...</p>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-users"></i>
+                                <div>
+                                    <h3>Number of Guests</h3>
+                                    <p id="confirm_num_guests">Loading...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="confirmation-section">
+                        <h2>Contact Information</h2>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <i class="fas fa-user"></i>
+                                <div>
+                                    <h3>Parent/Guardian Name</h3>
+                                    <p id="confirm_parent_name">Loading...</p>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-envelope"></i>
+                                <div>
+                                    <h3>Email</h3>
+                                    <p id="confirm_parent_email">Loading...</p>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-phone"></i>
+                                <div>
+                                    <h3>Phone</h3>
+                                    <p id="confirm_parent_phone">Loading...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="confirmation-section">
+                        <h2>Additional Information</h2>
+                        <div class="detail-grid">
+                            <div class="detail-item full-width">
+                                <i class="fas fa-comment-alt"></i>
+                                <div>
+                                    <h3>Special Requests</h3>
+                                    <p id="confirm_requests">Loading...</p>
+                                </div>
+                            </div>
+                            <div class="detail-item full-width">
+                                <i class="fas fa-euro-sign"></i>
+                                <div>
+                                    <h3>Estimated Price</h3>
+                                    <p id="confirm_price">Loading...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="confirmation-footer">
+                    <p>What happens next?</p>
+                    <ol>
+                        <li>We'll review your booking request within 24 hours</li>
+                        <li>You'll receive a confirmation email with all the details</li>
+                        <li>We'll contact you if we need any additional information</li>
+                    </ol>
+                    <div class="confirmation-actions">
+                        <a href="index.html" class="button">Return to Home</a>
+                        <a href="contact.html" class="button secondary">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <!-- Footer content copied from other pages -->
+        <div class="footer-content">
+            <div class="footer-about">
+                <h3>Fitzone Parties</h3>
+                <p>Creating unforgettable, action-packed party experiences for kids across Dublin. Part of the West Wood Club family.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="packages.html">Party Packages</a></li>
+                    <li><a href="locations.html">Locations</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="summer-camp.html">Summer Camp</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="booking.html">Book Now</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt icon"></i> Multiple Locations</p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:012191827">Leopardstown: 01 2191827</a></p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:018530353">Clontarf: 01 8530353</a></p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:018025906">Westmanstown: 01 8025906</a></p>
+                <p><i class="fas fa-envelope icon"></i> <a href="mailto:info@fitzoneparties.ie">info@fitzoneparties.ie</a></p>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; <span id="current-year"></span> Fitzone Parties | Powered by West Wood Club. All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+
+    <!-- Main JavaScript -->
+    <script src="script.js"></script>
+
+    <!-- Confirmation Page Specific Script -->
+    <script src="confirmation.js"></script>
+
+</body>
+</html>

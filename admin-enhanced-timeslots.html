@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Time Slots Management - Fitzone Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            color: #2563eb;
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        /* Quick Controls */
+        .quick-controls {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .control-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 1.5rem;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.875rem;
+        }
+
+        .form-select, .form-input {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .form-select:focus, .form-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .date-navigation {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            justify-content: center;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .current-date {
+            background: #f1f5f9;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            color: #2563eb;
+            min-width: 200px;
+            text-align: center;
+        }
+
+        /* Enhanced Time Slots Display */
+        .timeslots-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .timeslots-header {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .location-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .location-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .date-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            opacity: 0.9;
+        }
+
+        /* Day Sections */
+        .day-section {
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .day-header {
+            background: #f8fafc;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .day-header h3 {
+            margin: 0;
+            color: #1e293b;
+            font-size: 1.125rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .day-stats {
+            color: #64748b;
+            font-size: 0.875rem;
+            font-weight: normal;
+        }
+        
+        .day-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        /* Time Slots Grid */
+        .timeslots-grid {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .slot-day-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #2563eb;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .time-slot-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .time-slot-card:hover {
+            border-color: #2563eb;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+        }
+
+        .time-slot-card.available {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #f0fdf4, #ffffff);
+        }
+
+        .time-slot-card.unavailable {
+            border-color: #ef4444;
+            background: linear-gradient(135deg, #fef2f2, #ffffff);
+            opacity: 0.8;
+        }
+
+        .time-slot-card.booked {
+            border-color: #f59e0b;
+            background: linear-gradient(135deg, #fffbeb, #ffffff);
+        }
+
+        .slot-time {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .slot-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .status-available {
+            color: #10b981;
+        }
+
+        .status-unavailable {
+            color: #ef4444;
+        }
+
+        .status-booked {
+            color: #f59e0b;
+        }
+
+        .booking-info {
+            background: rgba(245, 158, 11, 0.1);
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .slot-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        /* Enhanced Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #374151;
+            border: 2px solid #e5e7eb;
+        }
+
+        .btn-outline:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+        }
+
+        /* Quick Action Buttons */
+        .quick-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .quick-toggle {
+            flex: 1;
+            justify-content: center;
+            padding: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #64748b;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #cbd5e1;
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #64748b;
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .control-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeslots-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-row {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Alert Messages */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-left: 4px solid #10b981;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .alert.warning {
+            border-left-color: #f59e0b;
+        }
+
+        .alert.error {
+            border-left-color: #ef4444;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-clock"></i> Enhanced Time Slots Management</h1>
+            <p>Easily manage availability for your locations with quick toggle controls</p>
+        </div>
+
+        <div class="quick-controls">
+            <div class="control-grid">
+                <div class="form-group">
+                    <label class="form-label">Location</label>
+                    <select id="location-select" class="form-select" onchange="loadTimeSlots()">
+                        <option value="">Select a location...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input type="date" id="date-select" class="form-input" onchange="loadTimeSlots()">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Quick Actions</label>
+                    <button class="btn btn-primary" onclick="setToday()">
+                        <i class="fas fa-calendar-day"></i>
+                        Today
+                    </button>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">&nbsp;</label>
+                    <button class="btn btn-outline" onclick="refreshData()">
+                        <i class="fas fa-refresh"></i>
+                        Refresh
+                    </button>
+                </div>
+            </div>
+            
+            <div class="date-navigation">
+                <button class="btn btn-outline" onclick="previousDay()">
+                    <i class="fas fa-chevron-left"></i>
+                    Previous Day
+                </button>
+                <div id="current-date" class="current-date">
+                    Select a date to begin
+                </div>
+                <button class="btn btn-outline" onclick="nextDay()">
+                    Next Day
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="timeslots-container">
+            <div id="timeslots-content">
+                <div class="empty-state">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>Select Location and Date</h3>
+                    <p>Choose a location and date to view and manage time slots</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://annyssisoigjibiocyzu.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubnlzc2lzb2lnamliaW9jeXp1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDczMzIxMDYsImV4cCI6MjA2MjkwODEwNn0.99ilyM9a9NVSNZZ4uiAcv92Nwr3wn6tcd2UhPwgiwg8';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        let currentDate = '';
+        let currentLocation = '';
+        
+        // Initialize the interface
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('DOM loaded, initializing...');
+            console.log('Window supabase:', window.supabase);
+            console.log('Supabase client:', supabase);
+            
+            // Wait a moment for Supabase to load
+            if (!window.supabase) {
+                showAlert('Waiting for Supabase to load...', 'warning');
+                setTimeout(async () => {
+                    if (window.supabase) {
+                        await loadLocations();
+                        setToday();
+                    } else {
+                        showAlert('Failed to load Supabase library', 'error');
+                    }
+                }, 1000);
+            } else {
+                await loadLocations();
+                setToday();
+            }
+        });
+        
+        // Load locations into dropdown
+        async function loadLocations() {
+            try {
+                console.log('Starting to load locations...');
+                console.log('Supabase client:', supabase);
+                
+                if (!supabase) {
+                    throw new Error('Supabase client not initialized');
+                }
+                
+                const { data: locations, error } = await supabase
+                    .from('locations')
+                    .select('*')
+                    .eq('is_active', true)
+                    .order('name');
+                
+                console.log('Locations response:', { data: locations, error });
+                
+                if (error) throw error;
+                
+                const select = document.getElementById('location-select');
+                if (!select) {
+                    throw new Error('Location select element not found');
+                }
+                
+                select.innerHTML = '<option value="">Select a location...</option>';
+                
+                if (locations && locations.length > 0) {
+                    locations.forEach(location => {
+                        const option = document.createElement('option');
+                        option.value = location.id;
+                        option.textContent = location.name;
+                        select.appendChild(option);
+                    });
+                    console.log(`Successfully loaded ${locations.length} locations`);
+                    showAlert(`Loaded ${locations.length} locations successfully`, 'success');
+                } else {
+                    console.warn('No locations found');
+                    showAlert('No active locations found', 'warning');
+                }
+            } catch (error) {
+                console.error('Error loading locations:', error);
+                showAlert(`Error loading locations: ${error.message}`, 'error');
+            }
+        }
+        
+        // Load time slots for selected location and date
+        async function loadTimeSlots() {
+            const locationId = document.getElementById('location-select').value;
+            const selectedDate = document.getElementById('date-select').value;
+            
+            currentLocation = locationId;
+            currentDate = selectedDate;
+            
+            const container = document.getElementById('timeslots-content');
+            
+            if (!locationId) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>Select a Location</h3>
+                        <p>Choose a location to view and manage time slots</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="loading">
+                    <i class="fas fa-spinner spinner"></i>
+                    <h3>Loading time slots...</h3>
+                </div>
+            `;
+            
+            try {
+                // Get location info
+                const { data: location } = await supabase
+                    .from('locations')
+                    .select('name')
+                    .eq('id', locationId)
+                    .single();
+                
+                // Get time slots
+                const { data: timeSlots, error } = await supabase
+                    .from('time_slots')
+                    .select('*')
+                    .eq('location_id', locationId)
+                    .order(['day_of_week', 'start_time']);
+                
+                if (error) throw error;
+                
+                // Get bookings for selected date
+                let bookings = [];
+                if (selectedDate) {
+                    const { data: dateBookings } = await supabase
+                        .from('bookings')
+                        .select('booking_time, num_children, status')
+                        .eq('location_id', locationId)
+                        .eq('booking_date', selectedDate)
+                        .in('status', ['confirmed', 'pending']);
+                    
+                    bookings = dateBookings || [];
+                }
+                
+                displayTimeSlots(location, timeSlots, bookings, selectedDate);
+                updateCurrentDateDisplay(selectedDate);
+                
+            } catch (error) {
+                console.error('Error loading time slots:', error);
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>Error Loading Data</h3>
+                        <p>Please try again or check your connection</p>
+                        <button class="btn btn-primary" onclick="loadTimeSlots()">
+                            <i class="fas fa-refresh"></i>
+                            Retry
+                        </button>
+                    </div>
+                `;
+            }
+        }
+        
+        // Display time slots in enhanced organized format
+        function displayTimeSlots(location, timeSlots, bookings, selectedDate) {
+            const container = document.getElementById('timeslots-content');
+            
+            if (!timeSlots || timeSlots.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-clock"></i>
+                        <h3>No Time Slots Found</h3>
+                        <p>No time slots are configured for ${location?.name || 'this location'}</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Process bookings
+            const bookingCounts = {};
+            bookings.forEach(booking => {
+                const time = booking.booking_time;
+                if (!bookingCounts[time]) {
+                    bookingCounts[time] = { count: 0, children: 0 };
+                }
+                bookingCounts[time].count++;
+                bookingCounts[time].children += booking.num_children;
+            });
+            
+            // Filter slots for current day if date is selected
+            let displaySlots = timeSlots;
+            if (selectedDate) {
+                const selectedDay = new Date(selectedDate).getDay();
+                displaySlots = timeSlots.filter(slot => slot.day_of_week === selectedDay);
+            }
+            
+            // Group by day and sort by time
+            const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const groupedSlots = {};
+            
+            displaySlots.forEach(slot => {
+                const dayName = dayNames[slot.day_of_week];
+                if (!groupedSlots[dayName]) {
+                    groupedSlots[dayName] = [];
+                }
+                groupedSlots[dayName].push(slot);
+            });
+            
+            // Sort each day's slots by time
+            Object.keys(groupedSlots).forEach(day => {
+                groupedSlots[day].sort((a, b) => a.start_time.localeCompare(b.start_time));
+            });
+            
+            // Calculate stats
+            const totalSlots = displaySlots.length;
+            const availableSlots = displaySlots.filter(s => s.is_available).length;
+            const bookedSlots = selectedDate ? Object.keys(bookingCounts).length : 0;
+            
+            let html = `
+                <div class="timeslots-header">
+                    <div class="location-info">
+                        <div>
+                            <div class="location-name">
+                                <i class="fas fa-map-marker-alt"></i>
+                                ${location?.name || 'Location'}
+                            </div>
+                            ${selectedDate ? `<div class="date-badge">
+                                <i class="fas fa-calendar"></i>
+                                ${formatDate(selectedDate)}
+                            </div>` : ''}
+                        </div>
+                    </div>
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <span class="stat-value">${totalSlots}</span>
+                            <span class="stat-label">Total Slots</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">${availableSlots}</span>
+                            <span class="stat-label">Available</span>
+                        </div>
+                        ${selectedDate ? `
+                            <div class="stat-item">
+                                <span class="stat-value">${bookedSlots}</span>
+                                <span class="stat-label">Booked Today</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            
+            // Add bulk actions if showing multiple days
+            if (!selectedDate && Object.keys(groupedSlots).length > 1) {
+                html += `
+                    <div style="padding: 1rem 2rem; background: #f8fafc; border-bottom: 1px solid #e2e8f0;">
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <h3 style="margin: 0; color: #374151;">Quick Actions:</h3>
+                            <button class="btn btn-success btn-sm" onclick="enableAllSlots()">
+                                <i class="fas fa-eye"></i> Enable All
+                            </button>
+                            <button class="btn btn-warning btn-sm" onclick="disableAllSlots()">
+                                <i class="fas fa-eye-slash"></i> Disable All
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Display slots organized by day
+            Object.keys(groupedSlots).sort((a, b) => {
+                const dayOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                return dayOrder.indexOf(a) - dayOrder.indexOf(b);
+            }).forEach(dayName => {
+                const daySlots = groupedSlots[dayName];
+                
+                html += `
+                    <div class="day-section">
+                        <div class="day-header">
+                            <h3>
+                                <i class="fas fa-calendar-day"></i>
+                                ${dayName}
+                                <span class="day-stats">(${daySlots.length} slots)</span>
+                            </h3>
+                            ${daySlots.length > 1 ? `
+                                <div class="day-actions">
+                                    <button class="btn btn-success btn-sm" onclick="enableDaySlots('${dayName}')">
+                                        <i class="fas fa-eye"></i> Enable Day
+                                    </button>
+                                    <button class="btn btn-warning btn-sm" onclick="disableDaySlots('${dayName}')">
+                                        <i class="fas fa-eye-slash"></i> Disable Day
+                                    </button>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="timeslots-grid">
+                `;
+                
+                daySlots.forEach(slot => {
+                    const slotTime = slot.start_time.substring(0, 5);
+                    const booking = bookingCounts[slotTime];
+                    const isBooked = selectedDate && booking;
+                    
+                    let statusClass = 'available';
+                    let statusText = 'Available';
+                    let statusIcon = 'check-circle';
+                    
+                    if (!slot.is_available) {
+                        statusClass = 'unavailable';
+                        statusText = 'Disabled';
+                        statusIcon = 'times-circle';
+                    } else if (isBooked) {
+                        statusClass = 'booked';
+                        statusText = 'Booked';
+                        statusIcon = 'calendar-check';
+                    }
+                    
+                    html += `
+                        <div class="time-slot-card ${statusClass}" data-day="${dayName}" data-slot-id="${slot.id}">
+                            <div class="slot-day-badge">${dayName.substring(0, 3)}</div>
+                            <div class="slot-time">
+                                <i class="fas fa-clock"></i>
+                                ${formatTime(slot.start_time)} - ${formatTime(slot.end_time)}
+                            </div>
+                            
+                            <div class="slot-status status-${statusClass}">
+                                <i class="fas fa-${statusIcon}"></i>
+                                ${statusText}
+                            </div>
+                            
+                            ${isBooked ? `
+                                <div class="booking-info">
+                                    <i class="fas fa-users"></i>
+                                    ${booking.count} booking${booking.count > 1 ? 's' : ''} 
+                                    (${booking.children} children)
+                                </div>
+                            ` : ''}
+                            
+                            <div class="slot-actions">
+                                ${slot.is_available ? `
+                                    <button class="btn btn-warning btn-sm quick-toggle" 
+                                            onclick="toggleSlot(${slot.id}, false)" title="Hide from customers">
+                                        <i class="fas fa-eye-slash"></i>
+                                        Hide
+                                    </button>
+                                ` : `
+                                    <button class="btn btn-success btn-sm quick-toggle" 
+                                            onclick="toggleSlot(${slot.id}, true)" title="Show to customers">
+                                        <i class="fas fa-eye"></i>
+                                        Show
+                                    </button>
+                                `}
+                                
+                                <button class="btn btn-danger btn-sm quick-toggle" 
+                                        onclick="deleteSlot(${slot.id}, '${dayName} ${formatTime(slot.start_time)}')" 
+                                        title="Delete permanently">
+                                    <i class="fas fa-trash"></i>
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // Toggle slot availability
+        window.toggleSlot = async function(slotId, makeAvailable) {
+            try {
+                console.log('🔧 Toggling slot:', slotId, 'to available:', makeAvailable);
+                
+                const { data, error } = await supabase
+                    .from('time_slots')
+                    .update({ is_available: makeAvailable })
+                    .eq('id', slotId)
+                    .select();
+                
+                if (error) throw error;
+                
+                console.log('✅ Toggle success:', data);
+                console.log('📝 Updated data:', JSON.stringify(data));
+                showAlert(`Time slot ${makeAvailable ? 'enabled' : 'disabled'} successfully`, 'success');
+                
+                // Add a longer delay and force refresh to ensure database is updated
+                setTimeout(() => {
+                    console.log('🔄 Refreshing data after toggle (1 second delay)...');
+                    loadTimeSlots();
+                }, 1000);
+                
+            } catch (error) {
+                console.error('❌ Error toggling slot:', error);
+                showAlert('Error updating time slot: ' + error.message, 'error');
+            }
+        };
+        
+        // Delete time slot
+        window.deleteSlot = async function(slotId, timeText) {
+            if (!confirm(`Are you sure you want to permanently delete the ${timeText} time slot?\n\nThis action cannot be undone!`)) {
+                return;
+            }
+            
+            try {
+                console.log('🗑️ Deleting slot:', slotId);
+                
+                const { data, error } = await supabase
+                    .from('time_slots')
+                    .delete()
+                    .eq('id', slotId)
+                    .select();
+                
+                if (error) throw error;
+                
+                console.log('✅ Delete success:', data);
+                showAlert('Time slot deleted successfully', 'success');
+                
+                // Add a small delay and force refresh
+                setTimeout(() => {
+                    console.log('🔄 Refreshing data after delete...');
+                    loadTimeSlots();
+                }, 300);
+                
+            } catch (error) {
+                console.error('❌ Error deleting slot:', error);
+                showAlert('Error deleting time slot: ' + error.message, 'error');
+            }
+        };
+        
+        // Set today's date
+        window.setToday = function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date-select').value = today;
+            loadTimeSlots();
+        };
+        
+        // Navigate to previous day
+        window.previousDay = function() {
+            const dateInput = document.getElementById('date-select');
+            if (!dateInput.value) {
+                setToday();
+                return;
+            }
+            
+            const currentDate = new Date(dateInput.value);
+            currentDate.setDate(currentDate.getDate() - 1);
+            dateInput.value = currentDate.toISOString().split('T')[0];
+            loadTimeSlots();
+        };
+        
+        // Navigate to next day
+        window.nextDay = function() {
+            const dateInput = document.getElementById('date-select');
+            if (!dateInput.value) {
+                setToday();
+                return;
+            }
+            
+            const currentDate = new Date(dateInput.value);
+            currentDate.setDate(currentDate.getDate() + 1);
+            dateInput.value = currentDate.toISOString().split('T')[0];
+            loadTimeSlots();
+        };
+        
+        // Refresh data
+        window.refreshData = function() {
+            loadTimeSlots();
+        };
+        
+        // Bulk actions
+        window.enableAllSlots = async function() {
+            if (!confirm('Enable all time slots for this location?')) return;
+            
+            try {
+                const locationId = document.getElementById('location-select').value;
+                const { error } = await supabase
+                    .from('time_slots')
+                    .update({ is_available: true })
+                    .eq('location_id', locationId);
+                
+                if (error) throw error;
+                showAlert('All time slots enabled successfully', 'success');
+                loadTimeSlots();
+            } catch (error) {
+                console.error('Error enabling all slots:', error);
+                showAlert('Error enabling all slots', 'error');
+            }
+        };
+        
+        window.disableAllSlots = async function() {
+            if (!confirm('Disable all time slots for this location? Customers will not be able to book any times.')) return;
+            
+            try {
+                const locationId = document.getElementById('location-select').value;
+                const { error } = await supabase
+                    .from('time_slots')
+                    .update({ is_available: false })
+                    .eq('location_id', locationId);
+                
+                if (error) throw error;
+                showAlert('All time slots disabled successfully', 'success');
+                loadTimeSlots();
+            } catch (error) {
+                console.error('Error disabling all slots:', error);
+                showAlert('Error disabling all slots', 'error');
+            }
+        };
+        
+        window.enableDaySlots = async function(dayName) {
+            const dayIndex = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].indexOf(dayName);
+            if (!confirm(`Enable all time slots for ${dayName}?`)) return;
+            
+            try {
+                const locationId = document.getElementById('location-select').value;
+                const { error } = await supabase
+                    .from('time_slots')
+                    .update({ is_available: true })
+                    .eq('location_id', locationId)
+                    .eq('day_of_week', dayIndex);
+                
+                if (error) throw error;
+                showAlert(`All ${dayName} time slots enabled`, 'success');
+                loadTimeSlots();
+            } catch (error) {
+                console.error('Error enabling day slots:', error);
+                showAlert('Error enabling day slots', 'error');
+            }
+        };
+        
+        window.disableDaySlots = async function(dayName) {
+            const dayIndex = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].indexOf(dayName);
+            if (!confirm(`Disable all time slots for ${dayName}?`)) return;
+            
+            try {
+                const locationId = document.getElementById('location-select').value;
+                const { error } = await supabase
+                    .from('time_slots')
+                    .update({ is_available: false })
+                    .eq('location_id', locationId)
+                    .eq('day_of_week', dayIndex);
+                
+                if (error) throw error;
+                showAlert(`All ${dayName} time slots disabled`, 'success');
+                loadTimeSlots();
+            } catch (error) {
+                console.error('Error disabling day slots:', error);
+                showAlert('Error disabling day slots', 'error');
+            }
+        };
+        
+        // Update current date display
+        function updateCurrentDateDisplay(date) {
+            const display = document.getElementById('current-date');
+            if (date) {
+                const dateObj = new Date(date);
+                const options = { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                };
+                display.textContent = dateObj.toLocaleDateString('en-US', options);
+            } else {
+                display.textContent = 'Select a date to begin';
+            }
+        }
+        
+        // Format date for display
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                weekday: 'long',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+        
+        // Format time for display
+        function formatTime(timeString) {
+            const [hours, minutes] = timeString.split(':');
+            const hour12 = hours % 12 || 12;
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            return `${hour12}:${minutes} ${ampm}`;
+        }
+        
+        // Show alert message
+        function showAlert(message, type = 'success') {
+            const alert = document.createElement('div');
+            alert.className = `alert ${type}`;
+            alert.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 3000);
+        }
+        
+        // Make functions available globally
+        window.loadTimeSlots = loadTimeSlots;
+    </script>
+</body>
+</html> 

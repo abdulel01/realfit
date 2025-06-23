@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Fitzone Parties - Kids Party Fun!</title>
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Page-specific head elements -->
+    <style>
+        /* Keep existing checkbox styles or move them to main CSS if not already there */
+        .required { color: #ff5a5f; margin-left: 2px; }
+        .checkbox-container {
+            display: block;
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 1em;
+            user-select: none;
+            color: #555;
+        }
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: #eee;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .checkbox-container:hover input ~ .checkmark {
+            background-color: #ccc;
+        }
+        .checkbox-container input:checked ~ .checkmark {
+            background-color: #ff5a5f;
+        }
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+        .checkbox-container input:checked ~ .checkmark:after {
+            display: block;
+        }
+        .checkbox-container .checkmark:after {
+            left: 7px;
+            top: 3px;
+            width: 6px;
+            height: 12px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+<body data-page="contact">
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <span>Fitzone Parties</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <ul>
+                <li><a href="index.html" class="nav-link" data-page="index">Home</a></li>
+                <li><a href="packages.html" class="nav-link" data-page="packages">Party Packages</a></li>
+                <li><a href="locations.html" class="nav-link" data-page="locations">Locations</a></li>
+                <li><a href="gallery.html" class="nav-link" data-page="gallery">Gallery</a></li>
+                <li><a href="summer-camp.html" class="nav-link" data-page="summer-camp">Summer Camp</a></li>
+                <li><a href="contact.html" class="nav-link active" data-page="contact">Contact</a></li> <!-- Set active -->
+                <li><a href="booking.html" class="nav-link primary-btn nav-book-btn" data-page="booking">Book Now</a></li>
+                <li class="auth-buttons">
+                    <a href="login.html" class="login-btn">Login</a>
+                    <a href="register.html" class="register-btn">Register</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Flash Messages Placeholder -->
+    <div class="flash-messages-container" id="flash-messages"></div>
+
+    <!-- Main Content Area -->
+    <main>
+        <!-- Use new V2 classes for the section and container -->
+        <section class="contact-section-v2">
+            <div class="contact-header-v2">
+                <h2>Get in Touch with Fitzone!</h2>
+                <p>Questions about our parties? Ready to book? Or just want to say hello? We're here to help make your child's special day unforgettable!</p>
+            </div>
+
+            <div class="contact-container-v2">
+                <!-- Box for Contact Info -->
+                <div class="contact-info-box">
+                    <h3>Ways to Reach Us</h3>
+                    <div class="info-item-v2">
+                        <i class="fa-solid fa-clock icon"></i>
+                        <div class="info-content-v2">
+                            <h4>Opening Hours</h4>
+                            <p>Monday - Friday: 9:00 AM - 8:00 PM</p>
+                            <p>Saturday - Sunday: 10:00 AM - 6:00 PM</p>
+                        </div>
+                    </div>
+                    <div class="info-item-v2">
+                        <i class="fa-solid fa-phone-volume icon"></i>
+                        <div class="info-content-v2">
+                            <h4>Call Us</h4>
+                            <!-- Updated Phone Numbers -->
+                            <p>Leopardstown: <a href="tel:019609328">01 9609328</a> / <a href="tel:012893208">01 2893208</a></p>
+                            <p>Clontarf: <a href="tel:018530353">01 8530353</a></p>
+                            <p>Westmanstown: <a href="tel:018025906">01 8025906</a></p>
+                        </div>
+                    </div>
+                    <div class="info-item-v2">
+                        <i class="fa-solid fa-envelope icon"></i>
+                        <div class="info-content-v2">
+                            <h4>Email Us</h4>
+                            <!-- Updated Emails -->
+                            <p>Leopardstown: <a href="mailto:leopardstown.fitzone@westwood.ie">leopardstown.fitzone@westwood.ie</a></p>
+                            <p>Clontarf: <a href="mailto:clontarf.fitzone@westwood.ie">clontarf.fitzone@westwood.ie</a></p>
+                            <p>Westmanstown: <a href="mailto:westmanstown.fitzone@westwood.ie">westmanstown.fitzone@westwood.ie</a></p>
+                            <p>General: <a href="mailto:info@fitzoneparties.ie">info@fitzoneparties.ie</a></p>
+                        </div>
+                    </div>
+                    <div class="info-item-v2">
+                        <i class="fa-solid fa-location-dot icon"></i>
+                        <div class="info-content-v2">
+                            <h4>Visit Us</h4>
+                            <p>Located within West Wood Clubs</p>
+                            <p>Multiple locations across Dublin</p>
+                            <a href="locations.html" class="location-link-v2">View Our Locations</a>
+                        </div>
+                    </div>
+
+                    <div class="social-connect-v2">
+                        <h4>Connect With Us</h4>
+                        <div class="social-icons-v2">
+                            <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Box for Contact Form -->
+                <div class="contact-form-box">
+                    <h3>Send Us a Message</h3>
+                    <form id="contactForm" method="POST">
+                        <div class="form-group">
+                            <label for="name">Your Name <span class="required">*</span></label>
+                            <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Your Email <span class="required">*</span></label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number (optional)">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject <span class="required">*</span></label>
+                            <select id="subject" name="subject" required>
+                                <option value="">Select a subject</option>
+                                <option value="booking">Party Booking Inquiry</option>
+                                <option value="packages">Package Information</option>
+                                <option value="summer-camp">Summer Camp Inquiry</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Your Message <span class="required">*</span></label>
+                            <textarea id="message" name="message" rows="6" placeholder="Tell us how we can help you..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="newsletter" name="newsletter" value="yes">
+                                <span class="checkmark"></span>
+                                Subscribe to our newsletter for party ideas and special offers
+                            </label>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <i class="fa-solid fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <h3>How far in advance should I book a party?</h3>
+                    <div class="faq-answer">
+                        <p>We recommend booking at least 3-4 weeks in advance to secure your preferred date and time, especially for weekend parties. Popular slots fill up quickly!</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <h3>What's included in the party packages?</h3>
+                     <div class="faq-answer">
+                        <p>All our party packages include dedicated party hosts, access to amazing play areas/activities, delicious hot food for the kids, drinks, and awesome goody bags to take home. Specific activities vary by package. Check our <a href="packages.html">Party Packages</a> page for full details on each option.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <h3>Is there a minimum or maximum number of children?</h3>
+                     <div class="faq-answer">
+                        <p>Yes, minimum numbers apply and vary by package (usually 10-15 children). The maximum number of guests is typically 30, but please check the specific package details. The birthday child is included in the guest count.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <h3>Do you cater for dietary requirements?</h3>
+                     <div class="faq-answer">
+                        <p>Absolutely! We can cater for various dietary requirements, including vegetarian, gluten-free, and common allergies. Please inform us of any specific needs when making your booking so we can make the necessary arrangements.</p>
+                    </div>
+                </div>
+                 <div class="faq-item">
+                    <h3>Can parents stay during the party?</h3>
+                     <div class="faq-answer">
+                        <p>Parents are welcome to stay! We have comfortable seating areas near the party zones. For Go-Kart parties, parental supervision might be required for younger racers.</p>
+                    </div>
+                </div>
+                 <div class="faq-item">
+                    <h3>What are the age ranges for the parties?</h3>
+                     <div class="faq-answer">
+                        <p>Our parties are generally designed for children aged 4-12. Some packages, like Go-Karting or Climbing, have specific minimum age requirements (e.g., 6+ or 5+). Please see the <a href="packages.html">Party Packages</a> page for details.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <!-- Footer content updated to match index.html -->
+         <div class="footer-content">
+            <div class="footer-about">
+                <h3>Fitzone Parties</h3>
+                <p>Creating unforgettable, action-packed party experiences for kids across Dublin. Part of the West Wood Club family.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="packages.html">Party Packages</a></li>
+                    <li><a href="locations.html">Locations</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="summer-camp.html">Summer Camp</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="booking.html">Book Now</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt icon"></i> Multiple Locations (See Locations page)</p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:019609328">Leopardstown: 01 9609328</a> / <a href="tel:012893208">01 2893208</a></p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:018530353">Clontarf: 01 8530353</a></p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:018025906">Westmanstown: 01 8025906</a></p>
+                <p><i class="fas fa-envelope icon"></i> <a href="mailto:leopardstown.fitzone@westwood.ie">Leopardstown Email</a></p>
+                <p><i class="fas fa-envelope icon"></i> <a href="mailto:clontarf.fitzone@westwood.ie">Clontarf Email</a></p>
+                <p><i class="fas fa-envelope icon"></i> <a href="mailto:westmanstown.fitzone@westwood.ie">Westmanstown Email</a></p>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; <span id="current-year"></span> Fitzone Parties | Powered by West Wood Club. All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- Chat Assistant -->
+    <!-- Chat Assistant HTML remains the same -->
+     <div class="chat-assistant">
+        <div class="chat-icon" id="chat-icon" aria-label="Open Chat">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div class="chat-popup" id="chat-popup">
+            <div class="chat-header">
+                <h4>Fitzone Helper</h4>
+                <button class="close-chat" id="close-chat" aria-label="Close Chat">&times;</button>
+            </div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="quick-replies" id="quick-replies"></div>
+            <div class="chat-input">
+                <form id="chat-input-form">
+                    <input type="text" id="chat-input-field" placeholder="Type your message...">
+                    <button type="submit" aria-label="Send Message"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Main JavaScript -->
+    <script src="script.js"></script>
+
+    <script>
+        // Set current year in footer
+        document.getElementById("current-year").textContent = new Date().getFullYear();
+
+        // Set active navigation link based on body data attribute
+        const currentPage = document.body.getAttribute("data-page");
+        if (currentPage) {
+            const activeLink = document.querySelector(`.nav-link[data-page="${currentPage}"]`);
+            if (activeLink) {
+                activeLink.classList.add("active");
+            }
+        }
+
+        // Contact Form Demo Submission
+        const contactForm = document.getElementById("contactForm");
+        if (contactForm) {
+            contactForm.addEventListener("submit", function(event) {
+                event.preventDefault(); // Prevent actual submission
+                // Simple validation (check required fields)
+                let isValid = true;
+                contactForm.querySelectorAll("[required]").forEach(input => {
+                    if (!input.value) {
+                        isValid = false;
+                        input.style.borderColor = "red"; // Basic invalid indicator
+                    } else {
+                        input.style.borderColor = ""; // Reset border
+                    }
+                });
+
+                const flashMessagesContainer = document.getElementById("flash-messages");
+                flashMessagesContainer.innerHTML = "; // Clear previous messages
+
+                if (isValid) {
+                    // Simulate success
+                    const successMessage = document.createElement("div");
+                    successMessage.classList.add("flash-message", "success");
+                    successMessage.innerHTML = `
+                        <i class="fas fa-check-circle"></i>
+                        <strong>Success!</strong> Your message has been sent (Demo).
+                        <button class="close-flash" onclick="this.parentElement.remove()">&times;</button>
+                    `;
+                    flashMessagesContainer.appendChild(successMessage);
+                    contactForm.reset(); // Clear the form
+                } else {
+                    // Simulate error
+                    const errorMessage = document.createElement("div");
+                    errorMessage.classList.add("flash-message", "error");
+                    errorMessage.innerHTML = `
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>Error!</strong> Please fill out all required fields.
+                        <button class="close-flash" onclick="this.parentElement.remove()">&times;</button>
+                    `;
+                    flashMessagesContainer.appendChild(errorMessage);
+                }
+                window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to top to show message
+            });
+        }
+
+        // FAQ Accordion
+        const faqItems = document.querySelectorAll(".faq-item");
+        faqItems.forEach(item => {
+            const header = item.querySelector("h3");
+            header.addEventListener("click", () => {
+                // Close other items
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item && otherItem.classList.contains("active")) {
+                        otherItem.classList.remove("active");
+                    }
+                });
+                // Toggle current item
+                item.classList.toggle("active");
+            });
+        });
+
+    </script>
+</body>
+</html>
+

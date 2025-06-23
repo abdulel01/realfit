@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fun Gallery - Fitzone Parties - Kids Party Fun!</title>
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon"> <!-- Placeholder: Add favicon.ico to images -->
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Page-specific head elements -->
+    <style>
+        /* Gallery specific styles are in style.css or were inline */
+        /* Lightbox styles are in style.css or were inline */
+    </style>
+</head>
+<body data-page="gallery">
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <!-- <img src="images/logo.png" alt="Fitzone Logo"> Placeholder: Add logo.png -->
+                <span>Fitzone Parties</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <ul>
+                <li><a href="index.html" class="nav-link" data-page="index">Home</a></li>
+                <li><a href="packages.html" class="nav-link" data-page="packages">Party Packages</a></li>
+                <li><a href="locations.html" class="nav-link" data-page="locations">Locations</a></li>
+                <li><a href="gallery.html" class="nav-link" data-page="gallery">Gallery</a></li>
+                <li><a href="summer-camp.html" class="nav-link" data-page="summer-camp">Summer Camp</a></li>
+                <li><a href="contact.html" class="nav-link" data-page="contact">Contact</a></li>
+                <!-- Added Book Now link -->
+                <li><a href="booking.html" class="nav-link primary-btn nav-book-btn" data-page="booking">Book Now</a></li>
+                <li class="auth-buttons">
+                    <!-- Static demo buttons -->
+                    <a href="login.html" class="login-btn">Login</a>
+                    <a href="register.html" class="register-btn">Register</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Flash Messages Placeholder (can be used by JS for demo feedback) -->
+    <div class="flash-messages-container" id="flash-messages"></div>
+
+    <!-- Main Content Area -->
+    <main>
+        <section class="gallery-section" style="padding-top: 100px;"> <!-- Added padding-top -->
+            <div class="gallery-header">
+                <h2>Epic Party Moments!</h2>
+                <p>Take a peek at the amazing adventures and unforgettable celebrations at Fitzone. Every smile tells a story!</p>
+            </div>
+
+            <div class="gallery-filters">
+                <button class="filter-btn active" data-filter="all">All Photos</button>
+                <button class="filter-btn" data-filter="activities">Activities</button>
+                <button class="filter-btn" data-filter="parties">Party Setups</button>
+                <button class="filter-btn" data-filter="venues">Our Venues</button>
+                <button class="filter-btn" data-filter="fun">Fun Moments</button>
+            </div>
+
+            <div class="gallery-grid">
+                <!-- Static image paths -->
+                <div class="gallery-item" data-category="activities">
+                    <img src="images/img-000.jpg" alt="Kids playing in Fitzone play area">
+                    <div class="overlay">
+                        <h3>Kids Playing</h3>
+                        <p>Kids exploring our multi-level play structure</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="activities">
+                    <img src="images/img-007.jpg" alt="Children sliding down blue slides">
+                    <div class="overlay">
+                        <h3>Slide Fun</h3>
+                        <p>Exciting slides for endless fun</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="parties">
+                    <img src="images/img-014.jpg" alt="Space themed party area">
+                    <div class="overlay">
+                        <h3>Party Setup</h3>
+                        <p>Out-of-this-world party experience</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="activities">
+                    <img src="images/img-021.jpg" alt="Child on red go-kart">
+                    <div class="overlay">
+                        <h3>Go-Kart Action</h3>
+                        <p>Speed and excitement for young racers</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="fun">
+                    <img src="images/img-028.jpg" alt="Kids in ball pit area">
+                    <div class="overlay">
+                        <h3>Ball Pit Fun</h3>
+                        <p>Dive into colorful fun</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="venues">
+                    <img src="images/img-035.jpg" alt="Children in ball pit at Leopardstown">
+                    <div class="overlay">
+                        <h3>Venue View</h3>
+                        <p>Our flagship location</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="venues">
+                    <img src="images/img-042.jpg" alt="Child on rope bridge at Clontarf">
+                    <div class="overlay">
+                        <h3>Activity View</h3>
+                        <p>Exciting rope bridge challenges</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="venues">
+                    <img src="images/img-049.jpg" alt="Play structure at Westmanstown">
+                    <div class="overlay">
+                        <h3>Play Structure</h3>
+                        <p>Modern play equipment for all ages</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="parties">
+                    <img src="images/img-063.jpg" alt="Fitzone party setup example">
+                    <div class="overlay">
+                        <h3>Party Decorations</h3>
+                        <p>Beautifully decorated party areas</p>
+                    </div>
+                </div>
+                <!-- Add more gallery items with static image paths -->
+                <div class="gallery-item" data-category="fun">
+                    <img src="images/img-056.jpg" alt="Kids having fun at a party">
+                    <div class="overlay">
+                        <h3>Party Fun</h3>
+                        <p>Creating unforgettable memories</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="activities">
+                    <img src="images/img-001.jpg" alt="Kids climbing on play structure">
+                    <div class="overlay">
+                        <h3>Climbing Fun</h3>
+                        <p>Building confidence through play</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-category="parties">
+                    <img src="images/img-002.jpg" alt="Party food setup">
+                    <div class="overlay">
+                        <h3>Party Food</h3>
+                        <p>Delicious food for hungry adventurers</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lightbox -->
+        <div class="lightbox">
+            <div class="lightbox-content">
+                <button class="lightbox-close">&times;</button>
+                <img src="" alt="">
+                <div class="lightbox-nav">
+                    <button class="prev-btn"><i class="fas fa-chevron-left"></i></button>
+                    <button class="next-btn"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="lightbox-caption"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-about">
+                <!-- <img src="images/logo-white.png" alt="Fitzone Logo"> Placeholder: Add white logo -->
+                <h3>Fitzone Parties</h3>
+                <p>Creating unforgettable, action-packed party experiences for kids across Dublin. Part of the West Wood Club family.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="packages.html">Party Packages</a></li>
+                    <li><a href="locations.html">Locations</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="summer-camp.html">Summer Camp</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="booking.html">Book Now</a></li> <!-- Added Book Now -->
+                    <li><a href="#">Privacy Policy</a></li> <!-- Placeholder -->
+                    <li><a href="#">Terms & Conditions</a></li> <!-- Placeholder -->
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt icon"></i> Multiple Locations (See Locations page)</p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:012191827">Leopardstown: 01 2191827</a></p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:018530353">Clontarf: 01 8530353</a></p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:018025906">Westmanstown: 01 8025906</a></p>
+                <p><i class="fas fa-envelope icon"></i> <a href="mailto:info@fitzoneparties.ie">info@fitzoneparties.ie</a></p>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <!-- Add other social links -->
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; <span id="current-year"></span> Fitzone Parties | Powered by West Wood Club. All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- Chat Assistant -->
+    <div class="chat-assistant">
+        <div class="chat-icon" id="chat-icon" aria-label="Open Chat">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div class="chat-popup" id="chat-popup">
+            <div class="chat-header">
+                <h4>Fitzone Helper</h4>
+                <button class="close-chat" id="close-chat" aria-label="Close Chat">&times;</button>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will be loaded here by JS -->
+            </div>
+            <div class="quick-replies" id="quick-replies">
+                <!-- Quick replies loaded by JS -->
+            </div>
+            <div class="chat-input">
+                <form id="chat-input-form">
+                    <input type="text" id="chat-input-field" placeholder="Type your message...">
+                    <button type="submit" aria-label="Send Message"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Main JavaScript -->
+    <script src="script.js"></script>
+
+    <!-- Page-specific scripts -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Gallery Filtering
+            const filterButtons = document.querySelectorAll(".filter-btn");
+            const galleryItems = document.querySelectorAll(".gallery-item");
+
+            if (filterButtons.length > 0 && galleryItems.length > 0) {
+                filterButtons.forEach(button => {
+                    button.addEventListener("click", () => {
+                        filterButtons.forEach(btn => btn.classList.remove("active"));
+                        button.classList.add("active");
+                        const filter = button.getAttribute("data-filter");
+
+                        galleryItems.forEach(item => {
+                            item.style.display = "none"; // Hide all first
+                            if (filter === "all" || item.getAttribute("data-category") === filter) {
+                                item.style.display = "block"; // Show matching items
+                                // Optional: Add fade-in animation if desired
+                            }
+                        });
+                    });
+                });
+            }
+
+            // Lightbox functionality
+            const lightbox = document.querySelector(".lightbox");
+            const lightboxImg = lightbox?.querySelector("img");
+            const lightboxCaption = lightbox?.querySelector(".lightbox-caption");
+            const closeBtn = lightbox?.querySelector(".lightbox-close");
+            const prevBtn = lightbox?.querySelector(".prev-btn");
+            const nextBtn = lightbox?.querySelector(".next-btn");
+            let currentIndex = 0;
+            let currentFilteredItems = [];
+
+            function updateFilteredItems() {
+                const activeFilter = document.querySelector(".filter-btn.active")?.getAttribute("data-filter") || "all";
+                currentFilteredItems = [];
+                galleryItems.forEach(item => {
+                    if (activeFilter === "all" || item.getAttribute("data-category") === activeFilter) {
+                        currentFilteredItems.push(item);
+                    }
+                });
+            }
+
+            function updateLightboxImage() {
+                if (!lightboxImg || !lightboxCaption || currentFilteredItems.length === 0) return;
+                const currentItem = currentFilteredItems[currentIndex];
+                const img = currentItem?.querySelector("img");
+                const caption = currentItem?.querySelector(".overlay h3")?.textContent || "";
+
+                if (img) {
+                    lightboxImg.src = img.src;
+                    lightboxImg.alt = img.alt;
+                    lightboxCaption.textContent = caption;
+                } else {
+                    // Handle case where image might be missing
+                    lightboxImg.src = "";
+                    lightboxImg.alt = "Image not found";
+                    lightboxCaption.textContent = "";
+                }
+            }
+
+            if (lightbox && lightboxImg && lightboxCaption && closeBtn && prevBtn && nextBtn) {
+                galleryItems.forEach((item) => {
+                    item.addEventListener("click", () => {
+                        updateFilteredItems();
+                        // Find the index within the *currently filtered* items
+                        currentIndex = currentFilteredItems.indexOf(item);
+                        if (currentIndex !== -1) {
+                            updateLightboxImage();
+                            lightbox.classList.add("active");
+                        }
+                    });
+                });
+
+                closeBtn.addEventListener("click", () => lightbox.classList.remove("active"));
+                lightbox.addEventListener("click", (e) => {
+                    if (e.target === lightbox) lightbox.classList.remove("active");
+                });
+
+                prevBtn.addEventListener("click", () => {
+                    currentIndex = (currentIndex - 1 + currentFilteredItems.length) % currentFilteredItems.length;
+                    updateLightboxImage();
+                });
+
+                nextBtn.addEventListener("click", () => {
+                    currentIndex = (currentIndex + 1) % currentFilteredItems.length;
+                    updateLightboxImage();
+                });
+
+                // Keyboard navigation for lightbox
+                document.addEventListener("keydown", (e) => {
+                    if (lightbox.classList.contains("active")) {
+                        if (e.key === "Escape") {
+                            lightbox.classList.remove("active");
+                        } else if (e.key === "ArrowLeft") {
+                            prevBtn.click();
+                        } else if (e.key === "ArrowRight") {
+                            nextBtn.click();
+                        }
+                    }
+                });
+            }
+
+            // Initial filter update on load
+            updateFilteredItems();
+        });
+
+        // Set current year in footer
+        document.getElementById("current-year").textContent = new Date().getFullYear();
+
+        // Set active navigation link based on body data attribute
+        const currentPage = document.body.getAttribute("data-page");
+        if (currentPage) {
+            const activeLink = document.querySelector(`.nav-link[data-page="${currentPage}"]`);
+            if (activeLink) {
+                activeLink.classList.add("active");
+            }
+        }
+    </script>
+</body>
+</html>

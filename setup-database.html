@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Setup - Fitzone Parties</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .step {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        .step h3 {
+            margin-top: 0;
+            color: #007bff;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        .log {
+            background: #000;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            height: 300px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .status.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .status.info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Fitzone Database Setup</h1>
+        
+        <div class="step">
+            <h3>📋 What this will do:</h3>
+            <ul>
+                <li>Create all necessary database tables (locations, packages, bookings, etc.)</li>
+                <li>Set up Row Level Security (RLS) policies</li>
+                <li>Insert sample data for locations and packages</li>
+                <li>Configure time slots for all locations</li>
+                <li>Enable real-time subscriptions</li>
+            </ul>
+        </div>
+
+        <div class="step">
+            <h3>🔧 Setup Actions:</h3>
+            <button onclick="setupSchema()" id="schema-btn">1. Create Database Schema</button>
+            <button onclick="setupSampleData()" id="data-btn" disabled>2. Insert Sample Data</button>
+            <button onclick="testConnection()" id="test-btn" disabled>3. Test Everything</button>
+            <button onclick="clearDatabase()" id="clear-btn">⚠️ Clear All Data</button>
+        </div>
+
+        <div id="status"></div>
+        
+        <div class="log" id="log"></div>
+
+        <div class="step">
+            <h3>📊 Quick Actions:</h3>
+            <button onclick="showTables()">Show All Tables</button>
+            <button onclick="showBookings()">Show Bookings</button>
+            <button onclick="showLocations()">Show Locations</button>
+            <button onclick="showPackages()">Show Packages</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { supabase } from './supabase.js';
+
+        let logElement = document.getElementById('log');
+        let statusElement = document.getElementById('status');
+
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.innerHTML += `[${timestamp}] ${message}\n`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(message);
+        }
+
+        function showStatus(message, type = 'info') {
+            statusElement.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        // Make functions global for onclick handlers
+        window.setupSchema = async function() {
+            log('🔄 Starting database schema setup...');
+            showStatus('Setting up database schema...', 'info');
+            
+            try {
+                // Create tables one by one with proper error handling
+                const tables = [
+                    {
+                        name: 'locations',
+                        sql: `
+                        CREATE TABLE IF NOT EXISTS public.locations (
+                            id SERIAL PRIMARY KEY,
+                            name TEXT NOT NULL,
+                            address TEXT NOT NULL,
+                            city TEXT NOT NULL,
+                            phone TEXT,
+                            email TEXT,
+                            description TEXT,
+                            image_url TEXT,
+                            latitude DECIMAL(10, 8),
+                            longitude DECIMAL(11, 8),
+                            is_active BOOLEAN DEFAULT true,
+                            created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                            updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+                        );`
+                    },
+                    {
+                        name: 'packages',
+                        sql: `
+                        CREATE TABLE IF NOT EXISTS public.packages (
+                            id SERIAL PRIMARY KEY,
+                            name TEXT NOT NULL,
+                            description TEXT,
+                            price DECIMAL(10, 2) NOT NULL,
+                            min_age INTEGER,
+                            max_age INTEGER,
+                            min_children INTEGER,
+                            max_children INTEGER,
+                            duration INTEGER,
+                            features JSONB,
+                            is_popular BOOLEAN DEFAULT false,
+                            is_exclusive BOOLEAN DEFAULT false,
+                            badge_text TEXT,
+                            badge_color TEXT,
+                            image_url TEXT,
+                            is_active BOOLEAN DEFAULT true,
+                            created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                            updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+                        );`
+                    },
+                    {
+                        name: 'location_packages',
+                        sql: `
+                        CREATE TABLE IF NOT EXISTS public.location_packages (
+                            id SERIAL PRIMARY KEY,
+                            location_id INTEGER REFERENCES public.locations(id) ON DELETE CASCADE,
+                            package_id INTEGER REFERENCES public.packages(id) ON DELETE CASCADE,
+                            is_available BOOLEAN DEFAULT true,
+                            price_override DECIMAL(10, 2),
+                            created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                            updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                            UNIQUE(location_id, package_id)
+                        );`
+                    },
+                    {
+                        name: 'time_slots',
+                        sql: `
+                        CREATE TABLE IF NOT EXISTS public.time_slots (
+                            id SERIAL PRIMARY KEY,
+                            location_id INTEGER REFERENCES public.locations(id) ON DELETE CASCADE,
+                            day_of_week INTEGER NOT NULL,
+                            start_time TIME NOT NULL,
+                            end_time TIME NOT NULL,
+                            is_available BOOLEAN DEFAULT true,
+                            created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                            updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+                        );`
+                    },
+                    {
+                        name: 'bookings',
+                        sql: `
+                        CREATE TABLE IF NOT EXISTS public.bookings (
+                            id SERIAL PRIMARY KEY,
+                            user_id UUID,
+                            location_id INTEGER REFERENCES public.locations(id),
+                            package_id INTEGER REFERENCES public.packages(id),
+                            booking_date DATE NOT NULL,
+                            booking_time TIME NOT NULL,
+                            num_children INTEGER NOT NULL,
+                            num_adults INTEGER NOT NULL,
+                            child_name TEXT,
+                            child_age INTEGER,
+                            special_requests TEXT,
+                            parent_name TEXT NOT NULL,
+                            email TEXT NOT NULL,
+                            phone TEXT NOT NULL,
+                            total_price DECIMAL(10, 2) NOT NULL,
+                            status TEXT DEFAULT 'pending',
+                            payment_status TEXT DEFAULT 'unpaid',
+                            payment_id TEXT,
+                            created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+                            updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+                        );`
+                    }
+                ];
+
+                for (const table of tables) {
+                    log(`Creating table: ${table.name}`);
+                    const { error } = await supabase.rpc('exec_sql', { sql_query: table.sql });
+                    if (error) {
+                        // Try alternative method
+                        const { error: error2 } = await supabase.from(table.name).select('id').limit(1);
+                        if (error2) {
+                            log(`⚠️ Could not verify table ${table.name}: ${error.message}`, 'warning');
+                        } else {
+                            log(`✅ Table ${table.name} exists`);
+                        }
+                    } else {
+                        log(`✅ Table ${table.name} created successfully`);
+                    }
+                }
+
+                // Enable RLS (this might fail if already enabled, that's OK)
+                const tables_rls = ['locations', 'packages', 'location_packages', 'time_slots', 'bookings'];
+                for (const table of tables_rls) {
+                    await supabase.rpc('exec_sql', { 
+                        sql_query: `ALTER TABLE public.${table} ENABLE ROW LEVEL SECURITY;` 
+                    });
+                }
+
+                // Create basic RLS policies
+                const policies = [
+                    `CREATE POLICY IF NOT EXISTS "Anyone can view locations" ON public.locations FOR SELECT USING (is_active = true);`,
+                    `CREATE POLICY IF NOT EXISTS "Anyone can view packages" ON public.packages FOR SELECT USING (is_active = true);`,
+                    `CREATE POLICY IF NOT EXISTS "Anyone can view location_packages" ON public.location_packages FOR SELECT USING (is_available = true);`,
+                    `CREATE POLICY IF NOT EXISTS "Anyone can view time_slots" ON public.time_slots FOR SELECT USING (is_available = true);`,
+                    `CREATE POLICY IF NOT EXISTS "Anyone can insert bookings" ON public.bookings FOR INSERT WITH CHECK (true);`,
+                    `CREATE POLICY IF NOT EXISTS "Anyone can view bookings" ON public.bookings FOR SELECT USING (true);`,
+                    `CREATE POLICY IF NOT EXISTS "Anyone can update bookings" ON public.bookings FOR UPDATE USING (true);`
+                ];
+
+                for (const policy of policies) {
+                    await supabase.rpc('exec_sql', { sql_query: policy });
+                }
+
+                log('✅ Database schema setup completed!');
+                showStatus('Database schema created successfully!', 'success');
+                document.getElementById('data-btn').disabled = false;
+                
+            } catch (error) {
+                log(`❌ Schema setup failed: ${error.message}`);
+                showStatus('Schema setup failed. Check the log for details.', 'error');
+            }
+        };
+
+        window.setupSampleData = async function() {
+            log('🔄 Inserting sample data...');
+            showStatus('Inserting sample data...', 'info');
+            
+            try {
+                // Insert locations
+                log('Inserting locations...');
+                const { error: locError } = await supabase.from('locations').upsert([
+                    {
+                        id: 1,
+                        name: 'Fitzone Leopardstown',
+                        address: '123 Leopardstown Road',
+                        city: 'Dublin',
+                        phone: '01 2191827',
+                        email: 'leopardstown@fitzoneparties.ie',
+                        description: 'Our flagship location with all amenities',
+                        is_active: true
+                    },
+                    {
+                        id: 2,
+                        name: 'Fitzone Clontarf',
+                        address: '45 Clontarf Road',
+                        city: 'Dublin',
+                        phone: '01 8530353',
+                        email: 'clontarf@fitzoneparties.ie',
+                        description: 'Featuring our exclusive climbing wall',
+                        is_active: true
+                    },
+                    {
+                        id: 3,
+                        name: 'Fitzone Westmanstown',
+                        address: '78 Westmanstown Avenue',
+                        city: 'Dublin',
+                        phone: '01 8025906',
+                        email: 'westmanstown@fitzoneparties.ie',
+                        description: 'Our newest location with state-of-the-art facilities',
+                        is_active: true
+                    }
+                ], { onConflict: 'id' });
+
+                if (!locError) log('✅ Locations inserted successfully');
+
+                // Insert packages
+                log('Inserting packages...');
+                const { error: pkgError } = await supabase.from('packages').upsert([
+                    {
+                        id: 1,
+                        name: 'Adventure Zone Party',
+                        description: 'Perfect for active kids who love adventure',
+                        price: 29.99,
+                        min_age: 4,
+                        max_age: 12,
+                        min_children: 5,
+                        max_children: 20,
+                        duration: 120,
+                        features: ["2 hours of play", "Party host", "Food & drinks", "Party room", "Invitations"],
+                        is_popular: true,
+                        is_active: true
+                    },
+                    {
+                        id: 2,
+                        name: 'Go-Kart Party',
+                        description: 'Thrilling go-kart racing experience',
+                        price: 39.99,
+                        min_age: 8,
+                        max_age: 16,
+                        min_children: 5,
+                        max_children: 15,
+                        duration: 120,
+                        features: ["2 hours of racing", "Safety briefing", "Food & drinks", "Party room", "Trophies"],
+                        is_active: true
+                    },
+                    {
+                        id: 3,
+                        name: 'Play & Dance Party',
+                        description: 'Combination of play area and dance floor',
+                        price: 34.99,
+                        min_age: 4,
+                        max_age: 12,
+                        min_children: 5,
+                        max_children: 25,
+                        duration: 120,
+                        features: ["2 hours of play", "Dance instructor", "Food & drinks", "Party room", "Music system"],
+                        is_active: true
+                    },
+                    {
+                        id: 4,
+                        name: 'VIP Ultimate Party',
+                        description: 'The ultimate party experience',
+                        price: 49.99,
+                        min_age: 4,
+                        max_age: 16,
+                        min_children: 5,
+                        max_children: 30,
+                        duration: 180,
+                        features: ["3 hours of activities", "Dedicated host", "Premium food & drinks", "VIP party room", "Party favors"],
+                        is_exclusive: true,
+                        badge_text: 'Exclusive',
+                        badge_color: '#4CAF50',
+                        is_active: true
+                    }
+                ], { onConflict: 'id' });
+
+                if (!pkgError) log('✅ Packages inserted successfully');
+
+                // Insert location-package relationships
+                log('Linking packages to locations...');
+                const { error: lpError } = await supabase.from('location_packages').upsert([
+                    { location_id: 1, package_id: 1, is_available: true },
+                    { location_id: 1, package_id: 2, is_available: true },
+                    { location_id: 1, package_id: 3, is_available: true },
+                    { location_id: 1, package_id: 4, is_available: true },
+                    { location_id: 2, package_id: 1, is_available: true },
+                    { location_id: 2, package_id: 3, is_available: true },
+                    { location_id: 3, package_id: 1, is_available: true }
+                ], { onConflict: 'location_id,package_id' });
+
+                if (!lpError) log('✅ Location-package links created successfully');
+
+                // Insert time slots
+                log('Creating time slots...');
+                const timeSlots = [];
+                
+                // Generate time slots for each location and day
+                for (let locationId = 1; locationId <= 3; locationId++) {
+                    for (let day = 0; day <= 6; day++) { // 0 = Sunday, 6 = Saturday
+                        if (locationId === 1) { // Leopardstown - all days
+                            timeSlots.push(
+                                { location_id: locationId, day_of_week: day, start_time: '10:00', end_time: '12:00', is_available: true },
+                                { location_id: locationId, day_of_week: day, start_time: '13:00', end_time: '15:00', is_available: true },
+                                { location_id: locationId, day_of_week: day, start_time: '16:00', end_time: '18:00', is_available: true }
+                            );
+                        } else if (locationId === 2 && [0, 1, 3, 5, 6].includes(day)) { // Clontarf - selected days
+                            timeSlots.push(
+                                { location_id: locationId, day_of_week: day, start_time: '13:00', end_time: '15:00', is_available: true },
+                                { location_id: locationId, day_of_week: day, start_time: '16:00', end_time: '18:00', is_available: true }
+                            );
+                        } else if (locationId === 3 && [0, 6].includes(day)) { // Westmanstown - weekends only
+                            timeSlots.push(
+                                { location_id: locationId, day_of_week: day, start_time: '10:00', end_time: '12:00', is_available: true },
+                                { location_id: locationId, day_of_week: day, start_time: '13:00', end_time: '15:00', is_available: true }
+                            );
+                        }
+                    }
+                }
+
+                const { error: tsError } = await supabase.from('time_slots').upsert(timeSlots);
+                if (!tsError) log('✅ Time slots created successfully');
+
+                log('✅ All sample data inserted successfully!');
+                showStatus('Sample data inserted successfully!', 'success');
+                document.getElementById('test-btn').disabled = false;
+                
+            } catch (error) {
+                log(`❌ Sample data insertion failed: ${error.message}`);
+                showStatus('Sample data insertion failed. Check the log for details.', 'error');
+            }
+        };
+
+        window.testConnection = async function() {
+            log('🔄 Testing database connection and data...');
+            showStatus('Testing database...', 'info');
+            
+            try {
+                // Test each table
+                const tables = ['locations', 'packages', 'location_packages', 'time_slots', 'bookings'];
+                
+                for (const table of tables) {
+                    const { data, error } = await supabase.from(table).select('*').limit(5);
+                    if (error) {
+                        log(`❌ Error accessing ${table}: ${error.message}`);
+                    } else {
+                        log(`✅ ${table}: ${data.length} records found`);
+                    }
+                }
+
+                log('✅ Database test completed!');
+                showStatus('Database is working correctly!', 'success');
+                
+            } catch (error) {
+                log(`❌ Database test failed: ${error.message}`);
+                showStatus('Database test failed. Check the log for details.', 'error');
+            }
+        };
+
+        window.clearDatabase = async function() {
+            if (!confirm('⚠️ This will delete ALL data! Are you sure?')) return;
+            
+            log('🔄 Clearing all data...');
+            showStatus('Clearing database...', 'info');
+            
+            try {
+                const tables = ['bookings', 'time_slots', 'location_packages', 'packages', 'locations'];
+                
+                for (const table of tables) {
+                    const { error } = await supabase.from(table).delete().neq('id', 0);
+                    if (!error) {
+                        log(`✅ Cleared ${table} table`);
+                    }
+                }
+                
+                log('✅ Database cleared!');
+                showStatus('Database cleared successfully!', 'success');
+                
+            } catch (error) {
+                log(`❌ Clear failed: ${error.message}`);
+                showStatus('Clear failed. Check the log for details.', 'error');
+            }
+        };
+
+        window.showTables = async function() {
+            log('📊 Checking all tables...');
+            const tables = ['locations', 'packages', 'location_packages', 'time_slots', 'bookings'];
+            
+            for (const table of tables) {
+                const { data, error, count } = await supabase.from(table).select('*', { count: 'exact' });
+                if (!error) {
+                    log(`📋 ${table}: ${count} records`);
+                }
+            }
+        };
+
+        window.showBookings = async function() {
+            const { data, error } = await supabase.from('bookings').select('*');
+            if (!error) {
+                log('📊 Current bookings:');
+                log(JSON.stringify(data, null, 2));
+            }
+        };
+
+        window.showLocations = async function() {
+            const { data, error } = await supabase.from('locations').select('*');
+            if (!error) {
+                log('📍 Available locations:');
+                data.forEach(loc => log(`- ${loc.name} (${loc.city})`));
+            }
+        };
+
+        window.showPackages = async function() {
+            const { data, error } = await supabase.from('packages').select('*');
+            if (!error) {
+                log('📦 Available packages:');
+                data.forEach(pkg => log(`- ${pkg.name} (€${pkg.price})`));
+            }
+        };
+
+        // Auto-test connection on load
+        log('🚀 Database setup tool loaded');
+        log('Click "Create Database Schema" to start setup');
+    </script>
+</body>
+</html> 

@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Summer Camps - Fitzone Parties - Kids Party Fun!</title>
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Page-specific head elements -->
+    <style>
+         /* Enhanced Summer Camp Styles - v2 (More Exciting) */
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&family=Baloo+2:wght@700;800&display=swap"); /* Ensure font is imported */
+
+        :root {
+            --camp-primary: #FF6B6B; /* Vibrant Coral */
+            --camp-secondary: #4ECDC4; /* Teal */
+            --camp-accent: #FFD166; /* Sunny Yellow */
+            --camp-bg-light: #F7FFF7; /* Very light green */
+            --camp-text-dark: #2F4F4F; /* Dark Slate Gray */
+            --camp-font-heading: 'Baloo 2', cursive; /* Playful heading font */
+            --camp-font-body: 'Nunito', sans-serif;
+        }
+
+        body[data-page="summer-camp"] main h1,
+        body[data-page="summer-camp"] main h2,
+        body[data-page="summer-camp"] main h3,
+        body[data-page="summer-camp"] main h4 {
+            font-family: var(--camp-font-heading);
+        }
+        body[data-page="summer-camp"] main {
+            font-family: var(--camp-font-body);
+        }
+
+        .summer-camp-hero-v2 {
+            padding: 150px 5% 100px;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.9), rgba(78, 205, 196, 0.9)), url(images/img-007.jpg) no-repeat center center/cover;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 8px solid var(--camp-accent); /* Yellow border bottom */
+        }
+        .summer-camp-hero-v2::before { /* Subtle pattern overlay - stars */
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M0 38.59l2.83-2.83 1.41 1.41L1.41 40H0v-1.41zM0 1.4l2.83 2.83 1.41-1.41L1.41 0H0v1.41zM38.59 40l-2.83-2.83 1.41-1.41L40 38.59V40h-1.41zM40 1.41l-2.83 2.83-1.41-1.41L38.59 0H40v1.41zM20 18.6l-1.4 1.4-1.4-1.4-1.4 1.4-1.4-1.4-1.4 1.4-1.4-1.4-1.4 1.4-1.4-1.4-1.4 1.4-1.4-1.4-1.4 1.4L20 30l1.4-1.4 1.4 1.4 1.4-1.4 1.4 1.4 1.4-1.4 1.4 1.4 1.4-1.4 1.4 1.4 1.4-1.4 1.4 1.4 1.4-1.4 1.4-1.4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: 1;
+        }
+        .summer-camp-hero-v2 .content {
+            position: relative;
+            z-index: 2;
+        }
+        .summer-camp-hero-v2 h1 {
+            font-size: 4em; /* Slightly larger */
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+            line-height: 1.1;
+        }
+        .summer-camp-hero-v2 .subtitle {
+            font-size: 1.5em;
+            margin-bottom: 40px; /* More space */
+            font-weight: 600; /* Bolder subtitle */
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.4);
+        }
+        .summer-camp-hero-v2 .primary-btn {
+            background: var(--camp-accent);
+            color: var(--camp-text-dark);
+            padding: 20px 50px; /* Bigger button */
+            font-size: 1.3em;
+            font-weight: 800;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+            border-radius: 50px; /* Fully rounded */
+            border: 3px solid rgba(255, 255, 255, 0.5);
+        }
+        .summer-camp-hero-v2 .primary-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+        }
+
+        .camp-section {
+            padding: 80px 5%;
+            background-color: var(--camp-bg-light);
+            position: relative; /* For potential pseudo-elements */
+        }
+        .camp-section.alt-bg {
+            background-color: #fff;
+        }
+        /* Wavy divider example (optional, add class to section if used) */
+        .wavy-top::before {
+            content: '';
+            position: absolute;
+            top: -1px; /* Overlap slightly */
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 50'%3E%3Cpath fill='%23ffffff' fill-opacity='1' d='M0,32L48,32C96,32,192,32,288,26.7C384,21,480,11,576,10.7C672,11,768,21,864,26.7C960,32,1056,32,1152,29.3C1248,27,1344,21,1392,18.7L1440,16L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: cover;
+            z-index: 10;
+        }
+        .camp-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative; /* Ensure content is above pseudo-elements */
+            z-index: 1;
+        }
+        .camp-section h2 {
+            text-align: center;
+            font-size: 3em; /* Larger H2 */
+            color: var(--camp-primary);
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+        .camp-section .section-subtitle {
+            text-align: center;
+            font-size: 1.3em; /* Larger subtitle */
+            color: var(--text-light);
+            margin-bottom: 60px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Early Bird Section */
+        .early-bird-v2 {
+            background: linear-gradient(135deg, var(--camp-secondary), var(--camp-primary));
+            color: white;
+            padding: 60px; /* More padding */
+            border-radius: 25px; /* More rounded */
+            text-align: center;
+            margin-bottom: 60px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        /* Add some sparkle */
+        .early-bird-v2::after {
+            content: '\f005'; /* Font Awesome star */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 3em;
+            color: rgba(255, 255, 255, 0.2);
+            transform: rotate(15deg);
+        }
+        .early-bird-v2 h3 {
+            font-size: 2.2em;
+            margin-bottom: 35px;
+            font-weight: 800;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        .price-grid-v2 {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .price-card-v2 {
+            background: rgba(255, 255, 255, 0.2); /* Slightly more visible */
+            padding: 35px;
+            border-radius: 20px;
+            min-width: 280px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .price-card-v2:hover {
+            transform: translateY(-10px) scale(1.03); /* Bounce effect */
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+        .price-card-v2 h4 {
+            font-size: 1.5em;
+            color: var(--camp-accent);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .price-card-v2 .price {
+            font-size: 2.8em;
+            font-weight: 800;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+        .price-card-v2 .save {
+            background: var(--camp-accent);
+            color: var(--camp-text-dark);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        .price-card-v2 p {
+            margin-bottom: 8px;
+            opacity: 0.95;
+            font-size: 1em;
+        }
+        .early-bird-v2 .primary-btn {
+             background: var(--camp-accent);
+            color: var(--camp-text-dark);
+            padding: 18px 45px;
+            font-size: 1.2em;
+            font-weight: 800;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            border-radius: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+        }
+        .early-bird-v2 .primary-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+        }
+
+        /* Camp Details Section */
+        .camp-details-v2 {
+            display: flex;
+            gap: 50px; /* More gap */
+            align-items: center;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+        }
+        .camp-details-v2 .details-list {
+            list-style: none;
+            padding: 0;
+            flex: 1;
+            min-width: 300px;
+        }
+        .camp-details-v2 .details-list li {
+            font-size: 1.2em; /* Larger text */
+            margin-bottom: 22px; /* More spacing */
+            display: flex;
+            align-items: center;
+            color: var(--camp-text-dark);
+            font-weight: 600;
+        }
+        .camp-details-v2 .details-list i {
+            color: var(--camp-primary);
+            font-size: 1.8em; /* Larger icons */
+            margin-right: 20px;
+            width: 40px; /* Align icons */
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .camp-details-v2 .details-list li:hover i {
+            transform: scale(1.2) rotate(-10deg);
+        }
+        /* Update icons */
+        .camp-details-v2 .details-list li:nth-child(1) i::before { content: '\f133'; } /* fa-calendar-alt */
+        .camp-details-v2 .details-list li:nth-child(2) i::before { content: '\f017'; } /* fa-clock */
+        .camp-details-v2 .details-list li:nth-child(3) i::before { content: '\f1ae'; } /* fa-child-reaching */
+        .camp-details-v2 .details-list li:nth-child(4) i::before { content: '\f3c5'; } /* fa-map-marker-alt */
+        .camp-details-v2 .details-list li:nth-child(5) i::before { content: '\f500'; } /* fa-user-shield */
+        .camp-details-v2 .details-list li:nth-child(6) i::before { content: '\f818'; } /* fa-cookie-bite */
+
+        .camp-details-v2 .details-image {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+        .camp-details-v2 .details-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 20px; /* More rounded */
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            border: 5px solid white;
+        }
+
+        /* Activities Section */
+        .activities-grid-v2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px; /* More gap */
+            margin-bottom: 60px;
+        }
+        .activity-card-v2 {
+            background: white;
+            padding: 40px 30px; /* More padding */
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #eee;
+            position: relative;
+            overflow: hidden;
+        }
+        .activity-card-v2:hover {
+            transform: translateY(-12px) rotate(1deg); /* More lift and slight tilt */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        .activity-card-v2 i {
+            font-size: 3.5em; /* Larger icons */
+            color: var(--camp-secondary);
+            margin-bottom: 25px;
+            display: block;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bounce effect */
+        }
+        .activity-card-v2:hover i {
+            transform: scale(1.15);
+        }
+        /* Update icons */
+        .activity-card-v2:nth-child(1) i::before { content: '\f1b0'; } /* fa-paw - Animals */
+        .activity-card-v2:nth-child(2) i::before { content: '\f53f'; } /* fa-palette - Arts */
+        .activity-card-v2:nth-child(3) i::before { content: '\f1e3'; } /* fa-futbol - Sports */
+        .activity-card-v2:nth-child(4) i::before { content: '\f73a'; } /* fa-brain - STEM */
+        .activity-card-v2:nth-child(5) i::before { content: '\f001'; } /* fa-music - Music */
+        .activity-card-v2:nth-child(6) i::before { content: '\f135'; } /* fa-rocket - Adventure */
+
+        .activity-card-v2 h3 {
+            font-size: 1.4em;
+            color: var(--camp-text-dark);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        .activity-card-v2 p {
+            color: var(--text-light);
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+        /* Safety Section */
+        .safety-section-v2 {
+            text-align: center;
+            background: white;
+            padding: 60px; /* More padding */
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 60px;
+            border-top: 6px solid var(--camp-accent); /* Yellow top border */
+        }
+        .safety-section-v2 i {
+            font-size: 3.5em;
+            color: var(--camp-primary);
+            margin-bottom: 25px;
+        }
+        .safety-section-v2 h3 {
+            font-size: 2em;
+            color: var(--camp-text-dark);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .safety-section-v2 p {
+            color: var(--text-light);
+            max-width: 750px;
+            margin: 0 auto;
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+
+        /* Contact/Booking Info Section */
+        .contact-info-v2 {
+            text-align: center;
+        }
+        .contact-grid-v2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 35px;
+            margin-top: 50px;
+        }
+        .contact-location-v2 {
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eee;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .contact-location-v2:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+        }
+        .contact-location-v2 h4 {
+            font-size: 1.6em;
+            color: var(--camp-secondary);
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        .contact-location-v2 p {
+            margin-bottom: 15px;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 1.05em;
+        }
+        .contact-location-v2 i {
+            color: var(--camp-primary);
+            font-size: 1.2em;
+        }
+        .contact-location-v2 a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 600;
+        }
+        .contact-location-v2 a:hover {
+            color: var(--camp-primary);
+        }
+
+        @media (max-width: 768px) {
+            .summer-camp-hero-v2 h1 { font-size: 3em; }
+            .summer-camp-hero-v2 .subtitle { font-size: 1.3em; }
+            .camp-section h2 { font-size: 2.4em; }
+            .camp-details-v2 { flex-direction: column; }
+            .early-bird-v2 { padding: 40px; }
+            .price-card-v2 { min-width: 250px; padding: 30px; }
+            .activity-card-v2 { padding: 30px 25px; }
+            .safety-section-v2 { padding: 40px; }
+            .contact-location-v2 { padding: 30px; }
+        }
+mn; }
+        }
+
+    </style>
+</head>
+<body data-page="summer-camp">
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <span>Fitzone Parties</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Toggle Menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+            <ul>
+                <li><a href="index.html" class="nav-link" data-page="index">Home</a></li>
+                <li><a href="packages.html" class="nav-link" data-page="packages">Party Packages</a></li>
+                <li><a href="locations.html" class="nav-link" data-page="locations">Locations</a></li>
+                <li><a href="gallery.html" class="nav-link" data-page="gallery">Gallery</a></li>
+                <li><a href="summer-camp.html" class="nav-link active" data-page="summer-camp">Summer Camp</a></li> <!-- Set active -->
+                <li><a href="contact.html" class="nav-link" data-page="contact">Contact</a></li>
+                <li><a href="booking.html" class="nav-link primary-btn nav-book-btn" data-page="booking">Book Now</a></li>
+                <li class="auth-buttons">
+                    <a href="login.html" class="login-btn">Login</a>
+                    <a href="register.html" class="register-btn">Register</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Flash Messages Placeholder -->
+    <div class="flash-messages-container" id="flash-messages"></div>
+
+    <!-- Main Content Area -->
+    <main>
+        <!-- New Hero Section -->
+        <section class="summer-camp-hero-v2">
+            <div class="content">
+                <h1>Fitzone's Epic Summer Camp Adventure 2025!</h1>
+                <p class="subtitle">An Unforgettable Summer Adventure Packed with Fun, Learning, and Friendship!</p>
+                <a href="#book-now" class="primary-btn">Explore & Book Now!</a>
+            </div>
+        </section>
+
+        <!-- Introduction Section -->
+        <section class="camp-section alt-bg">
+            <div class="camp-container">
+                <h2>Get Ready for Your Best Summer Ever!</h2>
+                <p class="section-subtitle">Welcome to Dublin's most prestigious summer camp experience at West Wood Club. We've reimagined summer fun with a perfect blend of luxury, adventure, and educational activities designed to inspire and delight children aged 4-10.</p>
+
+                 <!-- Early Bird Offer -->
+                <div class="early-bird-v2" id="book-now">
+                    <h3>🌟 Exclusive Early Bird Offer - Limited Spots Available! 🌟</h3>
+                    <div class="price-grid-v2">
+                        <div class="price-card-v2">
+                            <h4>Premium Non-Member</h4>
+                            <p class="price">€190</p>
+                            <p><span class="save">SAVE €59!</span></p>
+                            <p><del>Regular Price: €249</del></p>
+                            <p>All-inclusive premium experience</p>
+                        </div>
+                        <div class="price-card-v2">
+                            <h4>Elite Member</h4>
+                            <p class="price">€175</p>
+                            <p><span class="save">SAVE €54!</span></p>
+                            <p><del>Regular Price: €229</del></p>
+                            <p>Enhanced member benefits</p>
+                        </div>
+                    </div>
+                    <p><strong>Secure your child's spot in Dublin's most sought-after summer experience! Offer ends soon.</strong></p>
+                    <a href="booking.html?package=summer-camp" class="primary-btn" style="margin-top: 20px;">Book Summer Camp Now</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Camp Details Section -->
+        <section class="camp-section">
+            <div class="camp-container">
+                 <h2>Your Awesome Camp Checklist!</h2>
+                 <p class="section-subtitle">Everything you need to know about our premium summer camp program.</p>
+                <div class="camp-details-v2">
+                    <ul class="details-list">
+                        <li><i class="fas fa-calendar-alt"></i> <strong>Dates:</strong> 30th June to 22nd August 2025</li>
+                        <li><i class="fas fa-clock"></i> <strong>Time:</strong> 9:00am - 2:00pm (Monday to Friday)</li>
+                        <li><i class="fas fa-child"></i> <strong>Age Groups:</strong> Sparklers (4-6 yrs) & Trailblazers (7-10 yrs)</li>
+                        <li><i class="fas fa-map-marker-alt"></i> <strong>Locations:</strong> Leopardstown, Clontarf, Westmanstown</li>
+                        <li><i class="fas fa-user-shield"></i> <strong>Supervision:</strong> Fully supervised by Garda-vetted, professional staff</li>
+                        <li><i class="fas fa-utensils"></i> <strong>Includes:</strong> All activities, materials, and a special Friday treat!</li>
+                    </ul>
+                    <div class="details-image">
+                        <img src="images/img-063.jpg" alt="Kids enjoying summer camp activities">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activities Section -->
+        <section class="camp-section alt-bg">
+            <div class="camp-container">
+                <h2>Dive Into a World of Awesome Activities!</h2>
+                <p class="section-subtitle">Our diverse program ensures every day is packed with excitement, learning, and new experiences.</p>
+                <div class="activities-grid-v2">
+                    <div class="activity-card-v2">
+                        <i class="fas fa-swimming-pool"></i>
+                        <h3>Expert Swim Training</h3>
+                        <p>Daily lessons with certified instructors in our state-of-the-art pools. Build confidence and skills!</p>
+                    </div>
+                    <div class="activity-card-v2">
+                        <i class="fas fa-running"></i>
+                        <h3>Adventure Zone Fun</h3>
+                        <p>Explore multi-level play frames, slides, and obstacle courses. Pure energetic fun!</p>
+                    </div>
+                    <div class="activity-card-v2">
+                        <i class="fas fa-palette"></i>
+                        <h3>Creative Studio</h3>
+                        <p>Unleash imagination with professional art instruction and premium materials. Painting, crafting, and more!</p>
+                    </div>
+                    <div class="activity-card-v2">
+                        <i class="fas fa-flask"></i>
+                        <h3>Discovery Lab (STEM)</h3>
+                        <p>Engaging experiments and hands-on science projects that make learning exciting.</p>
+                    </div>
+                    <div class="activity-card-v2">
+                        <i class="fas fa-music"></i>
+                        <h3>Performing Arts Stage</h3>
+                        <p>Expert-led dance, music, and drama sessions. Build confidence and express creativity!</p>
+                    </div>
+                    <div class="activity-card-v2">
+                        <i class="fas fa-futbol"></i>
+                        <h3>Sports & Games Galore</h3>
+                        <p>Team sports, fun games, and skill-building activities for active bodies and minds.</p>
+                    </div>
+                     <div class="activity-card-v2">
+                        <i class="fas fa-puzzle-piece"></i>
+                        <h3>Mind Puzzles & Strategy</h3>
+                        <p>Engaging brain games, puzzles, and challenges to boost critical thinking.</p>
+                    </div>
+                     <div class="activity-card-v2">
+                        <i class="fas fa-star"></i>
+                        <h3>VIP Fridays</h3>
+                        <p>Special themed events, guest performers, fun competitions, and exclusive treats every Friday!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Safety Section -->
+        <section class="camp-section">
+            <div class="camp-container">
+                <div class="safety-section-v2">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Excellence in Safety & Care</h3>
+                    <p>Your child's safety and well-being are our top priorities. We maintain the highest standards with Garda-vetted staff, certified instructors, dedicated first-aid personnel, and secure facilities. Enjoy peace of mind knowing your child is in the best hands.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact/Booking Info Section -->
+        <section class="camp-section alt-bg">
+            <div class="camp-container contact-info-v2">
+                <h2>Ready to Book an Unforgettable Summer?</h2>
+                <p class="section-subtitle">Spaces are limited for this exclusive experience. Contact your preferred location or book online today!</p>
+                <div class="contact-grid-v2">
+                    <div class="contact-location-v2">
+                        <h4>Leopardstown</h4>
+                        <p><i class="fas fa-envelope"></i> <a href="mailto:leopardstown.fitzone@westwood.ie">leopardstown.fitzone@westwood.ie</a></p>
+                        <p><i class="fas fa-phone"></i> <a href="tel:019609328">Fitzone: 01 9609328</a></p>
+                        <p><i class="fas fa-phone"></i> <a href="tel:012893208">Reception: 01 2893208</a></p>
+                    </div>
+                    <div class="contact-location-v2">
+                        <h4>Clontarf</h4>
+                        <p><i class="fas fa-envelope"></i> <a href="mailto:clontarf.fitzone@westwood.ie">clontarf.fitzone@westwood.ie</a></p>
+                        <p><i class="fas fa-phone"></i> <a href="tel:018530353">Fitzone: 01 8530353</a></p>
+                        <p><i class="fas fa-phone"></i> <a href="tel:018057812">Reception: 01 8057812</a></p>
+                    </div>
+                    <div class="contact-location-v2">
+                        <h4>Westmanstown</h4>
+                        <p><i class="fas fa-envelope"></i> <a href="mailto:westmanstown.fitzone@westwood.ie">westmanstown.fitzone@westwood.ie</a></p>
+                        <p><i class="fas fa-phone"></i> <a href="tel:018025906">Fitzone: 01 8025906</a></p>
+                        <p><i class="fas fa-phone"></i> <a href="tel:018207888">Reception: 01 8207888</a></p>
+                    </div>
+                </div>
+                 <a href="booking.html?package=summer-camp" class="primary-btn" style="margin-top: 40px; background: var(--camp-primary); color: white;">Book Online Now</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <!-- Footer content updated to match index.html -->
+         <div class="footer-content">
+            <div class="footer-about">
+                <h3>Fitzone Parties</h3>
+                <p>Creating unforgettable, action-packed party experiences for kids across Dublin. Part of the West Wood Club family.</p>
+            </div>
+            <div class="footer-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="packages.html">Party Packages</a></li>
+                    <li><a href="locations.html">Locations</a></li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                    <li><a href="summer-camp.html">Summer Camp</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="booking.html">Book Now</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h3>Contact Us</h3>
+                <p><i class="fas fa-map-marker-alt icon"></i> Multiple Locations (See Locations page)</p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:019609328">Leopardstown: 01 9609328</a> / <a href="tel:012893208">01 2893208</a></p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:018530353">Clontarf: 01 8530353</a></p>
+                <p><i class="fas fa-phone icon"></i> <a href="tel:018025906">Westmanstown: 01 8025906</a></p>
+                <p><i class="fas fa-envelope icon"></i> <a href="mailto:leopardstown.fitzone@westwood.ie">Leopardstown Email</a></p>
+                <p><i class="fas fa-envelope icon"></i> <a href="mailto:clontarf.fitzone@westwood.ie">Clontarf Email</a></p>
+                <p><i class="fas fa-envelope icon"></i> <a href="mailto:westmanstown.fitzone@westwood.ie">Westmanstown Email</a></p>
+            </div>
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; <span id="current-year"></span> Fitzone Parties | Powered by West Wood Club. All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- Chat Assistant -->
+    <!-- Chat Assistant HTML remains the same -->
+     <div class="chat-assistant">
+        <div class="chat-icon" id="chat-icon" aria-label="Open Chat">
+            <i class="fas fa-comments"></i>
+        </div>
+        <div class="chat-popup" id="chat-popup">
+            <div class="chat-header">
+                <h4>Fitzone Helper</h4>
+                <button class="close-chat" id="close-chat" aria-label="Close Chat">&times;</button>
+            </div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="quick-replies" id="quick-replies"></div>
+            <div class="chat-input">
+                <form id="chat-input-form">
+                    <input type="text" id="chat-input-field" placeholder="Type your message...">
+                    <button type="submit" aria-label="Send Message"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <!-- Main JavaScript -->
+    <script src="script.js"></script>
+
+    <script>
+        // Set current year in footer
+        document.getElementById("current-year").textContent = new Date().getFullYear();
+
+        // Set active navigation link based on body data attribute
+        const currentPage = document.body.getAttribute("data-page");
+        if (currentPage) {
+            const activeLink = document.querySelector(`.nav-link[data-page="${currentPage}"]`);
+            if (activeLink) {
+                activeLink.classList.add("active");
+            }
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll("a[href^=\'#\']").forEach(anchor => {
+            anchor.addEventListener("click", function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute("href");
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerOffset = 80; // Adjust based on fixed header height
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
