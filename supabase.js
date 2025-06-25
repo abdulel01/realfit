@@ -532,7 +532,7 @@ export async function getTimeSlots(locationId = null, dayOfWeek = null) {
 
             if (error) throw error;
 
-            // Convert to the format expected by the frontend
+            // Convert to the format expected by the frontend and properly deduplicate
             const uniqueTimes = [...new Set(data.map(slot => slot.start_time))];
             const timeSlots = uniqueTimes.map(time => {
                 const [hours, minutes] = time.split(':');

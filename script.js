@@ -1,7 +1,8 @@
 // Update to script.js to integrate EmailJS for email confirmation
 
-// Import Supabase functions
+// Import Supabase functions and client
 import { 
+  supabase,
   getLocations, 
   getPackages, 
   getPackagesByLocation, 
@@ -34,6 +35,187 @@ import {
 // Add debug logging for imports
 console.log('Script.js loaded');
 
+// Mobile Navigation Functions
+function initializeMobileNavigation() {
+    console.log('🔧 Initializing enhanced mobile navigation...');
+    
+    // Get elements
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navUl = document.querySelector('nav ul');
+    const navLinks = document.querySelectorAll('nav ul li a');
+    const body = document.body;
+    
+    // Debug logging
+    console.log('Mobile menu button found:', !!mobileMenuBtn);
+    console.log('Navigation menu found:', !!navUl);
+    console.log('Navigation links found:', navLinks.length);
+    
+    if (!mobileMenuBtn || !navUl) {
+        console.error('❌ Mobile menu elements not found!');
+        console.log('Looking for:', {
+            mobileMenuBtn: '.mobile-menu-btn',
+            navUl: 'nav ul'
+        });
+        return;
+    }
+    
+    // State management
+    let isMenuOpen = false;
+    
+    // Toggle mobile menu function
+    function toggleMobileMenu(e) {
+        if (e) e.preventDefault();
+        
+        isMenuOpen = !isMenuOpen;
+        console.log('📱 Toggle mobile menu:', isMenuOpen ? 'OPEN' : 'CLOSED');
+        
+        // Toggle classes
+        mobileMenuBtn.classList.toggle('active', isMenuOpen);
+        navUl.classList.toggle('active', isMenuOpen);
+        body.classList.toggle('menu-open', isMenuOpen);
+        
+        // Prevent body scroll when menu is open
+        if (isMenuOpen) {
+            body.style.overflow = 'hidden';
+        } else {
+            body.style.overflow = '';
+        }
+        
+        // Update ARIA attributes for accessibility
+        mobileMenuBtn.setAttribute('aria-expanded', isMenuOpen);
+        navUl.setAttribute('aria-hidden', !isMenuOpen);
+    }
+    
+    // Close mobile menu function
+    function closeMobileMenu() {
+        if (isMenuOpen) {
+            console.log('📱 Closing mobile menu');
+            isMenuOpen = false;
+            mobileMenuBtn.classList.remove('active');
+            navUl.classList.remove('active');
+            body.classList.remove('menu-open');
+            body.style.overflow = '';
+            
+            // Update ARIA attributes
+            mobileMenuBtn.setAttribute('aria-expanded', 'false');
+            navUl.setAttribute('aria-hidden', 'true');
+        }
+    }
+    
+    // Event Listeners
+    
+    // 1. Mobile menu button click
+    mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+    mobileMenuBtn.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        toggleMobileMenu();
+    }, { passive: false });
+    
+    // 2. Navigation link clicks - close menu
+    navLinks.forEach((link, index) => {
+        link.addEventListener('click', function() {
+            console.log(`📱 Nav link clicked: ${link.textContent.trim()}`);
+            // Small delay to allow navigation to start
+            setTimeout(closeMobileMenu, 100);
+        });
+        
+        // Touch events for better mobile response
+        link.addEventListener('touchend', function() {
+            setTimeout(closeMobileMenu, 100);
+        });
+    });
+    
+    // 3. Click outside menu to close
+    document.addEventListener('click', function(e) {
+        // Check if click is outside menu and button
+        if (isMenuOpen && 
+            !mobileMenuBtn.contains(e.target) && 
+            !navUl.contains(e.target)) {
+            console.log('📱 Clicked outside menu - closing');
+            closeMobileMenu();
+        }
+    });
+    
+    // 4. Touch events for better mobile handling
+    document.addEventListener('touchstart', function(e) {
+        if (isMenuOpen && 
+            !mobileMenuBtn.contains(e.target) && 
+            !navUl.contains(e.target)) {
+            closeMobileMenu();
+        }
+    }, { passive: true });
+    
+    // 5. Escape key to close menu
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && isMenuOpen) {
+            console.log('📱 Escape key pressed - closing menu');
+            closeMobileMenu();
+        }
+    });
+    
+    // 6. Window resize - close menu if switching to desktop
+    let resizeTimeout;
+    window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+            if (window.innerWidth > 768 && isMenuOpen) {
+                console.log('📱 Resized to desktop - closing menu');
+                closeMobileMenu();
+            }
+        }, 100);
+    });
+    
+    // 7. Orientation change on mobile devices
+    window.addEventListener('orientationchange', function() {
+        setTimeout(function() {
+            if (window.innerWidth > 768 && isMenuOpen) {
+                closeMobileMenu();
+            }
+        }, 500); // Delay to allow orientation change to complete
+    });
+    
+    // Initialize ARIA attributes
+    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+    mobileMenuBtn.setAttribute('aria-controls', 'main-navigation');
+    mobileMenuBtn.setAttribute('aria-label', 'Toggle navigation menu');
+    navUl.setAttribute('aria-hidden', 'true');
+    navUl.setAttribute('id', 'main-navigation');
+    
+    console.log('✅ Enhanced mobile navigation initialized successfully');
+    
+    // Return control functions for external use
+    return {
+        toggle: toggleMobileMenu,
+        close: closeMobileMenu,
+        isOpen: () => isMenuOpen
+    };
+}
+
+// Debug function for mobile navigation
+function debugMobileNav() {
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navUl = document.querySelector('nav ul');
+    
+    console.log('🔍 Mobile Navigation Debug:', {
+        mobileMenuBtn: {
+            found: !!mobileMenuBtn,
+            visible: mobileMenuBtn ? getComputedStyle(mobileMenuBtn).display !== 'none' : false,
+            hasClickListener: mobileMenuBtn ? mobileMenuBtn.onclick !== null : false
+        },
+        navUl: {
+            found: !!navUl,
+            hasActiveClass: navUl ? navUl.classList.contains('active') : false
+        },
+        viewport: {
+            width: window.innerWidth,
+            isMobile: window.innerWidth <= 768
+        }
+    });
+}
+
+// Make debug function available globally
+window.debugMobileNav = debugMobileNav;
+
 // Test Supabase connection on load
 testConnection().then(result => {
     console.log('Connection test result:', result);
@@ -56,6 +238,9 @@ const totalSteps = 5; // Updated to include payment step
 // Initialize the form when DOM is loaded
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('DOM loaded, initializing form...');
+    
+    // Initialize mobile navigation
+    initializeMobileNavigation();
     
     // Initialize real-time data system (only for booking/packages/locations pages)
     const currentPage = document.body.dataset.page;
@@ -293,6 +478,7 @@ async function loadTimeSlots(locationId = null, selectedDate = null) {
         console.log('📋 Raw time slots data:', result.data);
         
         if (result.success && timeSelect) {
+            // Clear all existing options first
             timeSelect.innerHTML = '<option value="">Select a time...</option>';
             
             if (!result.data || result.data.length === 0) {
@@ -301,8 +487,20 @@ async function loadTimeSlots(locationId = null, selectedDate = null) {
                 return;
             }
             
-            console.log('✅ Adding', result.data.length, 'time slots to dropdown');
-            result.data.forEach((slot, index) => {
+            // Deduplicate time slots on the frontend as well (safety measure)
+            const seenTimes = new Set();
+            const uniqueSlots = result.data.filter(slot => {
+                const timeValue = slot.value || slot.start_time;
+                if (seenTimes.has(timeValue)) {
+                    console.log(`⚠️ Filtering duplicate time slot: ${timeValue}`);
+                    return false;
+                }
+                seenTimes.add(timeValue);
+                return true;
+            });
+            
+            console.log('✅ Adding', uniqueSlots.length, 'unique time slots to dropdown (filtered from', result.data.length, 'total)');
+            uniqueSlots.forEach((slot, index) => {
                 const option = document.createElement('option');
                 option.value = slot.value || slot.start_time;
                 option.textContent = slot.name || slot.display_name || slot.value || slot.start_time;
@@ -310,7 +508,7 @@ async function loadTimeSlots(locationId = null, selectedDate = null) {
                 console.log(`  ${index + 1}. ${option.textContent} (${option.value})`);
             });
             
-            console.log('✅ Time slots loaded successfully:', result.data.length);
+            console.log('✅ Time slots loaded successfully:', uniqueSlots.length);
         } else {
             console.error('❌ Failed to load time slots:', result.error);
             timeSelect.innerHTML = '<option value="">Error loading time slots</option>';
@@ -560,20 +758,159 @@ async function handleFormSubmission(event) {
             throw new Error('This date is no longer available. Please select another date.');
         }
         
+        // Check if payment is being skipped
+        if (window.skipPayment) {
+            console.log('Skipping payment, creating booking with manual payment status...');
+            
+            // Update booking data for manual payment
+            const manualBookingData = {
+                ...bookingData,
+                payment_status: 'pending_manual',
+                status: 'pending_payment',
+                notes: 'Manual payment required - customer will be contacted'
+            };
+            
+            // Create booking in database
+            const bookingResult = await createBookingInDatabase(manualBookingData);
+            
+            if (!bookingResult.success) {
+                throw new Error('Failed to create booking: ' + bookingResult.error);
+            }
+            
+            // Store booking data for confirmation page
+            sessionStorage.setItem('bookingData', JSON.stringify(manualBookingData));
+            
+            // Redirect to confirmation page
+            console.log('Manual booking created successfully, redirecting...');
+            window.location.href = `confirmation.html?bookingId=${bookingResult.bookingId}&manual=true`;
+            
+            return;
+        }
+        
         // Process payment first
         console.log('Processing payment...');
         
-        // Use new checkout payment system
-        if (window.checkoutPayment) {
-            await window.checkoutPayment.initiatePayment(bookingData);
-            return; // Checkout will redirect, so we stop here
-        } else {
-            throw new Error('Payment system not available');
+        // Use Stripe Payment Intents system
+        const paymentResult = await processPayment(bookingData);
+        
+        if (!paymentResult.success) {
+            throw new Error(paymentResult.error || 'Payment failed');
         }
+        
+        console.log('Payment successful, creating booking...');
+        
+        // Update booking data with payment info
+        const updatedBookingData = {
+            ...bookingData,
+            ...paymentResult.bookingData,
+            payment_status: 'paid'
+        };
+        
+        // Create booking in database
+        const bookingResult = await createBookingInDatabase(updatedBookingData);
+        
+        if (!bookingResult.success) {
+            throw new Error('Payment successful but booking creation failed. Please contact support.');
+        }
+        
+        // Store booking data for confirmation page
+        sessionStorage.setItem('bookingData', JSON.stringify(updatedBookingData));
+        
+        // Redirect to confirmation page
+        console.log('Booking created successfully, redirecting...');
+        window.location.href = `confirmation.html?bookingId=${bookingResult.bookingId}`;
+        
+        return;
         
     } catch (error) {
         console.error('Booking failed:', error);
         showMessage('❌ Booking failed: ' + error.message, 'error');
+    }
+}
+
+// Create booking in database
+async function createBookingInDatabase(bookingData) {
+    try {
+        console.log('Creating booking in database:', bookingData);
+        
+        // Prepare clean booking data
+        const cleanBookingData = {
+            parent_name: bookingData.parent_name,
+            email: bookingData.email,
+            phone: bookingData.phone,
+            booking_date: bookingData.booking_date,
+            booking_time: bookingData.booking_time,
+            location_id: parseInt(bookingData.location_id),
+            package_id: parseInt(bookingData.package_id),
+            num_children: parseInt(bookingData.num_children),
+            num_adults: parseInt(bookingData.num_adults) || 2,
+            child_name: bookingData.child_name,
+            child_age: parseInt(bookingData.child_age),
+            special_requests: bookingData.special_requests || '',
+            total_price: parseFloat(bookingData.total_price)
+        };
+
+        // Set status and payment status based on payment type
+        if (bookingData.payment_status === 'pending_manual') {
+            cleanBookingData.status = 'pending_payment';
+            cleanBookingData.payment_status = 'pending_manual';
+            if (bookingData.notes) {
+                cleanBookingData.special_requests += (cleanBookingData.special_requests ? '\n' : '') + bookingData.notes;
+            }
+        } else {
+            cleanBookingData.status = 'confirmed';
+            cleanBookingData.payment_status = 'paid';
+        }
+
+        // Add payment details if available
+        if (bookingData.payment_intent_id) {
+            cleanBookingData.payment_intent_id = bookingData.payment_intent_id;
+        }
+        if (bookingData.amount_paid) {
+            cleanBookingData.amount_paid = parseFloat(bookingData.amount_paid);
+        }
+
+        console.log('Clean booking data for database:', cleanBookingData);
+
+        const { data, error } = await supabase
+            .from('bookings')
+            .insert(cleanBookingData)
+            .select()
+            .single();
+        
+        if (error) {
+            console.error('Database error creating booking:', error);
+            console.error('Full error details:', error);
+            console.error('Booking data that failed:', bookingData);
+            return { success: false, error: error.message };
+        }
+        
+        console.log('Booking created successfully:', data);
+        return { success: true, bookingId: data.id, booking: data };
+        
+    } catch (error) {
+        console.error('Error creating booking:', error);
+        console.error('Error stack:', error.stack);
+        
+        // Try a simple test insert to see if Supabase connection works
+        try {
+            console.log('Testing Supabase connection...');
+            const { data: testData, error: testError } = await supabase
+                .from('bookings')
+                .select('id')
+                .limit(1);
+                
+            if (testError) {
+                console.error('Supabase connection test failed:', testError);
+                return { success: false, error: 'Database connection failed: ' + testError.message };
+            } else {
+                console.log('Supabase connection test passed');
+            }
+        } catch (testErr) {
+            console.error('Supabase connection test error:', testErr);
+        }
+        
+        return { success: false, error: error.message };
     }
 }
 
@@ -1255,19 +1592,107 @@ async function initializePaymentStep() {
         const numGuests = parseInt(document.getElementById('num-guests').value) || 1;
         const totalAmount = updatePaymentSummary(selectedPackage, numGuests);
         
+        console.log(`Payment details: Package: ${selectedPackage.name}, Guests: ${numGuests}, Total: €${totalAmount}`);
+        
+        // Check if payment element container exists
+        const paymentElementContainer = document.getElementById('payment-element');
+        if (!paymentElementContainer) {
+            console.error('Payment element container not found');
+            showMessage('❌ Payment interface not available on this page', 'error');
+            return;
+        }
+        
+        // Show loading state
+        paymentElementContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Initializing payment system...</div>';
+        
         // Initialize Stripe payment elements
         const result = await initializeStripePayment(totalAmount);
         
         if (!result.success) {
             console.error('Failed to initialize Stripe payment:', result.error);
-            showMessage('❌ Payment system unavailable. Please try again later.', 'error');
+            
+            // Show user-friendly error message
+            if (result.error.includes('fetch') || result.error.includes('network') || result.error.includes('Load failed')) {
+                paymentElementContainer.innerHTML = `
+                    <div style="text-align: center; padding: 20px; border: 2px solid #ffc107; border-radius: 8px; background: #fff3cd; color: #856404;">
+                        <h4 style="margin: 0 0 10px 0; color: #856404;">⚠️ Payment System Temporarily Unavailable</h4>
+                        <p style="margin: 0 0 15px 0;">Our payment system is currently being updated. You can still proceed with your booking and we'll contact you to arrange payment.</p>
+                        <button onclick="proceedWithoutPayment()" class="button" style="background: #28a745; margin-top: 10px;">
+                            Continue Without Payment
+                        </button>
+                    </div>
+                `;
+            } else {
+                paymentElementContainer.innerHTML = `
+                    <div style="text-align: center; padding: 20px; border: 2px solid #dc3545; border-radius: 8px; background: #f8d7da; color: #721c24;">
+                        <h4 style="margin: 0 0 10px 0; color: #721c24;">❌ Payment Error</h4>
+                        <p style="margin: 0;">${result.error}</p>
+                        <button onclick="location.reload()" class="button" style="margin-top: 10px;">
+                            Refresh Page
+                        </button>
+                    </div>
+                `;
+            }
             return;
         }
         
         console.log('Payment step initialized successfully');
         
+        // Add payment errors container if it doesn't exist
+        if (!document.getElementById('payment-errors')) {
+            const errorDiv = document.createElement('div');
+            errorDiv.id = 'payment-errors';
+            errorDiv.style.display = 'none';
+            errorDiv.style.color = '#dc3545';
+            errorDiv.style.marginTop = '10px';
+            errorDiv.style.padding = '10px';
+            errorDiv.style.border = '1px solid #dc3545';
+            errorDiv.style.borderRadius = '4px';
+            errorDiv.style.backgroundColor = '#f8d7da';
+            paymentElementContainer.parentNode.insertBefore(errorDiv, paymentElementContainer.nextSibling);
+        }
+        
     } catch (error) {
         console.error('Error initializing payment step:', error);
+        
+        const paymentElementContainer = document.getElementById('payment-element');
+        if (paymentElementContainer) {
+            paymentElementContainer.innerHTML = `
+                <div style="text-align: center; padding: 20px; border: 2px solid #dc3545; border-radius: 8px; background: #f8d7da; color: #721c24;">
+                    <h4 style="margin: 0 0 10px 0; color: #721c24;">❌ Payment System Error</h4>
+                    <p style="margin: 0 0 15px 0;">There was an error loading the payment system: ${error.message}</p>
+                    <button onclick="location.reload()" class="button" style="margin-top: 10px;">
+                        Refresh Page
+                    </button>
+                </div>
+            `;
+        }
+        
         showMessage('❌ Failed to initialize payment: ' + error.message, 'error');
+    }
+}
+
+// Function to proceed without payment (for offline bookings)
+window.proceedWithoutPayment = function() {
+    console.log('Proceeding without payment...');
+    
+    const paymentElementContainer = document.getElementById('payment-element');
+    if (paymentElementContainer) {
+        paymentElementContainer.innerHTML = `
+            <div style="text-align: center; padding: 20px; border: 2px solid #28a745; border-radius: 8px; background: #d4edda; color: #155724;">
+                <h4 style="margin: 0 0 10px 0; color: #155724;">✅ Booking Will Be Processed Manually</h4>
+                <p style="margin: 0;">Your booking details will be saved and we'll contact you within 24 hours to arrange payment and confirm your party.</p>
+            </div>
+        `;
+    }
+    
+    // Mark that we're proceeding without payment
+    window.skipPayment = true;
+    
+    // Enable the submit button
+    const submitBtn = document.querySelector('.submit-btn');
+    if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Complete Booking (Payment Later)';
     }
 }
